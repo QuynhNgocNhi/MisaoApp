@@ -15,13 +15,15 @@
  */
 
 import React, {Component} from 'react';
+
 import {
   SafeAreaView,
   StatusBar,
   useColorScheme,
+  Dimensions,
   Text,
   View,
-  Button
+ 
 } from 'react-native';
 
 import {
@@ -29,7 +31,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './src/screen/HomeScreen';
- 
+import LoginScreen from './src/screen/LoginScreen';
+import WelcomeScreen from './src/screen/Welcome';
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -39,10 +42,15 @@ const App = () => {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <HomeScreen />
+      <StatusBar/>
+      <WelcomeScreen /> 
+    
+     {/*  <LoginScreen/>*/}
+      
     </SafeAreaView>
   );
 };
+
+
 
 export default App; 

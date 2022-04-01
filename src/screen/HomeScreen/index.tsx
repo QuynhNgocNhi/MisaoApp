@@ -1,18 +1,24 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, FlatList, Text } from 'react-native'
 import ProductItem from '../../component/ProductItem';
-import products from '../../data/product';
+import products from '../../assets/product';
+// import colors, layout
+import colors from '../../theme/color';
+
 const HomeScreen = () => {
   return (
     <View style={styles.page}>
       {/* Render Product Component */}
       <View style={styles.root}>
 
-      <Text style={styles.title}>Hello World!</Text>
+      <Text style={styles.title}>Misao</Text>
       </View>
-      <ProductItem item = {products[0]}/>
-      <ProductItem item = {products[1]}/>
-      <ProductItem item = {products[2]}/>
+      {/* <ProductItem item = {products[0]}/> */}
+      
+      <FlatList 
+      data = {products}
+      renderItem = {({item})=><ProductItem item={item}/>}
+      />
     </View>
 
   );
@@ -21,7 +27,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 10,
     width: '100%',
-
+    backgroundColor: colors.themeBackground,
   },
   root: {
     flexDirection: 'row',
@@ -31,16 +37,16 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 15,
     borderWidth: 1,
-    borderColor: '#d1d1d1',
-    backgroundColor: '#fff',
+    borderColor: colors.borderColor,
+    backgroundColor: colors.background,
     borderRadius: 5,
 
   },
   title: {
-    color: '#000',
-    fontSize: 22,
-    backgroundColor: '#fff',
+    color: colors.primaryColor,
+    fontSize: 28,
     fontWeight: 'bold',
+
 
   }
 });

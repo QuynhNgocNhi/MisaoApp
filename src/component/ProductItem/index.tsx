@@ -34,6 +34,7 @@ const ProductItem = ({ item }: ProductItemProps) => {
 
             {[0, 0, 0, 0, 0].map((element, index) => {
               // index is the number of the current star 
+              
               const isFullStar = ((index < Math.floor(item.averageRating)))
               const isHalfStar = ((index == Math.floor(item.averageRating)) && (item.averageRating > Math.floor(item.averageRating)))
               const isNoStar = !isFullStar && !isHalfStar
@@ -52,7 +53,9 @@ const ProductItem = ({ item }: ProductItemProps) => {
               else if (isNoStar)
               starName = "star-o"
               
-              return <FontAwesome name={starName}
+              return <FontAwesome 
+              key = {`${item.id} - ${index}`}
+              name={starName}
               size={18} 
               color={'#F6C707'} />
 
