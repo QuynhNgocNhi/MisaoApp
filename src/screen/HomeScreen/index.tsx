@@ -1,54 +1,115 @@
-import React from 'react'
-import { View, StyleSheet, FlatList, Text } from 'react-native'
+import React, { useRef } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Logo, Heading6 } from '../../component/Text';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import HomeHeader from '../../component/AnimatedHeader';
 import ProductItem from '../../component/ProductItem';
 import products from '../../assets/product';
-// import colors, layout
-import colors from '../../theme/color';
+import HotDealItem from '../../component/HotDeal';
+
+// import color, layout, style
+import color from '../../theme/color';
+import layout from '../../theme/layout';
+
 
 const HomeScreen = () => {
+
+
   return (
-    <View style={styles.page}>
-      {/* Render Product Component */}
-      <View style={styles.root}>
+    <SafeAreaProvider>
 
-      <Text style={styles.title}>Misao</Text>
-      </View>
-      {/* <ProductItem item = {products[0]}/> */}
-      
-      <FlatList 
-      data = {products}
-      renderItem = {({item})=><ProductItem item={item}/>}
-      />
-    </View>
+      <SafeAreaView style={styles.screenContainer}>
+        <StatusBar translucent backgroundColor='transparent' />
 
+        <View style={styles.container}>
+          <HomeHeader />
+
+          {/* Add the following AnimatedHeader */}
+          <ScrollView
+            nestedScrollEnabled={true}
+          >
+
+
+            {/* Render Product Component */}
+            {/* <ProductItem item = {products[0]}/> */}
+            <View style={styles.top}>
+              <View style={styles.bottomContainer}>
+                <View style={styles.banner}>
+                  <Image style={styles.image} source={require('../../image/HappyFarmerGirl.jpg')} />
+                </View>
+
+              </View>
+            </View>
+            <View style={styles.centerContent}>
+              <View style={styles.hotDeal}>
+                <View style={styles.container}>
+                  <View style={styles.titleContainer}>
+                    <Heading6 style={styles.titleText}>Special Offers</Heading6>
+                  </View>
+                  <FlatList
+                    data={products}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    alwaysBounceHorizontal={false}
+                    /* keyExtractor={this.keyExtractor} */
+                    renderItem={({ item }) => <HotDealItem item={item} />}
+                    contentContainerStyle={styles.hotDealProductsList}
+                  />
+                </View>
+              </View>
+              <View style={styles.bottom}>
+
+                <FlatList
+                  data={products}
+                  renderItem={({ item }) => <ProductItem item={item} />}
+                />
+              </View>
+          </ScrollView>
+
+        </View>
+
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 const styles = StyleSheet.create({
-  page: {
-    padding: 10,
-    width: '100%',
-    backgroundColor: colors.themeBackground,
+  screenContainer: {
+    flex: 1,
+    // backgroundColor: colors.themeBackground,
   },
-  root: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  container: {
+    flex: 1,
+  },
+
+  top: {
+
+  },
+  bottomContainer: {
+    height: 200,
+    backgroundColor: color.white,
+
+
+  },
+  banner: {
+
+    backgroundColor: color.themeBackground,
+    height: '50%',
     alignItems: 'center',
-    marginBottom: 20,
-    width: '100%',
-    paddingVertical: 15,
-    borderWidth: 1,
-    borderColor: colors.borderColor,
-    backgroundColor: colors.background,
-    borderRadius: 5,
 
   },
-  title: {
-    color: colors.primaryColor,
-    fontSize: 28,
-    fontWeight: 'bold',
+  image: {
 
+    width: '90%',
+    height: 150,
+    borderRadius: 20
 
-  }
+  },
+  bottom: {
+    flex: 3,
+    width: '100%',
+    backgroundColor: color.black,
+  },
 });
 
 export default HomeScreen
