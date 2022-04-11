@@ -3,21 +3,18 @@
 // import dependencies
 import React, { Component } from 'react';
 import { ImageBackground, StatusBar, StyleSheet, View, SafeAreaView } from 'react-native';
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
-import { NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // import components
 import Button from '../../component/Button';
-import { Logo, Heading6 } from '../../component/Text';
+import { Logo, Paragraph } from '../../component/Text';
 import LinkButton from '../../component/Button/LinkButton';
 import UnderlineTextInput from '../../component/InputText';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {useNavigation} from '@react-navigation/native';
-import { RootStackParameterList } from '../../MainNavigator';
 
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+
 
 // Welcome Config
 const headerImg = require('../../image/HappyFarmerGirl.jpg')
@@ -27,13 +24,19 @@ const INPUT_TEXT_COLOR = color.onPrimaryColor;
 const INPUT_BORDER_COLOR = color.onPrimaryColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
-type WelcomeProps = NativeStackScreenProps <RootStackParameterList, "Welcome">
-
 // Welcome
-const Welcome: React.FC<WelcomeProps> = ({phoneNumber}) => {
-  const navigationRef = useNavigationContainerRef();
-  const navigation = useNavigation();
-  
+export default class Welcome extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  navigateTo = screen => () => {
+    const { navigation } = this.props;
+    navigation.navigate(screen);
+  };
+
+  render() {
     return (
       <SafeAreaView style={styles.screenContainer}>
         <StatusBar translucent backgroundColor='transparent' />
@@ -50,35 +53,24 @@ const Welcome: React.FC<WelcomeProps> = ({phoneNumber}) => {
               </View>
 
               <View style={styles.paragraphGroup}>
-                <Heading6 style={styles.headingText}>Mua bán và trãi nghiệm sản phẩm cây trồng</Heading6>
-                <Heading6 style={styles.headingText}>trên khắp mọi vùng miền tại Việt Nam</Heading6>
+                <Paragraph style={styles.headingText}>Chúc mừng bạn đã đăng ký tài khoản</Paragraph>
+                <Paragraph style={styles.headingText}>thành công!</Paragraph>
               </View>
 
 
               <View style={styles.center}>
 
                 <View style={styles.buttonsGroup}>
-                  <UnderlineTextInput
-                    inputContainerStyle={styles.inputContainer}
-
-                    blurOnSubmit={false}
-                    keyboardType="phone-pad"
-                    placeholder="Số điện thoại"
-
-                  />
-                </View>
-
-                <View style={styles.buttonsGroup}>
                   <Button
                     buttonStyle={styles.customButton}
-                    onPress={() => {navigation.navigate('Login');}}
-                    title={'Tiếp tục'.toUpperCase()}
+                    onPress={this.navigateTo('SignIn')}
+                    title={'Bắt đầu sử dụng'.toUpperCase()}
                   />
                 </View>
 
                 <LinkButton
-                  onPress={() => {navigation.navigate('Register');}}
-                  title="Chưa có tài khoản"
+                  onPress={this.navigateTo('HomeNavigator')}
+                  title="Hướng dẫn"
                   titleStyle={styles.linkButtonText}
                 />
               </View>
@@ -87,8 +79,8 @@ const Welcome: React.FC<WelcomeProps> = ({phoneNumber}) => {
         </KeyboardAwareScrollView>
       </SafeAreaView>
     );
-  
-};
+  }
+}
 // Welcome Styles
 const styles = StyleSheet.create({
   screenContainer: {
@@ -121,9 +113,12 @@ const styles = StyleSheet.create({
   },
   paragraphGroup: {
     alignItems: 'center',
+    paddingTop:15,
+    paddingBottom:50
   },
   headingText: {
     paddingTop: 15,
+    color: color.themeBackground
 
   },
   center: {
@@ -150,5 +145,3 @@ const styles = StyleSheet.create({
     width: '80%',
   }
 });
-
-export default Welcome;

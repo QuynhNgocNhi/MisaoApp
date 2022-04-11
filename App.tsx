@@ -14,7 +14,7 @@
  * @format
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
   SafeAreaView,
@@ -23,7 +23,7 @@ import {
   Dimensions,
   Text,
   View,
- 
+
 } from 'react-native';
 
 import {
@@ -32,7 +32,12 @@ import {
 //import Icon from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './src/screen/HomeScreen';
 import LoginScreen from './src/screen/LoginScreen';
+import RegisterScreen from './src/screen/RegisterScreen';
+import RegisterSuccessfulScreen from './src/screen/RegisterSuccessfulScreen';
 import WelcomeScreen from './src/screen/Welcome';
+import MainNavigator from './src/MainNavigator';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -41,15 +46,19 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar/>
-      <WelcomeScreen /> 
-    
-     {/*  <LoginScreen/>*/}
+    <SafeAreaProvider style={backgroundStyle}>
       
-    </SafeAreaView>
+        <StatusBar />
+       <MainNavigator/>
+      
+    </SafeAreaProvider>
   );
 };
+{/* <RegisterScreen />
+<RegisterSuccessfulScreen/>
+<MainNavigator />
+<LoginScreen/>
+*/}
 
 
 

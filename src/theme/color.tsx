@@ -5,12 +5,12 @@ import config from "../config";
 const themes = {
   Misao: {
 //Logo color: 
-Logo: "#006623",
+    Logo: "#006623",
     // primary color
     primaryLightColor: "#",
     primaryColor: "#006623",//00b970//bc0021
     primaryColorDark: "#00945a",
-    primaryColorLight: "#00e78c",
+    primaryColorLight: "#B5E9BA",
     onPrimaryColor: "#ffffff",//
     customonOnPrimaryColor:'#bc0021',
 
@@ -24,7 +24,7 @@ Logo: "#006623",
     onAccentColor: "#fff",
 
     // secondary color, primary color split
-    secondaryColor: "#b90039",
+    secondaryColor: "#B5E9BA",
     onSecondaryColor: "#fff",
 
     // tertiary color, secondary color intermediately related
@@ -43,7 +43,7 @@ Logo: "#006623",
 
     // text color
     primaryText: "#010203",//#010203
-    secondaryText: "#5d5d5d",
+    secondaryText: "#B5E9BA",
     disabledText: "rgba(0, 0, 0, 0.38)",
     normalText: "#010203",
     linkText: "#007537",

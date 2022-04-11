@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.primaryColor,
+    backgroundColor: color.black,
     borderRadius: BUTTON_BORDER_RADIUS,
   },
   defaultContainer: {
