@@ -4,22 +4,15 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import products from '../../assets/data/product';
-import category from '../../assets/data/category';
-import HotDealItem from '../../component/HotDeal';
 import CategoryList from '../../component/CategoryList';
-import ProductItem from '../../component/ProductItem';
-
+import PostItem from '../../component/PostItem';
+//import data
+import category from '../../assets/data/category';
+import post from '../../assets/data/post';
 
 import Button from '../../component/Button';
 import LinkButton from '../../component/Button/LinkButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParameterList } from '../../MainNavigator';
-
-type HomeProps = NativeStackScreenProps<RootStackParameterList, "Home">
 
 /* to ignore the warning message: 'VirtualizedLists should never be nested inside plain ScrollViews 
 with the same orientation because it can break windowing and other functionality - use another 
@@ -31,7 +24,7 @@ import layout from '../../theme/layout';
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
+
 
   return (
     <SafeAreaProvider>
@@ -51,59 +44,16 @@ const HomeScreen = () => {
             {/* Render Product Component */}
             {/* <ProductItem item = {products[0]}/> */}
             <View style={styles.middleContainer}>
-              <View style={styles.topContent}>
-                <View style={styles.banner}>
-                  <View style={styles.imageContainer}>
-
-                    <Image style={styles.image} source={require('../../image/Banner.png')} />
-                  </View>
-                </View>
-
-              </View>
+              
 
               <View style={styles.centerContent}>
+                
+                
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText]}>Giá sốc hôm nay <FontAwesome name={'bolt'} color={'#FF0000'} size={22} /></Heading6>
-
-                    <LinkButton
-                      title="Xem thêm"
-                      titleStyle={styles.viewAllText}
-
-                    />
-
-                  </View>
-                </View>
-                <View style={styles.hotDeal}>
-
-                  <FlatList
-                    horizontal
-                    data={products}
-                    showsHorizontalScrollIndicator={false}
-                    alwaysBounceHorizontal={false}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item, index }) => {
-                      return (
-                        <View>
-                          {
-                            item.discountPercentage && (
-                              <HotDealItem item={item}
-                                contentContainerStyle={styles.hotDealList}
-                                scrollEnabled={false}
-                              />
-                            )
-                          }
-                        </View>
-                      )
-                    }}
-                  />
-                </View>
-                <View style={styles.hotDealContentainer}>
-                  <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Tìm theo danh mục </Heading6>
+                    <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Danh mục </Heading6>
 
 
-                    <FontAwesome name={'arrow-right'} color={color.backgroundColor} size={18} />
 
                   </View>
                 </View>
@@ -127,15 +77,15 @@ const HomeScreen = () => {
                   <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>
 
 
-                  <FontAwesome name={'filter'} color={color.lightBlack} size={16} />
+                  <FontAwesome name={'filter'} color={color.lightBlack} size={18} />
 
                 </View>
               </View>
               <FlatList
                 contentContainerStyle={styles.ProductItemList}
-                data={products}
-                numColumns={2}
-                renderItem={({ item }) => <ProductItem item={item} />}
+                data={post}
+               
+                renderItem={({ item }) => <PostItem post={item} />}
               />
             </View>
           </ScrollView>

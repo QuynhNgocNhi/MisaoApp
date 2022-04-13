@@ -4,7 +4,7 @@ import config from "../config";
 // Color Themes
 const themes = {
   Misao: {
-//Logo color: 
+    //Logo color: 
     Logo: "#006623",
     // primary color
     primaryLightColor: "#",
@@ -12,7 +12,7 @@ const themes = {
     primaryColorDark: "#00945a",
     primaryColorLight: "#B5E9BA",
     onPrimaryColor: "#ffffff",//
-    customonOnPrimaryColor:'#bc0021',
+    customonOnPrimaryColor: '#bc0021',
 
     //dark background
     //darkBackgroundColor:'#bc0021',
@@ -58,11 +58,11 @@ const themes = {
     onError: "#fff",
     black: "#010203",
     white: "#fff",
-
+    lightBlack: "#696969",
     // border color
     borderColor: "#d1d1d1",
 
-  
+
   }
 };
 

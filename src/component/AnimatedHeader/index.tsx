@@ -11,15 +11,21 @@ import SearchBar from '../SearchBar';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParameterList } from '../../MainNavigator';
 
-const HEADER_HEIGHT = 150;
+
+const HEADER_HEIGHT = 140;
 const HomeHeader = () => {
+    const navigation = useNavigation();
 
     return (
         <View style={styles.root}>
             <View style={styles.topContainer}>
                 <Header
-                    containerStyle={{ borderBottomWidth: 0, }}
+                    containerStyle={{ borderBottomWidth: 0, marginVertical: 5 }}
                     backgroundColor={color.themeBackground}
                     centerComponent={
                         <Logo style={styles.Logo}>Misao</Logo>
@@ -62,8 +68,8 @@ const HomeHeader = () => {
 
             </View>
             <View style={styles.middleContainer} >
-                <View style={styles.search}>
-                    <SearchBar />
+                <View style={styles.search} >
+
                 </View>
 
             </View>
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
     },
     topContainer: {
 
-        backgroundColor: color.black
+
     },
     LogoContainer: {
 
@@ -112,13 +118,17 @@ const styles = StyleSheet.create({
     },
     middleContainer: {
         alignItems: 'center',
-        backgroundColor: color.Black,
+
+        bottom: 20,
 
     },
     search: {
         width: '95%',
+
     },
 
 
 });
+
+
 export default HomeHeader;

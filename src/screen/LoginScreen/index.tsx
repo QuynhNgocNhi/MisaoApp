@@ -5,9 +5,10 @@ import Svg, { Path } from 'react-native-svg';
 // import color
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-
+import Icon from '../../component/Icon';
 // import components
-import Button from '../../component/Button';
+import ButtonNormal from '../../component/Button';
+import { Button } from 'react-native-elements';
 import LinkButton from '../../component/Button/LinkButton';
 import UnderlineTextInput from '../../component/InputText';
 import UnderlinePasswordInput from '../../component/InputPassword';
@@ -32,8 +33,11 @@ const Login = () => {
       <KeyboardAwareScrollView
         contentContainerStyle={styles.contentContainerStyle}>
         <View style={styles.content}>
+
           <View style={styles.top}>
             <View style={styles.box}>
+
+
               <ImageBackground source={headerImg} resizeMode="cover" style={styles.image}>
                 <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
                 <Svg
@@ -50,7 +54,11 @@ const Login = () => {
 
               </ImageBackground>
 
+              <View style={styles.iconContainer} >
+                <Button type="clear" onPress={() => navigation.goBack()} icon={<Icon name={'md-chevron-back-circle-sharp'} size={42} color={color.white} />} />
+              </View>
             </View>
+
           </View>
 
           <View style={styles.footer}>
@@ -81,14 +89,14 @@ const Login = () => {
                 />
               </View>
               <View style={styles.buttonsGroup}>
-                <Button
+                <ButtonNormal
                   buttonStyle={styles.customButton}
-                  onPress={() => {navigation.navigate('Home');}}
+                  onPress={() => { navigation.navigate('Home'); }}
                   title={'Đăng nhập'.toUpperCase()}
                 />
               </View>
               <LinkButton
-                onPress={() => {navigation.navigate('Home');}}
+                onPress={() => { navigation.navigate('Home'); }}
                 title="Quên mật khẩu"
                 titleStyle={styles.forgotPasswordText}
               />
@@ -96,7 +104,7 @@ const Login = () => {
             <View style={styles.vSpacer} />
             <View style={styles.termBox}>
               <TouchableWithoutFeedback
-                onPress={() => {navigation.push('Login');}}>
+                onPress={() => { navigation.push('Login'); }}>
                 <View style={styles.termAndCondition}>
                   <Text style={styles.footerText}>
                     Bằng việc đăng nhập/đăng ký, bạn đồng ý với
@@ -127,6 +135,14 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: "column",
     backgroundColor: color.primaryColor,
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 50,
+    left: 10,
+
+
+
   },
   contentContainerStyle: {
     flexGrow: 1,

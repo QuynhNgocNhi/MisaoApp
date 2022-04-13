@@ -8,24 +8,21 @@ import layout from '../../theme/layout';
 
 
 
+
 //10 latest product that have oldprice
 
 //import image from '../../data/image'
 interface ProductItemProps {
     item: {
-        id: string,
-        title: string,
-        image: string,
-        price: number,
-        oldPrice?: number,
-        discountPercentage?: number,
-        //for optional props: oldPrice? 
+        CategoryId: string,
+        CategoryName: string,
+        CategoryImage: string,
 
     }
 }
 
 
-const HotDealItem = ({ item }: ProductItemProps) => {
+const CategoryList = ({ item }: CategoryItemProps) => {
     useEffect(() => {
 
         LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
@@ -37,16 +34,7 @@ const HotDealItem = ({ item }: ProductItemProps) => {
 
                 <Image style={styles.image} source={item.image} />
                 <View style={styles.tittleContainer}>
-                    <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
-                </View>
-
-
-
-                <Text style={styles.price}>đ{item.price}
-                   
-                </Text>
-                <View style={styles.discountLabelContainer}>
-                    <Text style={styles.label}>{`- ${item.discountPercentage}%`}</Text>
+                    <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
                 </View>
             </View>
         </View>
@@ -73,62 +61,28 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         height: 52,
     },
-    /*  root: {
-         flexDirection: 'column',
-         width: '25%',
-         borderWidth: 1,
-         borderColor: '#d1d1d1',
-         backgroundColor: '#fff',
-         borderRadius: 5,
- 
-     }, */
+    
     image: {
 
         width: '100%',
         height: 80,
         resizeMode: 'cover',
-        borderWidth: 1,
-        borderColor: '#FF0000',
+        
     },
-    /* bottomContainer: {
-        padding: 5,
-        width: '25%',
-        flex: 1.5,
-    }, */
-
+   
     title: {
         flex: 1,
         marginTop: 5,
         color: '#000',
         fontSize: 16
     },
-    price: {
-        marginBottom: 5,
-        color: '#FF0000',
-        fontSize: 16,
-        fontWeight: 'bold',
-
-    },
+  
     
     text: {
 
         color: '#000',
 
     },
-    discountLabelContainer: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        borderRadius: 6,
-        paddingVertical: 2,
-        paddingHorizontal: 6,
-        backgroundColor: '#FF9A9A',
-        borderWidth: 1,
-        borderColor: '#FF0000',
-    },
-    label: {
-        fontSize: 11,
-        color: color.onPrimaryColor,
-    },
+   
 });
-export default HotDealItem;
+export default CategoryList;

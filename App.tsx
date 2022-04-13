@@ -35,6 +35,7 @@ import LoginScreen from './src/screen/LoginScreen';
 import RegisterScreen from './src/screen/RegisterScreen';
 import RegisterSuccessfulScreen from './src/screen/RegisterSuccessfulScreen';
 import WelcomeScreen from './src/screen/Welcome';
+import Posts from './src/screen/PostsScreen';
 import MainNavigator from './src/MainNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -47,17 +48,16 @@ const App = () => {
 
   return (
     <SafeAreaProvider style={backgroundStyle}>
-      
         <StatusBar />
-       <MainNavigator/>
-      
+     
+<MainNavigator/>
     </SafeAreaProvider>
   );
 };
 {/* <RegisterScreen />
+<LoginScreen/>
 <RegisterSuccessfulScreen/>
 <MainNavigator />
-<LoginScreen/>
 */}
 
 
