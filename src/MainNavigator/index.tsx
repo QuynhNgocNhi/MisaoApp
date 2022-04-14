@@ -8,7 +8,18 @@ import Register from '../../src/screen/RegisterScreen';
 import RegisterSuccessful from '../../src/screen/RegisterSuccessfulScreen';
 import Welcome from '../../src/screen/Welcome';
 import PostsScreen from '../../src/screen/PostsScreen';
+import PostsSaved from '../../src/screen/PostsSaved';
+import ProductsSaved from '../../src/screen/ProductsSaved';
+import Notification from '../../src/screen/Notification';
 import HomeNavigation from '../../src/TabNavigation';
+
+// import Add screen
+import AddItem from '../screen/AddScreen';
+// import Add Product screen
+import AddProduct from '../screen/AddScreen/AddProduct';
+import AddProductLastStep from '../screen/AddScreen/AddProductLastStep';
+
+
 import HeaderIconButton from '../component/HeaderButton'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -26,10 +37,14 @@ export type RootStackParameterList = {
   HomeNavigation: {
     userName: string;
   };
-  Home: {
-    productName: string;
-  };
+
   Posts;
+  PostsSaved;
+  ProductsSaved;
+  Notification;
+  AddItem;
+  AddProduct;
+  AddProductLastStep;
   AddPost;
   Chat;
   Profile;
@@ -61,7 +76,24 @@ const MainNavigator = () => {
     <NavigationContainer>
 
       <RootStack.Navigator >
+        {/*  <RootStack.Screen name="AddItem" options={({ navigation }) => ({
+          title: 'Thêm sản phẩm/ tin mua',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <HeaderIconButton
+              onPress={() => navigation.goBack()}
+              name={BACK_ICON}
+              color={color.primaryColor}
+            />
+          ),
+
+        })} component={AddItem} /> */}
+        <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation}
+        />
         <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
+        <RootStack.Screen name="AddItem" options={{ headerShown: false }} component={AddItem} />
+        <RootStack.Screen name="AddProduct" options={{ headerShown: false }} component={AddProduct} />
+        <RootStack.Screen name="AddProductLastStep" options={{ headerShown: false }} component={AddProductLastStep} />
 
         <RootStack.Screen name="Login" options={({ navigation }) => ({
           /* title: 'Edit Profile', */
@@ -75,9 +107,8 @@ const MainNavigator = () => {
           ),
         })}
           component={Login} />
-        <RootStack.Screen name="Home" options={{ headerShown: false }} component={Home}
-        />
-        <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
+        {/*         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
+ */}
         <RootStack.Screen name="Posts" options={{ headerShown: false }} component={PostsScreen} />
         <RootStack.Screen name="Register" options={({ navigation }) => ({
           title: 'Đăng ký tài khoản',
@@ -91,6 +122,42 @@ const MainNavigator = () => {
           ),
 
         })} component={Register} />
+        <RootStack.Screen name="PostsSaved" options={({ navigation }) => ({
+          title: 'Tin đã lưu',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <HeaderIconButton
+              onPress={() => navigation.goBack()}
+              name={BACK_ICON}
+              color={color.primaryColor}
+            />
+          ),
+
+        })} component={PostsSaved} />
+        <RootStack.Screen name="ProductsSaved" options={({ navigation }) => ({
+          title: 'Yêu thích',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <HeaderIconButton
+              onPress={() => navigation.goBack()}
+              name={BACK_ICON}
+              color={color.primaryColor}
+            />
+          ),
+
+        })} component={ProductsSaved} />
+        <RootStack.Screen name="Notification" options={({ navigation }) => ({
+          title: 'Thông báo',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <HeaderIconButton
+              onPress={() => navigation.goBack()}
+              name={BACK_ICON}
+              color={color.primaryColor}
+            />
+          ),
+
+        })} component={Notification} />
         <RootStack.Screen name="RegisterSuccessful" options={{ headerShown: false }} component={RegisterSuccessful} />
       </RootStack.Navigator>
 

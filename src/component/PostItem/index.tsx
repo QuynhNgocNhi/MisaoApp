@@ -22,6 +22,8 @@ interface PostsProps {
         title: string,
         content: string,
         userId: string,
+        name: string,
+        avatar: string,
         time: number,
         timeUnit: string,
         askedTimes: number,
@@ -39,10 +41,10 @@ const PostItem = ({ post }: PostsProps) => {
                         <Avatar
                             size="medium"
                             rounded
-                            source={require('../../assets/image/meo.jpg')}
+                            source={post.avatar}
                         />
 
-                        <Text style={styles.userName} numberOfLines={1}>{post.userId}</Text>
+                        <Text style={styles.userName} numberOfLines={1}>{post.name}</Text>
                     </View>
                     <View style={styles.bookmarkContainer}>
 
@@ -59,7 +61,8 @@ const PostItem = ({ post }: PostsProps) => {
                 </View>
                 <View style={styles.bottomContainer}>
 
-                    <Text numberOfLines={1} style={styles.postTime}>{post.time} {post.timeUnit} trước
+
+                    <Text numberOfLines={1} style={styles.postTime}><FontAwesome name={'clock-o'} size={22} /> {post.time} {post.timeUnit} trước
                     </Text>
 
                     <Text numberOfLines={1} style={styles.askedTimes}>{post.askedTimes} người đang hỏi
@@ -73,8 +76,8 @@ const styles = StyleSheet.create({
 
     root: {
         flexDirection: 'column',
-
-        borderWidth: 1,
+        alignItems: 'center',
+        borderBottomWidth: 0.5,
         borderColor: '#d1d1d1',
         backgroundColor: '#fff',
         borderRadius: 5,
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
     {
         flexDirection: 'row',
 
-        margin: 5,
+
     },
     bookmarkContainer: {
         position: 'absolute',
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
         width: '90%',
     },
     title: {
-        margin: 10,
+
         marginBottom: 0,
         color: '#000',
         fontSize: 18,
@@ -120,19 +123,25 @@ const styles = StyleSheet.create({
 
     },
     content: {
-        margin: 10,
+
         marginTop: 0,
         color: '#000',
         fontSize: 18,
 
 
     },
-    bottomContainer:{
-       
+    bottomContainer: {
+
+        width: '90%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: 10,
-        marginTop: 0,
+        marginBottom: 10,
+        marginTop: 5,
+
+
+    },
+    postTime: {
+
     }
 
 });

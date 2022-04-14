@@ -13,6 +13,7 @@
  *
  * @format
  */
+import SearchBox from './src/component/SearchBox';
 
 import React, { Component } from 'react';
 
@@ -48,16 +49,16 @@ const App = () => {
 
   return (
     <SafeAreaProvider style={backgroundStyle}>
-        <StatusBar />
-     
-<MainNavigator/>
+      <StatusBar />
+
+      <MainNavigator />
     </SafeAreaProvider>
   );
 };
 {/* <RegisterScreen />
+<SearchBox />
 <LoginScreen/>
 <RegisterSuccessfulScreen/>
-<MainNavigator />
 */}
 
 

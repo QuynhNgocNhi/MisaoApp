@@ -3,7 +3,7 @@ export default [
         id: '1',
         name: 'Quang Đại',
         avatar: require('../image/meo.jpg'),
-        averageRating: 4.5,              
+        averageRating: 4.5,
         rating: 57,
         price: 30000,
         oldPrice: 29.990,
@@ -32,8 +32,8 @@ export default [
         price: 37000,
         unitPrice: 'tấn',
         askedTimes: 10,
-        
-        
+
+
     },
     {
         id: '4',
@@ -73,6 +73,7 @@ export default [
     },
     {
         id: '7',
+
         name: 'Hoàng Thượng',
         avatar: require('../image/meo.jpg'),
         averageRating: 5,
@@ -80,6 +81,6 @@ export default [
         price: 37000,
         unitPrice: 'kg',
         askedTimes: 3,
-        
+
     }
 ]

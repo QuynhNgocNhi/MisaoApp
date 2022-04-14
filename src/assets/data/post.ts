@@ -2,17 +2,22 @@ export default [
     {
         id: '1',
         title: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        content:'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        userId: '1',              
+        content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
+        userId: '1',
+        name: 'Quang Đại',
+        avatar: require('../image/meo.jpg'),
         time: 1,
         timeUnit: 'phút',
         askedTimes: 0,
+
     },
     {
         id: '2',
         title: 'Mầm sen ngọt hải phòng',
-        content:'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        userId: '2',              
+        content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
+        userId: '2',
+        name: 'Đại Ca',
+        avatar: require('../image/meo.jpg'),
         time: 1,
         timeUnit: 'phút',
         askedTimes: 5,
@@ -20,19 +25,23 @@ export default [
     {
         id: '3',
         title: 'Mầm sen meow meow',
-        content:'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        userId: '2',              
+        content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
+        userId: '3',
+        name: 'Đại tỷ',
+        avatar: require('../image/meo.jpg'),
         time: 1,
         timeUnit: 'phút',
         askedTimes: 10,
-        
-        
+
+
     },
     {
         id: '4',
         title: 'Mầm sen meow meow',
-        content:'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        userId: '2',              
+        content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
+        userId: '4',
+        name: 'Lâm sen',
+        avatar: require('../image/meo.jpg'),
         time: 1,
         timeUnit: 'phút',
         askedTimes: 21,
@@ -40,8 +49,10 @@ export default [
     {
         id: '5',
         title: 'Mầm sen meow meow',
-        content:'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        userId: '2',              
+        content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
+        userId: '5',
+        name: 'Mèo',
+        avatar: require('../image/meo.jpg'),
         time: 1,
         timeUnit: 'phút',
         askedTimes: 5,
@@ -49,8 +60,10 @@ export default [
     {
         id: '6',
         title: 'Mầm sen meow meow',
-        content:'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        userId: '2',              
+        content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
+        userId: '6',
+        name: 'Sóc kute',
+        avatar: require('../image/meo.jpg'),
         time: 1,
         timeUnit: 'phút',
         askedTimes: 21,
@@ -58,11 +71,13 @@ export default [
     {
         id: '7',
         title: 'Mầm sen meow meow',
-        content:'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
-        userId: '2',              
+        content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
+        userId: '7',
+        name: 'Hoàng Thượng',
+        avatar: require('../image/meo.jpg'),
         time: 1,
         timeUnit: 'phút',
         askedTimes: 3,
-        
+
     }
 ]

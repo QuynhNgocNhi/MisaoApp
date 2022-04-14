@@ -4,8 +4,6 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // import components
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TabBadgeIcon from '../component/TabbarIcon';
 
 // import Home screen
@@ -14,7 +12,7 @@ import Home from '../screen/HomeScreen';
 // import Posts screen
 import Posts from '../screen/PostsScreen';
 
-// import Cart screen
+// import Add screen
 import AddItem from '../screen/AddScreen';
 
 // import Chat screen
@@ -66,15 +64,20 @@ function TabNavigation() {
                     return <Icon name={iconName} size={size} color={color} />;
                 },
             })} */
-            tabBarOptions={{
-                keyboardHidesTabBar: true,
-                activeTintColor: Colors.primaryColor,
-                inactiveTintColor: Colors.black,
-                showLabel: false, // hide labels
-                style: {
-                    backgroundColor: Colors.surface // TabBar background
-                },
-            }}>
+            screenOptions={{
+                headerShown: false,
+                "tabBarHideOnKeyboard": true,
+                "tabBarActiveTintColor": "#006623",
+                "tabBarInactiveTintColor": "#010203",
+                "tabBarShowLabel": false,
+                "tabBarStyle": [
+                    {
+                        "display": "flex"
+                    },
+                    null
+                ]
+            }}
+        >
 
             <Tab.Screen name="Home" component={Home}
 

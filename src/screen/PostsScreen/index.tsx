@@ -44,11 +44,11 @@ const HomeScreen = () => {
             {/* Render Product Component */}
             {/* <ProductItem item = {products[0]}/> */}
             <View style={styles.middleContainer}>
-              
+
 
               <View style={styles.centerContent}>
-                
-                
+
+
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
                     <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Danh mục </Heading6>
@@ -80,13 +80,13 @@ const HomeScreen = () => {
                   <FontAwesome name={'filter'} color={color.lightBlack} size={18} />
 
                 </View>
+                <FlatList
+                  contentContainerStyle={styles.postListContainer}
+                  data={post}
+
+                  renderItem={({ item }) => <PostItem post={item} />}
+                />
               </View>
-              <FlatList
-                contentContainerStyle={styles.ProductItemList}
-                data={post}
-               
-                renderItem={({ item }) => <PostItem post={item} />}
-              />
             </View>
           </ScrollView>
 
@@ -182,7 +182,8 @@ const styles = StyleSheet.create({
   CategoryListContainer: {
     padding: 10,
   },
-  ProductItemList: {
+
+  postListContainer: {
 
   }
 });

@@ -53,10 +53,10 @@ const ProductItem = ({ item }: ProductItemProps) => {
 
         {item.discountPercentage && (<View style={styles.discountLabelContainer}>
           <Text style={styles.label}>{`- ${item.discountPercentage}%`}</Text>
-        
+
         </View>)}
         <View style={styles.wishlistContainer}>
-          <FontAwesome style={styles.wishlist} name={"heart-o"} color={'#FF0000'} size={24}/>
+          <FontAwesome style={styles.wishlist} name={"heart-o"} color={'#FF0000'} size={24} />
         </View>
       </View>
     </View>
@@ -142,13 +142,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-  
+
   },
   wishlist: {
     opacity: 0.5,
   },
   price: {
-    margin: 5,
+    marginLeft: 10,
+
     color: '#000',
     fontSize: 18,
     fontWeight: 'bold',
@@ -165,20 +166,22 @@ const styles = StyleSheet.create({
     color: '#000',
 
   },
-  unitPriceRow:{
-flexDirection: 'row',
-justifyContent: 'space-between'
+  unitPriceRow: {
+
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
 
   unitPrice: {
-margin: 5,
-   
+    marginRight: 10,
+
     fontSize: 16,
-    
+
   },
-  askedTimes:{
-alignSelf:'flex-end',
-paddingBottom: 5,
+  askedTimes: {
+    marginRight: 10,
+    alignSelf: 'flex-end',
+    paddingBottom: 5,
   },
 
 });

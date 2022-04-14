@@ -12,7 +12,7 @@ const themes = {
     primaryColorDark: "#00945a",
     primaryColorLight: "#B5E9BA",
     onPrimaryColor: "#ffffff",//
-    customonOnPrimaryColor: '#bc0021',
+    customOnPrimaryColor: '#bc0021',
 
     //dark background
     //darkBackgroundColor:'#bc0021',
@@ -42,7 +42,7 @@ const themes = {
     overlayColor: "#b90039",
 
     // text color
-    primaryText: "#010203",//#010203
+    primaryText: "#010203",//đen xanh
     secondaryText: "#B5E9BA",
     disabledText: "rgba(0, 0, 0, 0.38)",
     normalText: "#010203",
@@ -50,10 +50,11 @@ const themes = {
 
     // background, surface
     background: "#ffffff",
-    onBackground: "#212121",
-    themeBackground: "#B5E9BA",
+    underBackground: "#F4F4F4",
+    onBackground: "#212121", // màu than chì
+    themeBackground: "#B5E9BA",// màu xanh trang chủ
     surface: "#fff",
-    onSurface: "#757575",
+    onSurface: "#757575", //xám than
     error: "#cd040b",
     onError: "#fff",
     black: "#010203",

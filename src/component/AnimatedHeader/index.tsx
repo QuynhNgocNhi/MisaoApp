@@ -8,7 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Header } from 'react-native-elements';
 import { Icon } from 'react-native-elements'
 import SearchBar from '../SearchBar';
-
+import SearchBox from '../SearchBox';
+import { Button } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
@@ -17,7 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParameterList } from '../../MainNavigator';
 
 
-const HEADER_HEIGHT = 140;
+const HEADER_HEIGHT = 145;
 const HomeHeader = () => {
     const navigation = useNavigation();
 
@@ -36,26 +37,31 @@ const HomeHeader = () => {
                         <View style={styles.iconListContainer}>
                             <View style={styles.bookmark}>
 
-                                <FontAwesome
-                                    name={'bookmark-o'}
-                                    size={22}
-                                    color={'#ffffff'} />
+                                <Button type="clear" onPress={() => { navigation.navigate('PostsSaved'); }}
+                                    icon={<FontAwesome
+                                        name={'bookmark-o'}
+                                        size={22}
+                                        color={'#ffffff'} />} />
+
+
 
 
                             </View>
                             <View style={styles.heart}>
+                                <Button type="clear" onPress={() => { navigation.navigate('ProductsSaved'); }}
+                                    icon={<FontAwesome
+                                        name={'heart-o'}
+                                        size={22}
+                                        color={'#ffffff'} />} />
 
-                                <FontAwesome
-                                    name={'heart-o'}
-                                    size={22}
-                                    color={'#ffffff'} />
                             </View>
                             <View style={styles.notification}>
+                                <Button type="clear" onPress={() => { navigation.navigate('Notification'); }}
+                                    icon={<FontAwesome
+                                        name={'bell-o'}
+                                        size={22}
+                                        color={'#ffffff'} />} />
 
-                                <FontAwesome
-                                    name={'bell-o'}
-                                    size={22}
-                                    color={'#ffffff'} />
 
 
                             </View>
@@ -68,8 +74,9 @@ const HomeHeader = () => {
 
             </View>
             <View style={styles.middleContainer} >
-                <View style={styles.search} >
 
+                <View style={styles.search} >
+                    <SearchBar />
                 </View>
 
             </View>
@@ -101,6 +108,7 @@ const styles = StyleSheet.create({
 
     },
     Logo: {
+        marginVertical: 5,
         color: color.white,
         fontSize: 24,
 
@@ -111,15 +119,14 @@ const styles = StyleSheet.create({
 
     },
     iconListContainer: {
-        width: '100%',
-        justifyContent: 'space-between',
         flexDirection: "row",
-
     },
+
     middleContainer: {
         alignItems: 'center',
 
         bottom: 20,
+
 
     },
     search: {
