@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, 
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import CategoryList from '../../component/CategoryList';
+import CategoryItem from '../../component/CategoryItem';
 import PostItem from '../../component/PostItem';
 //import data
 import category from '../../assets/data/category';
@@ -58,7 +58,7 @@ const HomeScreen = () => {
                                         showsHorizontalScrollIndicator={false}
                                         alwaysBounceHorizontal={false}
                                         keyExtractor={item => item.id}
-                                        renderItem={({ item }) => <CategoryList item={item} />}
+                                        renderItem={({ item }) => <CategoryItem category={item} />}
                                     />
                                 </View>
 

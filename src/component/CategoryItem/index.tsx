@@ -1,7 +1,7 @@
 import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox } from 'react-native'
 import React, { useEffect } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Heading6 } from '../../component/Text';
+import { Heading6 } from '../Text';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
@@ -12,17 +12,17 @@ import layout from '../../theme/layout';
 //10 latest product that have oldprice
 
 //import image from '../../data/image'
-interface ProductItemProps {
-    item: {
-        CategoryId: string,
-        CategoryName: string,
-        CategoryImage: string,
+interface categoryItemProps {
+    category: {
+        id: string,
+        name: string,
+        image: string,
 
     }
 }
 
 
-const CategoryList = ({ item }: CategoryItemProps) => {
+const CategoryItem = ({ category }: categoryItemProps) => {
     useEffect(() => {
 
         LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
@@ -32,9 +32,9 @@ const CategoryList = ({ item }: CategoryItemProps) => {
 
             <View style={styles.bottomContainer}>
 
-                <Image style={styles.image} source={item.image} />
+                <Image style={styles.image} source={category.image} />
                 <View style={styles.tittleContainer}>
-                    <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
+                    <Text style={styles.title} numberOfLines={2}>{category.name}</Text>
                 </View>
             </View>
         </View>
@@ -61,28 +61,28 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         height: 52,
     },
-    
+
     image: {
 
         width: '100%',
         height: 80,
         resizeMode: 'cover',
-        
+
     },
-   
+
     title: {
         flex: 1,
         marginTop: 5,
         color: '#000',
         fontSize: 16
     },
-  
-    
+
+
     text: {
 
         color: '#000',
 
     },
-   
+
 });
-export default CategoryList;
+export default CategoryItem;

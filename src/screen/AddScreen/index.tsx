@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import CategoryList from '../../component/CategoryList';
+import CategoryList from '../../component/CategoryItem';
 import PostItem from '../../component/PostItem';
 //import data
 import category from '../../assets/data/category';

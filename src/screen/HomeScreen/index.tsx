@@ -7,7 +7,7 @@ import HomeHeader from '../../component/AnimatedHeader';
 import products from '../../assets/data/product';
 import category from '../../assets/data/category';
 import HotDealItem from '../../component/HotDeal';
-import CategoryList from '../../component/CategoryList';
+import CategoryList from '../../component/CategoryItem';
 import ProductItem from '../../component/ProductItem';
 
 
@@ -115,7 +115,7 @@ const HomeScreen = () => {
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
                     keyExtractor={item => item.id}
-                    renderItem={({ item }) => <CategoryList item={item} />}
+                    renderItem={({ item }) => <CategoryList category={item} />}
                   />
                 </View>
 

@@ -18,6 +18,7 @@ import AddItem from '../screen/AddScreen';
 // import Add Product screen
 import AddProduct from '../screen/AddScreen/AddProduct';
 import AddProductLastStep from '../screen/AddScreen/AddProductLastStep';
+import ProductDetail from '../screen/ProductDetailScreen';
 
 
 import HeaderIconButton from '../component/HeaderButton'
@@ -44,7 +45,12 @@ export type RootStackParameterList = {
   Notification;
   AddItem;
   AddProduct;
-  AddProductLastStep;
+  AddProductLastStep: {
+    productId: string;
+  };
+  ProductDetail: {
+    productId: string;
+  };
   AddPost;
   Chat;
   Profile;
@@ -88,12 +94,13 @@ const MainNavigator = () => {
           ),
 
         })} component={AddItem} /> */}
+        <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation}
         />
-        <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
         <RootStack.Screen name="AddItem" options={{ headerShown: false }} component={AddItem} />
         <RootStack.Screen name="AddProduct" options={{ headerShown: false }} component={AddProduct} />
         <RootStack.Screen name="AddProductLastStep" options={{ headerShown: false }} component={AddProductLastStep} />
+        <RootStack.Screen name="ProductDetail" options={{ headerShown: false }} component={ProductDetail} />
 
         <RootStack.Screen name="Login" options={({ navigation }) => ({
           /* title: 'Edit Profile', */

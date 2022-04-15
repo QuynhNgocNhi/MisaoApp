@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import CategoryList from '../../component/CategoryList';
+import CategoryList from '../../component/CategoryItem';
 import PostItem from '../../component/PostItem';
 //import data
 import category from '../../assets/data/category';
@@ -44,11 +44,11 @@ const HomeScreen = () => {
             {/* Render Product Component */}
             {/* <ProductItem item = {products[0]}/> */}
             <View style={styles.middleContainer}>
-              
+
 
               <View style={styles.centerContent}>
-                
-                
+
+
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
                     <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Danh mục </Heading6>
@@ -84,7 +84,7 @@ const HomeScreen = () => {
               <FlatList
                 contentContainerStyle={styles.ProductItemList}
                 data={post}
-               
+
                 renderItem={({ item }) => <PostItem post={item} />}
               />
             </View>

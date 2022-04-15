@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import CategoryList from '../../component/CategoryList';
+import CategoryItem from '../../component/CategoryItem';
 import PostItem from '../../component/PostItem';
 //import data
 import category from '../../assets/data/category';
@@ -64,8 +64,8 @@ const HomeScreen = () => {
                     data={category}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => <CategoryList item={item} />}
+                    keyExtractor={category => category.id}
+                    renderItem={({ item }) => <CategoryItem category={item} />}
                   />
                 </View>
 

@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from 'react-native-elements';
 
-import CategoryList from '../../component/CategoryList';
+import CategoryItem from '../../component/CategoryItem';
 //import data
 import category from '../../assets/data/category';
 
@@ -132,7 +132,7 @@ const AddProductScreen = () => {
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
                                     keyExtractor={item => item.id}
-                                    renderItem={({ item }) => <CategoryList item={item} />}
+                                    renderItem={({ item }) => <CategoryItem category={item} />}
                                 />
                             </View>
 
