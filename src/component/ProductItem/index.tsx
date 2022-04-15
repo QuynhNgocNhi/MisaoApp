@@ -6,6 +6,7 @@ import { Heading6 } from '../../component/Text';
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 import NumberFormat from 'react-number-format';
+import { useNavigation } from '@react-navigation/native';
 
 
 //import image from '../../data/image'
@@ -30,14 +31,16 @@ const ProductItem = ({ item }: ProductItemProps) => {
 
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
   }, [])
+  const navigation = useNavigation();
+  const data = { productId: 'Tên sản phẩm nè' }
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
 
       <View style={styles.bottomContainer}>
 
         <Image style={styles.image} source={item.image} />
         <View style={styles.tittleContainer}>
-          <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
+          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }} style={styles.title} numberOfLines={2}>{item.title}</Text>
         </View>
 
 

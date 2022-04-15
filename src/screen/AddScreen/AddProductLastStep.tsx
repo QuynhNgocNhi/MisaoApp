@@ -1,6 +1,6 @@
 //to do: onpress change state button
 
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import CategoryList from '../../component/CategoryList';
+import CategoryList from '../../component/CategoryItem';
 //import data
 import category from '../../assets/data/category';
 
@@ -31,7 +31,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
-const AddProductScreen = () => {
+const AddProductScreen = (Props) => {
     const navigation = useNavigation();
 
     const [date, setDate] = useState('09-10-2020');
@@ -39,7 +39,7 @@ const AddProductScreen = () => {
     const stateName = 'Nguyễn Văn A'
     const statePhone = '097773777'
     const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
-
+    const data = { productId: 'Tên sản phẩm nè' }
 
     return (
         <SafeAreaProvider>
@@ -162,10 +162,11 @@ const AddProductScreen = () => {
                                 </View>
                                 <View style={styles.productOutOfStockDateContainerContainer}>
                                     {/*  <DateTimePicker
-                                    data={date}
-                                    mode='date'
-                                    display='default'
-                                    onChange={date => this.setState({ date })} /> */}
+                                      
+                                        
+                                        mode='date'
+                                        display='default'
+                                        onChange={date => this.setState({ date })} /> */}
                                 </View>
 
                             </View>
@@ -198,7 +199,7 @@ const AddProductScreen = () => {
                                         outlined
 
                                         buttonStyle={styles.customButtonAdd}
-                                        onPress={() => { navigation.navigate('Login'); }}
+                                        onPress={() => { navigation.navigate('ProductDetail', { data }); }}
                                         title={'Đăng sản phẩm'.toUpperCase()}
                                     />
 
