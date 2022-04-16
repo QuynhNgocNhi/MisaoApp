@@ -81,7 +81,7 @@ const AddScreen = () => {
               <Button
                 outlined
                 buttonStyle={styles.customButton}
-                onPress={() => { navigation.navigate('Login'); }}
+                onPress={() => { navigation.navigate('AddPost'); }}
                 title={'Đăng tin mua'.toUpperCase()}
               />
             </View>

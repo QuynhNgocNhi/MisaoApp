@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface AmazoneCloneTests : XCTestCase
+@interface MisaoTests : XCTestCase
 
 @end
 
-@implementation AmazoneCloneTests
+@implementation MisaoTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {
