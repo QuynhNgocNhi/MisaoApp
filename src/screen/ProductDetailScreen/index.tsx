@@ -11,6 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Avatar } from 'react-native-elements';
 import CommentItem from '../../component/CommentItem';
 import ProductItem from '../../component/ProductItem';
+import AddComment from '../../component/AddComment';
 
 //import data
 import comment from '../../assets/data/comment';
@@ -107,7 +108,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                             centerComponent={
                                 <Text style={
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>Tên sản phẩm{data.productId}
+                                }>{data.productId}
                                 </Text>
                             }
                             leftComponent={
@@ -273,6 +274,9 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         renderItem={({ item }) => <CommentItem comment={item} />}
                                     />
 
+                                </View>
+                                <View style={styles.AddCommentContainer}>
+                                    <AddComment />
                                 </View>
 
 

@@ -45,7 +45,7 @@ const themes = {
     primaryText: "#010203",//đen xanh
     secondaryText: "#B5E9BA",
     disabledText: "rgba(0, 0, 0, 0.38)",
-    normalText: "#010203",
+    normalText: "#424242",
     linkText: "#007537",
 
     // background, surface

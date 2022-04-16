@@ -6,21 +6,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Button } from 'react-native-elements';
-import DateTimePicker from '@react-native-community/datetimepicker';
-
-import CategoryList from '../../component/CategoryItem';
-//import data
-import category from '../../assets/data/category';
 
 // import components
 import ButtonNormal from '../../component/Button';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Header } from 'react-native-elements';
 import HeaderIconButton from '../../component/HeaderButton'
 
-import LinkButton from '../../component/Button/LinkButton';
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
 
 // import color, layout, style
@@ -138,7 +130,7 @@ const AddProductScreen = (Props) => {
                                 <View style={styles.tittleContainer}>
 
                                     <Icon name='calendar-month-outline' size={26} color='#5C8700' />
-                                    <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Ngày hết hàng</Heading6>
+                                    <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Ngày hết mua</Heading6>
                                 </View>
                                 <View style={styles.productOutOfStockDateContainerContainer}>
                                     {/*  <DateTimePicker
@@ -179,7 +171,7 @@ const AddProductScreen = (Props) => {
                                         outlined
 
                                         buttonStyle={styles.customButtonAdd}
-                                        onPress={() => { navigation.navigate('PostDetail', { data }); }}
+                                        onPress={() => { navigation.navigate('PostAddedPreview', { data }); }}
                                         title={'Đăng tin mua'.toUpperCase()}
                                     />
 

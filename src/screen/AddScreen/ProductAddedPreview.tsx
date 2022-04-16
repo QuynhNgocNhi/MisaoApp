@@ -10,12 +10,12 @@ import { Button } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Avatar } from 'react-native-elements';
 import CommentItem from '../../component/CommentItem';
+import ProductItem from '../../component/ProductItem';
 import AddComment from '../../component/AddComment';
-import post from '../../assets/data/post';
-import PostItem from '../../component/PostItem';
 
 //import data
 import comment from '../../assets/data/comment';
+import products from '../../assets/data/product';
 
 
 
@@ -86,7 +86,7 @@ import Comment from '../../assets/data/comment';
 
 
 
-const PostDetailScreen = ({ Props, route }) => {
+const ProductDetailScreen = ({ Props, route }) => {
     const navigation = useNavigation();
     const { data } = route.params;
     const [date, setDate] = useState('09-10-2020');
@@ -123,9 +123,9 @@ const PostDetailScreen = ({ Props, route }) => {
                     <ScrollView>
                         <View style={styles.container}>
                             <View style={[styles.box, styles.productDetailContainer]}>
-                                <View style={[styles.userContainer, styles.box]}>
+                                <View style={styles.userContainer}>
 
-                                    <View style={styles.userNameContainer}>
+                                    <View style={[styles.userNameContainer, { width: '100%', marginBottom: 20 }]}>
                                         <Avatar
                                             containerStyle={{
                                                 borderColor: 'grey',
@@ -142,19 +142,29 @@ const PostDetailScreen = ({ Props, route }) => {
                                             <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
                                         </View>
                                     </View>
-                                    <View style={styles.followContainer}>
 
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
-                                    </View>
                                 </View>
+                                <View style={styles.productContainer}>
 
+                                    <View style={styles.unitPriceRow}>
+
+                                        <Text style={styles.price}>50000 đ</Text>
+                                        <Text style={styles.oldPrice}> 59000 đ</Text>
+
+                                    </View>
+                                    <View style={styles.Line}></View>
+
+
+                                </View>
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
-                                    <Text style={styles.productName}>Cần mua 20kh cần tây</Text>
+                                    <Text style={styles.productStatus}>Tình trạng</Text>
 
+                                    <ButtonNormal buttonStyle={styles.statusButton} outlined title={'Còn hàng'}></ButtonNormal>
 
 
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
+                                    <Text style={[styles.productStatus, { marginBottom: 20 }]}>Mô tả sản phẩm</Text>
                                     <Text style={styles.productDescription}>
                                         Panse mang một vẻ đẹp ngọt ngào, đằm thắm nhưng không kém phần rực rỡ mà không phải loài hoa nào cũng có.
                                         Nó là loài cây biểu tượng của mặt trời của hi vọng, của sự ấm áp, hướng về những điều tốt đẹp nhất. Hiện nay có khá nhiều người yêu thích loại cây xinh đẹp này, trồng trong nhà như một cây trang trí tô điểm không gian.
@@ -163,115 +173,43 @@ const PostDetailScreen = ({ Props, route }) => {
 
                                 </View>
                                 <View style={[styles.productContainer, styles.productAdjust]}>
-                                    <Text style={styles.productStatus}>Chi tiết tin mua</Text>
+                                    <Text style={styles.productStatus}>Chi tiết sản phẩm</Text>
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={styles.requireName}>Danh mục</Text>
-                                        <Text style={styles.requireAnswer}>Trái cây</Text>
-                                    </View>
-                                    <View style={styles.productStatusItem}>
-
-                                        <Text style={styles.requireName}>Giao tới</Text>
-                                        <Text style={styles.requireAnswer}>Tiền Giang</Text>
+                                        <Text style={{ fontSize: 18 }}>Danh mục</Text>
+                                        <Text style={{ fontSize: 18 }}>Trái cây</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={styles.requireName}>Ngày còn hạn</Text>
-                                        <Text style={styles.requireAnswer}>21/10/2022</Text>
+                                        <Text style={{ fontSize: 18 }}>Nơi bán</Text>
+                                        <Text style={{ fontSize: 18 }}>Tiền Giang</Text>
                                     </View>
-
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> 20 người đang hỏi</Text>
-                                        <Text style={{ fontSize: 18, padding: 10 }}>Báo xấu <FontAwesome name='exclamation-circle' size={22} color={color.disableText} /></Text>
+                                        <Text style={{ fontSize: 18 }}>Số lượng</Text>
+                                        <Text style={{ fontSize: 18 }}>50 kg</Text>
                                     </View>
 
 
+
+
                                 </View>
+                                <View style={styles.productImageContainer}>
 
+                                    <Text style={[styles.productStatus, { alignSelf: 'flex-start' }]}>Ảnh sản phẩm</Text>
 
+                                    <View style={styles.productImage}>
 
-                            </View>
-                            <View style={[styles.box, { marginTop: 10 }]}>
-
-                                <View style={[styles.userContainer]}>
-
-                                    <View style={styles.userNameContainer}>
-                                        <Avatar
-                                            size="medium"
-                                            rounded
-                                            containerStyle={{
-                                                borderColor: 'grey',
-                                                borderStyle: 'solid',
-                                                borderWidth: 1,
-                                            }}
-
-                                            source={require('../../assets/avatar/11.png')}
-                                        />
-                                        <View style={{ alignItems: 'center' }}>
-
-                                            <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
-                                        </View>
-                                    </View>
-                                    <View style={styles.followContainer}>
-
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                        <Image style={styles.image} source={require('../../assets/productImage/mango-1.jpg')} />
+                                        <Image style={styles.image} source={require('../../assets/productImage/mango-2.jpg')} />
+                                        <Image style={styles.image} source={require('../../assets/productImage/mango-3.jpg')} />
                                     </View>
 
-                                </View>
-                                <View style={[styles.userInfomationContainer]}>
-                                    <Text style={{ fontSize: 18, }}>@Sockute</Text>
-                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>Bán hoài không nghỉ</Text>
-
-
-                                </View>
-                                <View style={styles.userInfomationCounters}>
-                                    <Text style={{ fontSize: 16, }}><Heading6>54</Heading6> ngày ở Misao</Text>
-                                    <Text style={{ fontSize: 16, }}><Heading6>4</Heading6> đang bán</Text>
-                                    <Text style={{ fontSize: 16, }}><Heading6>5</Heading6> đang mua</Text>
-                                </View>
-
-
-
-
-                            </View>
-                            <View style={[styles.box, styles.commentContainer, { marginTop: 10 }]}>
-                                <View style={styles.commentCountContainer}>
-
-                                    <FontAwesome name='comment-o' size={24} color={color.borderColor} />
-                                    <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>7 bình luận</Heading6>
-                                </View>
-                                <View style={[styles.commentList, { marginTop: 10 }]}>
-                                    <FlatList
-
-                                        data={comment}
-
-                                        renderItem={({ item }) => <CommentItem comment={item} />}
-                                    />
-
-                                </View>
-                                <View style={styles.AddCommentContainer}>
-                                    <AddComment />
                                 </View>
 
 
                             </View>
-                            <View style={[styles.upSellProduct, { marginTop: 10 }]}>
-                                <View style={styles.bottomContainer}>
 
-
-                                    <Heading6 style={styles.titleText}>Có thể bạn quan tâm </Heading6>
-
-                                    <FlatList
-                                        contentContainerStyle={styles.postListContainer}
-                                        data={post}
-
-                                        renderItem={({ item }) => <PostItem post={item} />}
-                                    />
-                                </View>
-
-                            </View>
 
                         </View>
                     </ScrollView>
@@ -280,8 +218,8 @@ const PostDetailScreen = ({ Props, route }) => {
 
                         <ButtonNormal
                             buttonStyle={styles.customButtonBackToHome}
-                            onPress={() => { navigation.navigate('Login'); }}
-                            title={'Hỏi Thăm'.toUpperCase()}
+                            onPress={() => { navigation.navigate('HomeNavigation'); }}
+                            title={'Về trang chủ'.toUpperCase()}
                         />
                     </View>
 
@@ -374,12 +312,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         justifyContent: 'space-between',
     },
-    productName: {
-
-        fontSize: 20,
-        color: color.primaryText,
-        fontWeight: '500'
-    },
     productStatus: {
 
         fontSize: 20,
@@ -402,16 +334,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: color.primaryText
 
-
-    },
-    requireName: {
-        fontSize: 18,
-
-        color: color.primaryText
-    },
-    requireAnswer: {
-        fontSize: 18,
-        color: color.normalText
 
     },
     productAdjust: {
@@ -487,4 +409,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default PostDetailScreen
+export default ProductDetailScreen

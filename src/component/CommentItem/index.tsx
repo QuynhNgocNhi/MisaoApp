@@ -86,15 +86,21 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     },
     commentContentContainer: {
-        width: '100%',
+        width: '90%',
 
+        alignSelf: 'flex-end',
 
 
     },
     commentContent: {
         fontSize: 18,
         width: '90%',
-        alignSelf: 'flex-end',
+
+
+
+
+
+
 
 
 

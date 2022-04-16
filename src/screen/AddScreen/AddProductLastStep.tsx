@@ -89,7 +89,7 @@ const AddProductScreen = (Props) => {
 
                                         maxFontSizeMultiplier={1}
                                         placeholder="Nhập giá bán"
-                                        placeholderTextColor={'#424242'}
+                                        placeholderTextColor={color.normalText}
 
                                         // Inherit any props passed to it; e.g., multiline, numberOfLines below
                                         multiline={true}
@@ -199,7 +199,7 @@ const AddProductScreen = (Props) => {
                                         outlined
 
                                         buttonStyle={styles.customButtonAdd}
-                                        onPress={() => { navigation.navigate('ProductDetail', { data }); }}
+                                        onPress={() => { navigation.navigate('ProductAddedPreview', { data }); }}
                                         title={'Đăng sản phẩm'.toUpperCase()}
                                     />
 

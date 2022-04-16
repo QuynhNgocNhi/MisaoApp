@@ -20,6 +20,8 @@ import AddProduct from '../screen/AddScreen/AddProduct';
 import AddPost from '../screen/AddScreen/AddPost';
 import AddProductLastStep from '../screen/AddScreen/AddProductLastStep';
 import AddPostLastStep from '../screen/AddScreen/AddPostLastStep';
+import PostAddedPreview from '../screen/AddScreen/PostAddedPreview';
+import ProductAddedPreview from '../screen/AddScreen/ProductAddedPreview';
 import ProductDetail from '../screen/ProductDetailScreen';
 import PostDetail from '../screen/PostDetailScreen';
 
@@ -50,7 +52,13 @@ export type RootStackParameterList = {
   AddProductLastStep: {
     productId: string;
   };
+  ProductAddedPreview: {
+    productId: string;
+  };
   AddPostLastStep: {
+    productId: string;
+  };
+  PostAddedPreview: {
     productId: string;
   };
   ProductDetail: {
@@ -109,9 +117,11 @@ const MainNavigator = () => {
         />
         <RootStack.Screen name="AddItem" options={{ headerShown: false }} component={AddItem} />
         <RootStack.Screen name="AddProduct" options={{ headerShown: false }} component={AddProduct} />
-        <RootStack.Screen name="AddPost" options={{ headerShown: false }} component={AddPost} />
         <RootStack.Screen name="AddProductLastStep" options={{ headerShown: false }} component={AddProductLastStep} />
+        <RootStack.Screen name="ProductAddedPreview" options={{ headerShown: false }} component={ProductAddedPreview} />
+        <RootStack.Screen name="AddPost" options={{ headerShown: false }} component={AddPost} />
         <RootStack.Screen name="AddPostLastStep" options={{ headerShown: false }} component={AddPostLastStep} />
+        <RootStack.Screen name="PostAddedPreview" options={{ headerShown: false }} component={PostAddedPreview} />
         <RootStack.Screen name="ProductDetail" options={{ headerShown: false }} component={ProductDetail} />
         <RootStack.Screen name="PostDetail" options={{ headerShown: false }} component={PostDetail} />
 

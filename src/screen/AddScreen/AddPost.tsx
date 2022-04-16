@@ -132,7 +132,7 @@ const AddProductScreen = () => {
 
                             <View style={styles.buttonsGroup}>
                                 <View style={styles.bottomContainer}>
-                                    <Text style={styles.tipsText}>Lưu ý: Địa chỉ của bạn sẽ xuất hiện trong bài đăng.</Text>
+                                    <Text style={styles.tipsText}>Mẹo: Thông tin tài khoản đầy đủ sẽ giúp bạn nhận được tin tưởng từ người bán hơn đấy.</Text>
                                 </View>
                                 <ButtonNormal
                                     outlined
