@@ -39,6 +39,7 @@ import WelcomeScreen from './src/screen/Welcome';
 import Posts from './src/screen/PostsScreen';
 import MainNavigator from './src/MainNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AppStatusBar from './src/component/AppStatusBar';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -49,8 +50,6 @@ const App = () => {
 
   return (
     <SafeAreaProvider style={backgroundStyle}>
-      <StatusBar />
-
       <MainNavigator />
     </SafeAreaProvider>
   );

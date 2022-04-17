@@ -62,7 +62,7 @@ const themes = {
     lightBlack: "#696969",
     // border color
     borderColor: "#d1d1d1",
-
+    important: '#D40000',
 
   }
 };

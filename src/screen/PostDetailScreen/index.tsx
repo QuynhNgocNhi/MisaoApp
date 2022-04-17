@@ -99,7 +99,7 @@ const PostDetailScreen = ({ Props, route }) => {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.screenContainer}>
-                <StatusBar translucent backgroundColor='transparent' />
+                <StatusBar translucent backgroundColor='transparent' barStyle={'dark-content'} />
                 <View style={styles.container}>
                     <View style={styles.headerContainer}>
                         <Header
@@ -108,8 +108,8 @@ const PostDetailScreen = ({ Props, route }) => {
                             centerComponent={
                                 <Text style={
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>{data.productId}
-                                </Text>
+                                }>Tin mua</Text>
+
                             }
                             leftComponent={
                                 <HeaderIconButton
@@ -138,7 +138,7 @@ const PostDetailScreen = ({ Props, route }) => {
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
+                                            <Text style={styles.userName} numberOfLines={1}>{data.userName}</Text>
                                             <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
                                         </View>
                                     </View>
@@ -149,15 +149,14 @@ const PostDetailScreen = ({ Props, route }) => {
                                 </View>
 
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
-                                    <Text style={styles.productName}>Cần mua 20kh cần tây</Text>
+                                    <Text style={styles.productName}>{data.title}</Text>
 
 
 
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={styles.productDescription}>
-                                        Panse mang một vẻ đẹp ngọt ngào, đằm thắm nhưng không kém phần rực rỡ mà không phải loài hoa nào cũng có.
-                                        Nó là loài cây biểu tượng của mặt trời của hi vọng, của sự ấm áp, hướng về những điều tốt đẹp nhất. Hiện nay có khá nhiều người yêu thích loại cây xinh đẹp này, trồng trong nhà như một cây trang trí tô điểm không gian.
+                                        {data.content}
                                     </Text>
 
 
@@ -210,7 +209,7 @@ const PostDetailScreen = ({ Props, route }) => {
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
+                                            <Text style={styles.userName} numberOfLines={1}>{data.userName}</Text>
                                             <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
                                         </View>
                                     </View>
@@ -265,6 +264,7 @@ const PostDetailScreen = ({ Props, route }) => {
 
                                     <FlatList
                                         contentContainerStyle={styles.postListContainer}
+
                                         data={post}
 
                                         renderItem={({ item }) => <PostItem post={item} />}

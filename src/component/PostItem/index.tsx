@@ -6,6 +6,7 @@ import { Avatar } from 'react-native-elements';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+import { useNavigation } from '@react-navigation/native';
 
 
 //import image from '../../data/image'
@@ -32,6 +33,9 @@ interface PostsProps {
 }
 
 const PostItem = ({ post }: PostsProps) => {
+    const navigation = useNavigation();
+    const data = { postId: post.id, title: post.title, content: post.content, userId: post.userId, userName: post.name }
+
     return (
         <View>
             <View style={styles.root}>
@@ -54,7 +58,7 @@ const PostItem = ({ post }: PostsProps) => {
 
                 <View style={styles.middleContainer}>
 
-                    <Text numberOfLines={1} style={styles.title}>{post.title}
+                    <Text onPress={() => { navigation.navigate('PostDetail', { data }); }} numberOfLines={1} style={styles.title}>{post.title}
                     </Text>
                     <Text numberOfLines={1} style={styles.content}>{post.content}
                     </Text>

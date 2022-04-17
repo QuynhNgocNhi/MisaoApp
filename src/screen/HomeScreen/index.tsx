@@ -18,6 +18,8 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParameterList } from '../../MainNavigator';
+//set something when screen is focused(status bar), because it is not rerendered when screen is load
+import { useIsFocused } from '@react-navigation/native';
 
 type HomeProps = NativeStackScreenProps<RootStackParameterList, "Home">
 
@@ -28,16 +30,19 @@ import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+import AppStatusBar from '../../component/AppStatusBar';
 
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const statusbar = () => { return <StatusBar /> }
 
   return (
     <SafeAreaProvider>
 
       <SafeAreaView style={styles.screenContainer}>
-        <StatusBar translucent backgroundColor='transparent' />
+        {isFocused ? (<StatusBar backgroundColor={color.themeBackground} />) : null}
 
         <View style={styles.container}>
           <HomeHeader />
@@ -149,10 +154,12 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    // backgroundColor: colors.themeBackground,
+
+
   },
   container: {
     flex: 1,
+
   },
 
   middleContainer: {

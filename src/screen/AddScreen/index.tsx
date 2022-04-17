@@ -24,18 +24,21 @@ import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+//set something when screen is focused(status bar), because it is not rerendered when screen is load
+import { useIsFocused } from '@react-navigation/native';
 
 import { useNavigation } from '@react-navigation/native';
 
 const AddScreen = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
 
   return (
     <SafeAreaProvider>
 
       <SafeAreaView style={styles.screenContainer}>
-        <StatusBar translucent backgroundColor='transparent' />
+        {isFocused ? (<StatusBar backgroundColor={color.background} barStyle={'dark-content'} />) : null}
 
         <View style={styles.container}>
           <View style={styles.headerContainer}>

@@ -15,6 +15,7 @@ import HomeNavigation from '../../src/TabNavigation';
 
 // import Add screen
 import AddItem from '../screen/AddScreen';
+import ChatScreen from '../screen/ChatScreen';
 // import Add Product screen
 import AddProduct from '../screen/AddScreen/AddProduct';
 import AddPost from '../screen/AddScreen/AddPost';
@@ -65,12 +66,13 @@ export type RootStackParameterList = {
     productId: string;
   };
   PostDetail: {
-    productId: string;
+    postId: string;
+
   };
   AddPost: {
     postId: string;
   };
-  Chat;
+  ChatScreen;
   Profile;
   Welcome: {
     phoneNumber: number;
@@ -115,6 +117,7 @@ const MainNavigator = () => {
         <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation}
         />
+        <RootStack.Screen name="ChatScreen" options={{ headerShown: false }} component={ChatScreen} />
         <RootStack.Screen name="AddItem" options={{ headerShown: false }} component={AddItem} />
         <RootStack.Screen name="AddProduct" options={{ headerShown: false }} component={AddProduct} />
         <RootStack.Screen name="AddProductLastStep" options={{ headerShown: false }} component={AddProductLastStep} />

@@ -1,190 +1,165 @@
-import React, { useRef } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomeHeader from '../../component/AnimatedHeader';
-import CategoryList from '../../component/CategoryItem';
-import PostItem from '../../component/PostItem';
-//import data
-import category from '../../assets/data/category';
-import post from '../../assets/data/post';
 
+// import components
 import Button from '../../component/Button';
-import LinkButton from '../../component/Button/LinkButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { Header } from 'react-native-elements';
+import HeaderIconButton from '../../component/HeaderButton';
+import SearchBar from '../../component/SearchBar';
+import ButtonNormal from '../../component/Button';
+const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
+const DELETE_ICON = Platform.OS === 'ios' ? 'ios-trash-outline' : 'md-trash-outline';
+import AppStatusBar from '../../component/AppStatusBar';
 
-/* to ignore the warning message: 'VirtualizedLists should never be nested inside plain ScrollViews 
-with the same orientation because it can break windowing and other functionality - use another 
-VirtualizedList-backed container instead.' */
-import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+//set something when screen is focused(status bar), because it is not rerendered when screen is load
+import { useIsFocused } from '@react-navigation/native';
 
-const HomeScreen = () => {
+import { useNavigation } from '@react-navigation/native';
+
+import ChatTypeScreen from './ChatTypeScreen'
+
+import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitch';
+
+const ChatScreen = () => {
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  const [ChatTab, setChatTab] = useState(1);
+  const onSelectSwitch = value => {
+    setChatTab(value);
+  };
 
 
   return (
     <SafeAreaProvider>
 
       <SafeAreaView style={styles.screenContainer}>
-        <StatusBar translucent backgroundColor='transparent' />
+        {isFocused ? (<StatusBar backgroundColor={color.background} />) : null}
 
         <View style={styles.container}>
-          <HomeHeader />
+          <View style={styles.headerContainer}>
+            <Header
 
-          {/* Add the following AnimatedHeader */}
-          <ScrollView
-            nestedScrollEnabled={false}
-          >
+              containerStyle={{ borderBottomWidth: 0, marginVertical: 10 }}
+              backgroundColor={color.white}
+              centerComponent={
+                <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }}>Trò chuyện</Text>
+              }
+              leftComponent={
+                <HeaderIconButton
+                  onPress={() => navigation.goBack()}
+                  name={BACK_ICON}
+                  color={color.lightBlack}
+                />
+              }
+              rightComponent={
+                <HeaderIconButton
+                  onPress={() => navigation.goBack()}
+                  name={DELETE_ICON}
+                  color={color.lightBlack}
+                />
+              }
 
 
-            {/* Render Product Component */}
-            {/* <ProductItem item = {products[0]}/> */}
-            <View style={styles.middleContainer}>
+            />
+          </View>
 
+          <View style={styles.middleContainer} >
 
-              <View style={styles.centerContent}>
-
-
-                <View style={styles.hotDealContentainer}>
-                  <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Danh mục </Heading6>
-
-
-
-                  </View>
-                </View>
-                <View style={styles.CategoryListContainer}>
-
-                  <FlatList
-                    horizontal
-                    data={category}
-                    showsHorizontalScrollIndicator={false}
-                    alwaysBounceHorizontal={false}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => <CategoryList item={item} />}
-                  />
-                </View>
-
-              </View>
+            <View style={styles.search} >
+              <SearchBar />
             </View>
-            <View style={styles.bottomContainer}>
-              <View style={styles.productListContentainer}>
-                <View style={styles.titleContainer}>
-                  <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>
+
+          </View>
+          <View style={styles.switchTabContainer}>
+            <CustomSwitch
+              selectionMode={1}
+              option1="Bán hàng"
+              option2="Mua hàng"
+              option3="Tất cả"
+              onSelectSwitch={onSelectSwitch}
+            />
+
+          </View>
+          {ChatTab == 1 &&
+            <ChatTypeScreen chatTypeId='1' />}
+          {ChatTab == 2 &&
+            <ChatTypeScreen chatTypeId='2' />}
+          {ChatTab == 3 &&
+            <ChatTypeScreen chatTypeId='3' />}
 
 
-                  <FontAwesome name={'filter'} color={color.lightBlack} size={18} />
 
-                </View>
-              </View>
-              <FlatList
-                contentContainerStyle={styles.ProductItemList}
-                data={post}
 
-                renderItem={({ item }) => <PostItem post={item} />}
-              />
-            </View>
-          </ScrollView>
 
         </View>
 
       </SafeAreaView>
-    </SafeAreaProvider>
+    </SafeAreaProvider >
   );
 };
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    // backgroundColor: colors.themeBackground,
+    backgroundColor: color.background,
+    justifyContent: 'space-between',
   },
   container: {
     flex: 1,
+
+
   },
 
+  headingText: {
+    fontSize: 20,
+    textAlign: 'center',
+
+  },
+  center: {
+    alignItems: 'center',
+
+  },
   middleContainer: {
-
-
-  },
-  topContent: {
-
-    height: 160,
-    backgroundColor: color.white,
-  },
-  banner: {
-
-    backgroundColor: color.themeBackground,
-    height: '50%',
     alignItems: 'center',
 
-
-
-
-  },
-  imageContainer: {
-    width: '90%',
-    height: 150,
-    borderRadius: 20,
-    //set box shadow fo image
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 10,
-      height: 16,
-    },
-    shadowOpacity: 0.35,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  image: {
-    flex: 1,
-    width: '100%',
-    borderRadius: 20,
-
-  },
-  bottomContainer: {
-
-    width: '100%',
-
-  },
-  centerContent: {
-
-    backgroundColor: color.white,
+    bottom: 20,
 
 
   },
-  hotDealContentainer: {
+  search: {
+
+    width: '95%',
+    paddingTop: 20,
+
+
   },
-  titleContainer: {
+  switchTabContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 10,
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    backgroundColor: color.white,
-  },
-  titleText: {
-    fontWeight: '600',
-    color: '#FF0000',
-
-  },
-  viewAllText: {
-    color: color.primaryColor,
-  },
-  hotDeal: {
-    width: '80%',
+    width: '90%',
+    justifyContent: 'space-around',
     alignSelf: 'center',
-
+    marginBottom: 30
   },
-  CategoryListContainer: {
+  switchButton: {
     padding: 10,
-  },
-  ProductItemList: {
+    height: 40,
+    width: '30%',
+    justifyContent: 'space-between',
+    backgroundColor: color.themeBackground,
 
-  }
+  },
+
+
 });
 
-export default HomeScreen
+export default ChatScreen

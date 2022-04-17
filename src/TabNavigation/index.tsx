@@ -127,8 +127,11 @@ function TabNavigation() {
 
 
 
-            <Tab.Screen name="Chat" component={Posts}
+            <Tab.Screen name="Chat" component={Chat}
                 options={{
+                    tabBarStyle: {
+                        display: "none"
+                    },
                     tabBarIcon: props => (
                         <TabBadgeIcon
                             name={`chat-processing${props.focused ? '' : '-outline'}`}

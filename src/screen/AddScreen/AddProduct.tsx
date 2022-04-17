@@ -36,7 +36,7 @@ const AddProductScreen = () => {
         <SafeAreaProvider>
 
             <SafeAreaView style={styles.screenContainer}>
-                <StatusBar translucent backgroundColor='transparent' />
+                <StatusBar translucent backgroundColor='transparent' barStyle={'dark-content'} />
 
                 <View style={styles.container}>
                     <View style={styles.headerContainer}>

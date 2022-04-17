@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
@@ -21,28 +21,38 @@ import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+import CustomSwitch from '../../component/CustomSwitch';
+import { Compare } from '@material-ui/icons';
+import AppStatusBar from '../../component/AppStatusBar';
+
+//set something when screen is focused(status bar), because it is not rerendered when screen is load
+import { useIsFocused } from '@react-navigation/native';
 
 
 const HomeScreen = () => {
-
+  const [PostTab, setPostTab] = useState(1);
+  const onSelectSwitch = value => {
+    setPostTab(value);
+  };
+  const PostSortedById = [...post].sort((a, b) => parseInt(b.id) - parseInt(a.id))
+  const PostSortedById2 = [...post].sort((a, b) => parseInt(a.id) - parseInt(b.id))
+  const isFocused = useIsFocused();
 
   return (
     <SafeAreaProvider>
 
       <SafeAreaView style={styles.screenContainer}>
-        <StatusBar translucent backgroundColor='transparent' />
+        {isFocused ? (<StatusBar backgroundColor={color.themeBackground} />) : null}
+
+
 
         <View style={styles.container}>
           <HomeHeader />
 
-          {/* Add the following AnimatedHeader */}
           <ScrollView
             nestedScrollEnabled={false}
           >
 
-
-            {/* Render Product Component */}
-            {/* <ProductItem item = {products[0]}/> */}
             <View style={styles.middleContainer}>
 
 
@@ -51,7 +61,7 @@ const HomeScreen = () => {
 
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Danh mục </Heading6>
+                    <Heading6 style={[styles.titleText, { color: color.primaryText }]}>Danh mục </Heading6>
 
 
 
@@ -72,20 +82,39 @@ const HomeScreen = () => {
               </View>
             </View>
             <View style={styles.bottomContainer}>
-              <View style={styles.productListContentainer}>
-                <View style={styles.titleContainer}>
-                  <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>
 
 
-                  <FontAwesome name={'filter'} color={color.lightBlack} size={18} />
+              <View style={styles.productListContainer}>
+                <View style={styles.switchTabContainer}>
+                  <CustomSwitch
+                    selectionMode={1}
+                    option1="Mới nhất"
+                    option2="Gợi ý"
+
+                    onSelectSwitch={onSelectSwitch}
+                  />
 
                 </View>
-                <FlatList
-                  contentContainerStyle={styles.postListContainer}
-                  data={post}
+                {PostTab == 1 &&
+                  (<FlatList
+                    contentContainerStyle={styles.postListContainer}
 
-                  renderItem={({ item }) => <PostItem post={item} />}
-                />
+                    data={PostSortedById}
+                    renderItem={({ item }) => <PostItem post={item} />}
+                  />)}
+                {PostTab == 2 &&
+                  (<FlatList
+                    contentContainerStyle={styles.postListContainer}
+                    data={PostSortedById2}
+
+                    renderItem={({ item }) => <PostItem post={item} />}
+                  />)}
+
+                {/*                   <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>*/}
+
+
+
+
               </View>
             </View>
           </ScrollView>
@@ -103,16 +132,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+
   },
 
   middleContainer: {
-
-
+    padding: 10,
+    backgroundColor: color.background,
   },
   topContent: {
 
     height: 160,
-    backgroundColor: color.white,
+
   },
   banner: {
 
@@ -185,7 +215,26 @@ const styles = StyleSheet.create({
 
   postListContainer: {
 
-  }
+  },
+  productListContainer: {
+    width: '100%',
+    backgroundColor: color.background,
+
+  },
+  switchTabContainer: {
+    flexDirection: 'row',
+    width: '85%',
+
+    alignSelf: 'center',
+    marginBottom: 30,
+    marginTop: 20,
+    alignItems: 'center',
+    backgroundColor: color.underBackground,
+    borderRadius: 20
+
+
+  },
+
 });
 
 export default HomeScreen

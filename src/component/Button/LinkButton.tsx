@@ -1,9 +1,9 @@
 // import dependencies
 import React from 'react';
-import {StyleSheet, TextStyle} from 'react-native';
+import { StyleSheet, TextStyle } from 'react-native';
 
 // import components
-import {ButtonText} from '../Text';
+import { ButtonText } from '../Text';
 
 // import colors
 import color from '../../theme/color';
@@ -24,7 +24,7 @@ type Props = {
 };
 
 // LinkButton
-const LinkButton = ({onPress, title, titleStyle}: Props) => (
+const LinkButton = ({ onPress, title, titleStyle }: Props) => (
   <ButtonText onPress={onPress} style={[styles.title, titleStyle]}>
     {title || 'Link Button'}
   </ButtonText>

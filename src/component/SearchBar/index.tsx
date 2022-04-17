@@ -25,13 +25,13 @@ export default class App extends React.Component {
         value={search}
         rounded
         containerStyle={{
-          backgroundColor: color.themeBackground,
+          backgroundColor: 'transparent',
           borderTopWidth: 0,
           borderBottomWidth: 0,
         }}
-        inputStyle={{ backgroundColor: color.white, borderRadius: 10, }}
-        inputContainerStyle={{ backgroundColor: color.white, borderRadius: 10, }}
-        leftIconContainerStyle={{ backgroundColor: color.white }}
+        inputStyle={{ backgroundColor: color.underBackground, borderRadius: 10, }}
+        inputContainerStyle={{ backgroundColor: color.underBackground, borderRadius: 10, }}
+        leftIconContainerStyle={{ backgroundColor: color.underBackground }}
       />
     );
   }

@@ -2,12 +2,9 @@
 
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Button } from 'react-native-elements';
-import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { Avatar } from 'react-native-elements';
 import CommentItem from '../../component/CommentItem';
 import ProductItem from '../../component/ProductItem';
@@ -61,28 +58,19 @@ interface commentProps {
     }
 
 }
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CategoryList from '../../component/CategoryList';
-//import data
-import category from '../../assets/data/category';
 
 // import components
 import ButtonNormal from '../../component/Button';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Header } from 'react-native-elements';
 import HeaderIconButton from '../../component/HeaderButton'
 
-import LinkButton from '../../component/Button/LinkButton';
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
 
 // import color, layout, style
 import color from '../../theme/color';
-import layout from '../../theme/layout';
 
 import { useNavigation } from '@react-navigation/native';
-import Comment from '../../assets/data/comment';
 
 
 
