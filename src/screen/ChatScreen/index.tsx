@@ -44,7 +44,7 @@ const ChatScreen = () => {
     <SafeAreaProvider>
 
       <SafeAreaView style={styles.screenContainer}>
-        {isFocused ? (<StatusBar backgroundColor={color.background} />) : null}
+        {isFocused ? (<StatusBar backgroundColor={color.background} barStyle={'dark-content'} />) : null}
 
         <View style={styles.container}>
           <View style={styles.headerContainer}>

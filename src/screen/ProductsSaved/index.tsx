@@ -16,7 +16,7 @@ import color from '../../theme/color';
 import layout from '../../theme/layout';
 
 
-const HomeScreen = () => {
+const ProductsSaved = () => {
 
 
     return (
@@ -39,41 +39,10 @@ const HomeScreen = () => {
                         <View style={styles.middleContainer}>
 
 
-                            <View style={styles.centerContent}>
 
-
-                                <View style={styles.hotDealContentainer}>
-                                    <View style={styles.titleContainer}>
-                                        <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Danh mục </Heading6>
-
-
-
-                                    </View>
-                                </View>
-                                <View style={styles.CategoryListContainer}>
-
-                                    <FlatList
-                                        horizontal
-                                        data={category}
-                                        showsHorizontalScrollIndicator={false}
-                                        alwaysBounceHorizontal={false}
-                                        keyExtractor={item => item.id}
-                                        renderItem={({ item }) => <CategoryItem category={item} />}
-                                    />
-                                </View>
-
-                            </View>
                         </View>
                         <View style={styles.bottomContainer}>
-                            <View style={styles.productListContentainer}>
-                                <View style={styles.titleContainer}>
-                                    <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>
 
-
-                                    <FontAwesome name={'filter'} color={color.lightBlack} size={18} />
-
-                                </View>
-                            </View>
                             <FlatList
                                 contentContainerStyle={styles.ProductItemList}
                                 data={post}
@@ -92,10 +61,13 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     screenContainer: {
         flex: 1,
-        // backgroundColor: colors.themeBackground,
+        alignItems: 'center',
+        backgroundColor: color.background,
     },
     container: {
         flex: 1,
+        width: '90%',
+        paddingTop: 20
     },
 
     middleContainer: {
@@ -105,7 +77,7 @@ const styles = StyleSheet.create({
     topContent: {
 
         height: 160,
-        backgroundColor: color.white,
+
     },
     banner: {
 
@@ -180,4 +152,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen
+export default ProductsSaved

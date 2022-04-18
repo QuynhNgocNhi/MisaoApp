@@ -7,17 +7,12 @@ const themes = {
     //Logo color: 
     Logo: "#006623",
     // primary color
-    primaryLightColor: "#",
-    primaryColor: "#006623",//00b970//bc0021
-    primaryColorDark: "#00945a",
-    primaryColorLight: "#B5E9BA",
-    onPrimaryColor: "#ffffff",//
-    customOnPrimaryColor: '#bc0021',
-
-    //dark background
-    //darkBackgroundColor:'#bc0021',
-    //darkScreenPrimaryText:'#ffffff',
-    //darkScreensecondaryText:'#ffffff',
+    primaryLightColor: "#85FF91",//xanh lá nhạt
+    primaryColor: "#006623",// xanh lá đậm
+    primaryColorDark: "#00945a", // xanh lá đậm
+    primaryColorLight: "#B5E9BA",//xanh lá nhạt
+    onPrimaryColor: "#ffffff",// trắng
+    customOnPrimaryColor: '#bc0021',// đỏ
 
     // accent color, triad
     accentColor: "#0069b9",
@@ -43,17 +38,17 @@ const themes = {
 
     // text color
     primaryText: "#010203",//đen xanh
-    secondaryText: "#B5E9BA",
-    disabledText: "rgba(0, 0, 0, 0.38)",
-    normalText: "#424242",
-    linkText: "#007537",
+    secondaryText: "#B5E9BA",//xanh lá nhạt
+    disabledText: "rgba(0, 0, 0, 0.38)",//xám nhạt
+    normalText: "#424242", // xám chì
+    linkText: "#007537",// xanh đậm
+    linkButton: "#4C9EEB",// xanh biển
 
     // background, surface
     background: "#ffffff",
-    underBackground: "#F4F4F4",
+    underBackground: "#F4F4F4", //màu xám nhẹ
     onBackground: "#212121", // màu than chì
     themeBackground: "#B5E9BA",// màu xanh trang chủ
-    surface: "#fff",
     onSurface: "#757575", //xám than
     error: "#cd040b",
     onError: "#fff",
@@ -62,7 +57,10 @@ const themes = {
     lightBlack: "#696969",
     // border color
     borderColor: "#d1d1d1",
-    important: '#D40000',
+    important: '#D40000',//red
+    pink: '#f66',
+    pinkBackground: "#FFD5D5",
+    pinkBackgroundLight: "#FFE3E3",
 
   }
 };

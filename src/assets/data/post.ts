@@ -9,6 +9,8 @@ export default [
         time: 1,
         timeUnit: 'phút',
         askedTimes: 0,
+        dateCreated: '21-05-2001',
+        availability: 0,
 
     },
     {
@@ -21,6 +23,8 @@ export default [
         time: 1,
         timeUnit: 'phút',
         askedTimes: 5,
+        dateCreated: '21-05-2001',
+        availability: 1,
     },
     {
         id: '3',
@@ -32,6 +36,8 @@ export default [
         time: 1,
         timeUnit: 'phút',
         askedTimes: 10,
+        dateCreated: '21-05-2001',
+        availability: 0,
 
 
     },
@@ -45,10 +51,12 @@ export default [
         time: 1,
         timeUnit: 'phút',
         askedTimes: 21,
+        dateCreated: '01-07-2021',
+        availability: 0,
     },
     {
         id: '5',
-        title: 'Mầm sen meow meow',
+        title: 'Mầm sen meow meow agfaweg',
         content: 'Mầm hoa sen học đường Mèo ngủ nhiều học ngu',
         userId: '5',
         name: 'Mèo',
@@ -56,6 +64,8 @@ export default [
         time: 1,
         timeUnit: 'phút',
         askedTimes: 5,
+        dateCreated: '01-06-2021',
+        availability: 0,
     },
     {
         id: '6',
@@ -67,6 +77,8 @@ export default [
         time: 1,
         timeUnit: 'phút',
         askedTimes: 21,
+        dateCreated: '01-06-2021',
+        availability: 1,
     },
     {
         id: '7',
@@ -78,6 +90,8 @@ export default [
         time: 1,
         timeUnit: 'phút',
         askedTimes: 3,
+        dateCreated: '01-06-2021',
+        availability: 0,
 
     }
 ]

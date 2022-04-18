@@ -25,6 +25,7 @@ import PostAddedPreview from '../screen/AddScreen/PostAddedPreview';
 import ProductAddedPreview from '../screen/AddScreen/ProductAddedPreview';
 import ProductDetail from '../screen/ProductDetailScreen';
 import PostDetail from '../screen/PostDetailScreen';
+import MyProfileScreen from '../screen/ProfileScreen/MyProfileScreen';
 
 import HeaderIconButton from '../component/HeaderButton'
 import { NavigationContainer } from '@react-navigation/native';
@@ -50,6 +51,9 @@ export type RootStackParameterList = {
   Notification;
   AddItem;
   AddProduct;
+  AddPost: {
+    postId: string;
+  };
   AddProductLastStep: {
     productId: string;
   };
@@ -69,11 +73,12 @@ export type RootStackParameterList = {
     postId: string;
 
   };
-  AddPost: {
-    postId: string;
-  };
+
   ChatScreen;
   Profile;
+  MyProfileScreen: {
+    userId: string;
+  };
   Welcome: {
     phoneNumber: number;
   };
@@ -114,9 +119,10 @@ const MainNavigator = () => {
           ),
 
         })} component={AddItem} /> */}
+        <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
         <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
-        <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation}
-        />
+        <RootStack.Screen name="MyProfileScreen" options={{ headerShown: false }} component={MyProfileScreen} />
+
         <RootStack.Screen name="ChatScreen" options={{ headerShown: false }} component={ChatScreen} />
         <RootStack.Screen name="AddItem" options={{ headerShown: false }} component={AddItem} />
         <RootStack.Screen name="AddProduct" options={{ headerShown: false }} component={AddProduct} />

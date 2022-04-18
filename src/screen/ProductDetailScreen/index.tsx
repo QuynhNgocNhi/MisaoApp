@@ -23,13 +23,16 @@ interface productProps {
     product: {
         id: string,
         title: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
+        description: string,
+        image: string,
+        averageRating: number,
+        rating: number,
+        price: number,
+        oldPrice: number,
+        unitPrice: string,
+        discountPercentage: number,
         askedTimes: number,
+        dateCreated: string,
 
     }
 }
