@@ -203,7 +203,7 @@ const HomeScreen = () => {
                                 type='material'
                                 color='#FF6A6A'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate('ProductsSaved')}
                             />
                             <Text style={styles.buttonName}>Sản phẩm yêu thích</Text>
                         </View>
@@ -215,7 +215,7 @@ const HomeScreen = () => {
                                 type='font-awesome'
                                 color='#FFB22D'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate('PostsSaved')}
                             />
                             <Text style={styles.buttonName}>Tin mua  đã lưu</Text>
                         </View>

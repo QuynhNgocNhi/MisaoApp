@@ -11,15 +11,10 @@ import { useNavigation } from '@react-navigation/native';
 
 //import image from '../../data/image'
 interface PostsProps {
-    /*  user: {
-         id: string,
-         name: string,
-         avatar: string,
- 
- 
-     }, */
+
     post: {
         id: string,
+        categoryId: string,
         title: string,
         content: string,
         userId: string,

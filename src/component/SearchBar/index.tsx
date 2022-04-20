@@ -1,38 +1,58 @@
-import { SearchBar } from 'react-native-elements';
-import React from 'react';
+import { Image, View, Text, TextInput, StyleSheet, LogBox } from 'react-native'
+import React, { useEffect } from 'react';
+
 // import color, layout, style
 import color from '../../theme/color';
-import layout from '../../theme/layout';
+
+import { useNavigation } from '@react-navigation/native';
+import { Icon } from 'react-native-elements'
 
 
-export default class App extends React.Component {
-  state = {
-    search: '',
-  };
 
-  updateSearch = (search) => {
-    this.setState({ search });
-  };
+const SearchBar = () => {
+  const navigation = useNavigation();
 
-  render() {
-    const { search } = this.state;
+  return (
+    <View style={styles.search} >
+      {/*   <SearchBar navigation={navigation} /> */}
+      <TextInput style={styles.searchBar}
+        placeholder={'Tìm kiếm sản phẩm, tin mua,...'}
 
-    return (
-      <SearchBar
+        onFocus={() => navigation.navigate('SearchModal')}>
+      </TextInput>
+      <View style={styles.searchIcon}>
 
-        placeholder="Tìm kiếm sản phẩm, tin bán,..."
-        onChangeText={this.updateSearch}
-        value={search}
-        rounded
-        containerStyle={{
-          backgroundColor: 'transparent',
-          borderTopWidth: 0,
-          borderBottomWidth: 0,
-        }}
-        inputStyle={{ backgroundColor: color.underBackground, borderRadius: 10, }}
-        inputContainerStyle={{ backgroundColor: color.underBackground, borderRadius: 10, }}
-        leftIconContainerStyle={{ backgroundColor: color.underBackground }}
-      />
-    );
-  }
+        <Icon
+          name='search'
+          type='feather'
+          color={color.borderColor}
+          size={30}
+        />
+      </View>
+
+    </View>
+
+  )
 }
+const styles = StyleSheet.create({
+  search: {
+    width: '95%',
+  },
+  searchBar: {
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: color.borderColor,
+    width: '95%',
+    alignSelf: 'center',
+    backgroundColor: color.underBackground,
+    fontSize: 18,
+    paddingLeft: 60,
+  },
+  searchIcon: {
+    position: 'absolute',
+    top: 10,
+    left: 20,
+
+  }
+});
+export default SearchBar;

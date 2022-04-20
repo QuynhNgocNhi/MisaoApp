@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import CategoryItem from '../../component/CategoryItem';
+import CategoryItem from '../../component/CategoryItem/PostCategoryItem';
 import PostItem from '../../component/PostItem';
 //import data
 import category from '../../assets/data/category';

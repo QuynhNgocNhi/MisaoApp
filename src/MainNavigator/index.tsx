@@ -12,7 +12,7 @@ import PostsSaved from '../../src/screen/PostsSaved';
 import ProductsSaved from '../../src/screen/ProductsSaved';
 import Notification from '../../src/screen/Notification';
 import HomeNavigation from '../../src/TabNavigation';
-
+import UserProfileScreen from '../../src/screen/ProfileScreen/UserProfileScreen';
 // import Add screen
 import AddItem from '../screen/AddScreen';
 import ChatScreen from '../screen/ChatScreen';
@@ -26,7 +26,9 @@ import ProductAddedPreview from '../screen/AddScreen/ProductAddedPreview';
 import ProductDetail from '../screen/ProductDetailScreen';
 import PostDetail from '../screen/PostDetailScreen';
 import MyProfileScreen from '../screen/ProfileScreen/MyProfileScreen';
-
+import ModalSearch from '../screen/Search';
+import PostSearchedByCategory from '../screen/Search/PostSearchedByCategory';
+import ProductSearchedByCategory from '../screen/Search/ProductSearchedByCategory';
 import HeaderIconButton from '../component/HeaderButton'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -44,9 +46,11 @@ export type RootStackParameterList = {
   HomeNavigation: {
     userName: string;
   };
-
+  SearchModal;
   Posts;
   PostsSaved;
+  PostSearchedByCategory;
+  ProductSearchedByCategory;
   ProductsSaved;
   Notification;
   AddItem;
@@ -75,7 +79,10 @@ export type RootStackParameterList = {
   };
 
   ChatScreen;
-  Profile;
+  ProfileScreen;
+  UserProfileScreen: {
+    userId: string;
+  };
   MyProfileScreen: {
     userId: string;
   };
@@ -107,97 +114,96 @@ const MainNavigator = () => {
     <NavigationContainer>
 
       <RootStack.Navigator >
-        {/*  <RootStack.Screen name="AddItem" options={({ navigation }) => ({
-          title: 'Thêm sản phẩm/ tin mua',
-          headerTitleAlign: 'center',
-          headerLeft: () => (
-            <HeaderIconButton
-              onPress={() => navigation.goBack()}
-              name={BACK_ICON}
-              color={color.primaryColor}
-            />
-          ),
 
-        })} component={AddItem} /> */}
-        <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
-        <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
-        <RootStack.Screen name="MyProfileScreen" options={{ headerShown: false }} component={MyProfileScreen} />
+        <RootStack.Group>
 
-        <RootStack.Screen name="ChatScreen" options={{ headerShown: false }} component={ChatScreen} />
-        <RootStack.Screen name="AddItem" options={{ headerShown: false }} component={AddItem} />
-        <RootStack.Screen name="AddProduct" options={{ headerShown: false }} component={AddProduct} />
-        <RootStack.Screen name="AddProductLastStep" options={{ headerShown: false }} component={AddProductLastStep} />
-        <RootStack.Screen name="ProductAddedPreview" options={{ headerShown: false }} component={ProductAddedPreview} />
-        <RootStack.Screen name="AddPost" options={{ headerShown: false }} component={AddPost} />
-        <RootStack.Screen name="AddPostLastStep" options={{ headerShown: false }} component={AddPostLastStep} />
-        <RootStack.Screen name="PostAddedPreview" options={{ headerShown: false }} component={PostAddedPreview} />
-        <RootStack.Screen name="ProductDetail" options={{ headerShown: false }} component={ProductDetail} />
-        <RootStack.Screen name="PostDetail" options={{ headerShown: false }} component={PostDetail} />
+          <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
+          <RootStack.Screen name="PostSearchedByCategory" options={{ headerShown: false }} component={PostSearchedByCategory} />
+          <RootStack.Screen name="ProductSearchedByCategory" options={{ headerShown: false }} component={ProductSearchedByCategory} />
+          <RootStack.Screen name="UserProfileScreen" options={{ headerShown: false }} component={UserProfileScreen} />
+          <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
+          <RootStack.Screen name="MyProfileScreen" options={{ headerShown: false }} component={MyProfileScreen} />
 
-        <RootStack.Screen name="Login" options={({ navigation }) => ({
-          /* title: 'Edit Profile', */
-          headerShown: false,
-          headerLeft: () => (
-            <HeaderIconButton
-              onPress={() => navigation.goBack()}
-              name={BACK_ICON}
-              color={color.primaryColor}
-            />
-          ),
-        })}
-          component={Login} />
-        {/*         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
+          <RootStack.Screen name="ChatScreen" options={{ headerShown: false }} component={ChatScreen} />
+          <RootStack.Screen name="AddItem" options={{ headerShown: false }} component={AddItem} />
+          <RootStack.Screen name="AddProduct" options={{ headerShown: false }} component={AddProduct} />
+          <RootStack.Screen name="AddProductLastStep" options={{ headerShown: false }} component={AddProductLastStep} />
+          <RootStack.Screen name="ProductAddedPreview" options={{ headerShown: false }} component={ProductAddedPreview} />
+          <RootStack.Screen name="AddPost" options={{ headerShown: false }} component={AddPost} />
+          <RootStack.Screen name="AddPostLastStep" options={{ headerShown: false }} component={AddPostLastStep} />
+          <RootStack.Screen name="PostAddedPreview" options={{ headerShown: false }} component={PostAddedPreview} />
+          <RootStack.Screen name="ProductDetail" options={{ headerShown: false }} component={ProductDetail} />
+          <RootStack.Screen name="PostDetail" options={{ headerShown: false }} component={PostDetail} />
+
+          <RootStack.Screen name="Login" options={({ navigation }) => ({
+            /* title: 'Edit Profile', */
+            headerShown: false,
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+          })}
+            component={Login} />
+          {/*         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
  */}
-        <RootStack.Screen name="Posts" options={{ headerShown: false }} component={PostsScreen} />
-        <RootStack.Screen name="Register" options={({ navigation }) => ({
-          title: 'Đăng ký tài khoản',
-          headerTitleAlign: 'center',
-          headerLeft: () => (
-            <HeaderIconButton
-              onPress={() => navigation.goBack()}
-              name={BACK_ICON}
-              color={color.primaryColor}
-            />
-          ),
+          <RootStack.Screen name="Posts" options={{ headerShown: false }} component={PostsScreen} />
+          <RootStack.Screen name="Register" options={({ navigation }) => ({
+            title: 'Đăng ký tài khoản',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
 
-        })} component={Register} />
-        <RootStack.Screen name="PostsSaved" options={({ navigation }) => ({
-          title: 'Tin đã lưu',
-          headerTitleAlign: 'center',
-          headerLeft: () => (
-            <HeaderIconButton
-              onPress={() => navigation.goBack()}
-              name={BACK_ICON}
-              color={color.primaryColor}
-            />
-          ),
+          })} component={Register} />
+          <RootStack.Screen name="PostsSaved" options={({ navigation }) => ({
+            title: 'Tin đã lưu',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
 
-        })} component={PostsSaved} />
-        <RootStack.Screen name="ProductsSaved" options={({ navigation }) => ({
-          title: 'Yêu thích',
-          headerTitleAlign: 'center',
-          headerLeft: () => (
-            <HeaderIconButton
-              onPress={() => navigation.goBack()}
-              name={BACK_ICON}
-              color={color.primaryColor}
-            />
-          ),
+          })} component={PostsSaved} />
+          <RootStack.Screen name="ProductsSaved" options={({ navigation }) => ({
+            title: 'Yêu thích',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
 
-        })} component={ProductsSaved} />
-        <RootStack.Screen name="Notification" options={({ navigation }) => ({
-          title: 'Thông báo',
-          headerTitleAlign: 'center',
-          headerLeft: () => (
-            <HeaderIconButton
-              onPress={() => navigation.goBack()}
-              name={BACK_ICON}
-              color={color.primaryColor}
-            />
-          ),
+          })} component={ProductsSaved} />
+          <RootStack.Screen name="Notification" options={({ navigation }) => ({
+            title: 'Thông báo',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
 
-        })} component={Notification} />
-        <RootStack.Screen name="RegisterSuccessful" options={{ headerShown: false }} component={RegisterSuccessful} />
+          })} component={Notification} />
+          <RootStack.Screen name="RegisterSuccessful" options={{ headerShown: false }} component={RegisterSuccessful} />
+        </RootStack.Group>
+        <RootStack.Group>
+          <RootStack.Screen name="SearchModal" component={ModalSearch} options={{ headerShown: false }} />
+
+        </RootStack.Group>
       </RootStack.Navigator>
 
     </NavigationContainer>

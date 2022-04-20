@@ -10,7 +10,7 @@ const MyProductList = () => (
             contentContainerStyle={styles.ProductItemList}
             data={products}
             numColumns={2}
-            renderItem={({ item }) => <ProductItem item={item} />}
+            renderItem={({ item }) => <ProductItem product={item} />}
         />
 
 

@@ -11,51 +11,76 @@ import { useNavigation } from '@react-navigation/native';
 
 //import image from '../../data/image'
 interface ProductItemProps {
-  item: {
+  product: {
     id: string,
-    title: string,
+    name: string,
+    description: string,
     image: string,
     price: number,
     oldPrice?: number,
     discountPercentage?: number,
     unitPrice: string,
     askedTimes: number,
+    userId: string,
+    userName: string,
+    userAvatar: string,
+    time: number,
+    timeUnit: string,
+    dateCreated: string,
+    availability: number,
+
     //for optional props: oldPrice? 
 
   }
 }
 
 
-const ProductItem = ({ item }: ProductItemProps) => {
+const ProductItem = ({ product }: ProductItemProps) => {
   useEffect(() => {
 
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
   }, [])
   const navigation = useNavigation();
-  const data = { productId: 'Tên sản phẩm nè' }
+  const data = {
+    productId: product.id,
+    productName: product.name,
+    productDescription: product.description,
+    productPrice: product.price,
+    oldPrice: product.oldPrice,
+    productImage: product.image,
+    productDiscount: product.discountPercentage,
+    productUnitPrice: product.unitPrice,
+    productAskTime: product.askedTimes,
+    userId: product.userId,
+    userName: product.userName,
+    userAvatar: product.userAvatar,
+    time: product.time,
+    timeUnit: product.timeUnit,
+
+  }
   return (
     <View style={styles.container} >
 
       <View style={styles.bottomContainer}>
 
-        <Image style={styles.image} source={item.image} />
+        <Image style={styles.image} source={product.image} />
         <View style={styles.tittleContainer}>
-          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }} style={styles.title} numberOfLines={2}>{item.title}</Text>
+          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }} style={styles.title} numberOfLines={2}>{product.name}</Text>
         </View>
 
 
         <View style={styles.unitPriceRow}>
 
-          <Text style={styles.price}>đ{item.price}
-            {item.oldPrice && (<Text style={styles.oldPrice}> ${item.oldPrice}</Text>)}
+          <Text style={styles.price}>đ{product.price}
+            {product.oldPrice && (<Text style={styles.oldPrice}> ${product.oldPrice}</Text>)}
 
           </Text>
-          <Text style={styles.unitPrice}> {item.unitPrice} </Text>
+          <Text style={styles.unitPrice}> {product.unitPrice} </Text>
         </View>
-        <Text style={styles.askedTimes}> {item.askedTimes} người đang hỏi </Text>
+        <Text style={styles.askedTimes}> {product.askedTimes} người đang hỏi </Text>
 
-        {item.discountPercentage && (<View style={styles.discountLabelContainer}>
-          <Text style={styles.label}>{`- ${item.discountPercentage}%`}</Text>
+        {product.discountPercentage && (<View style={styles.discountLabelContainer}>
+          <Text style={styles.label}>{`- ${product.discountPercentage}%`}</Text>
 
         </View>)}
         <View style={styles.wishlistContainer}>

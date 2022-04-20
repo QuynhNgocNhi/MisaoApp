@@ -97,9 +97,10 @@ const ProductDetailScreen = ({ Props, route }) => {
                             containerStyle={{ borderBottomWidth: 0, marginVertical: 10 }}
                             backgroundColor={color.white}
                             centerComponent={
-                                <Text style={
+                                <Text numberOfLines={1} style={
+
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>{data.productId}
+                                }>{data.productName}
                                 </Text>
                             }
                             leftComponent={
@@ -114,7 +115,8 @@ const ProductDetailScreen = ({ Props, route }) => {
                     <ScrollView>
                         <View style={styles.container}>
                             <View style={[styles.box, styles.productDetailContainer]}>
-                                <View style={[styles.userContainer, styles.box]}>
+
+                                <View style={[styles.userContainer, styles.box, { paddingTop: 0 }]}>
 
                                     <View style={styles.userNameContainer}>
                                         <Avatar
@@ -129,8 +131,8 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
+                                            <Text style={styles.userName} numberOfLines={1}>{data.userName}</Text>
+                                            <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
                                         </View>
                                     </View>
                                     <View style={styles.followContainer}>
@@ -139,11 +141,13 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     </View>
                                 </View>
                                 <View style={styles.productContainer}>
+                                    <Text style={styles.productName}>{data.productName}
+                                    </Text>
 
                                     <View style={styles.unitPriceRow}>
 
-                                        <Text style={styles.price}>50000 đ</Text>
-                                        <Text style={styles.oldPrice}> 59000 đ</Text>
+                                        <Text style={styles.price}>{data.productPrice} đ</Text>
+                                        <Text style={styles.oldPrice}> {data.oldPrice} đ</Text>
 
                                     </View>
                                     <View style={styles.Line}></View>
@@ -160,8 +164,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={[styles.productStatus, { marginBottom: 20 }]}>Mô tả sản phẩm</Text>
                                     <Text style={styles.productDescription}>
-                                        Panse mang một vẻ đẹp ngọt ngào, đằm thắm nhưng không kém phần rực rỡ mà không phải loài hoa nào cũng có.
-                                        Nó là loài cây biểu tượng của mặt trời của hi vọng, của sự ấm áp, hướng về những điều tốt đẹp nhất. Hiện nay có khá nhiều người yêu thích loại cây xinh đẹp này, trồng trong nhà như một cây trang trí tô điểm không gian.
+                                        {data.productDescription}
                                     </Text>
 
 
@@ -200,14 +203,14 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     </View>
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> 20 người đang hỏi</Text>
+                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> {data.productAskTime} người đang hỏi</Text>
                                         <Text style={{ fontSize: 18, padding: 10 }}>Báo xấu <FontAwesome name='exclamation-circle' size={22} color={color.disableText} /></Text>
                                     </View>
                                 </View>
 
 
                             </View>
-                            <View style={[styles.box, { marginTop: 10 }]}>
+                            <View style={[styles.box, { marginTop: 10, }]}>
 
                                 <View style={[styles.userContainer]}>
 
@@ -225,8 +228,8 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
+                                            <Text style={styles.userName} numberOfLines={1}>{data.userName}</Text>
+                                            <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
                                         </View>
                                     </View>
                                     <View style={styles.followContainer}>
@@ -282,7 +285,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         contentContainerStyle={styles.ProductItemList}
                                         data={products}
                                         numColumns={2}
-                                        renderItem={({ item }) => <ProductItem item={item} />}
+                                        renderItem={({ item }) => <ProductItem product={item} />}
                                     />
                                 </View>
 
@@ -294,6 +297,7 @@ const ProductDetailScreen = ({ Props, route }) => {
 
 
                         <ButtonNormal
+
                             buttonStyle={styles.customButtonBackToHome}
                             onPress={() => { navigation.navigate('Login'); }}
                             title={'Chốt'.toUpperCase()}
@@ -326,6 +330,7 @@ const styles = StyleSheet.create({
 
     },
     userNameContainer: {
+
         width: '90%',
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -333,7 +338,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     userName: {
-        margin: 5,
+
         paddingLeft: 5,
         fontWeight: '600',
         color: '#000',
@@ -483,6 +488,19 @@ const styles = StyleSheet.create({
     customButtonBackToHome: {
         position: 'absolute',
         bottom: 0,
+        backgroundColor: color.primaryColor
+    },
+    productName:
+
+    {
+
+        fontSize: 20,
+        color: color.primaryText,
+        fontWeight: '500',
+        textTransform: 'capitalize',
+        paddingBottom: 20
+
+
     }
 });
 

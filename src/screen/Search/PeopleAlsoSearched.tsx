@@ -30,7 +30,7 @@ interface productProps {
         availability: number,
     }
 }
-const ProductHistoryItem = ({ product }: productProps) => {
+const PeopleAlsoSearched = ({ product }: productProps) => {
     const navigation = useNavigation();
     const data = {
         productId: product.id,
@@ -61,13 +61,9 @@ const ProductHistoryItem = ({ product }: productProps) => {
 
                     <View style={styles.middleContainer}>
 
-                        <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }} numberOfLines={1} style={styles.title}>{product.name}
+                        <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }}
+                            numberOfLines={1} style={styles.title}>{product.name}
                         </Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-                            <Text numberOfLines={1} style={[styles.content, { color: color.important, }]}>{product.price} đ/{product.unitPrice}</Text>
-                            <Text numberOfLines={1} style={styles.content}>{product.askedTimes} {product.unitPrice}</Text>
-                        </View>
 
                     </View>
                 </View>
@@ -80,15 +76,17 @@ const ProductHistoryItem = ({ product }: productProps) => {
 const styles = StyleSheet.create({
 
     root: {
-        width: '95%',
-        flexDirection: 'column',
+
+        width: (layout.SCREEN_WIDTH - 30) / 2,
+        flex: 1,
         alignItems: 'center',
         borderWidth: 0.5,
         borderColor: '#d1d1d1',
         backgroundColor: '#fff',
         borderRadius: 10,
-        padding: 10,
+        padding: 5,
         marginTop: 10,
+        marginLeft: 10
 
     },
 
@@ -99,50 +97,22 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
 
     },
-    userContainer:
-    {
-        flexDirection: 'row',
 
 
-    },
-    bookmarkContainer: {
-        position: 'absolute',
-        top: 10,
-        right: 0,
-
-    },
-
-    userName: {
-        margin: 5,
-        paddingLeft: 10,
-        fontWeight: 'bold',
-        color: '#000',
-        fontSize: 20
-    },
-    middleContainer: {
-        width: '80%',
-        marginLeft: 10,
-
-    },
     title: {
 
         marginBottom: 0,
         color: '#000',
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        padding: 5
 
-    },
-    content: {
-
-        marginTop: 0,
-        color: '#000',
-        fontSize: 18,
 
 
     },
+
     bottomContainer: {
 
-        width: '90%',
+
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 10,
@@ -150,19 +120,18 @@ const styles = StyleSheet.create({
 
 
     },
-    productTime: {
 
-    },
     imageContainer: {
+
 
     },
     productImage: {
-
-        width: 50,
-        height: 50,
+        marginLeft: 10,
+        width: 40,
+        height: 40,
         borderWidth: 1,
         borderColor: color.borderColor,
     }
 
 });
-export default ProductHistoryItem;
+export default PeopleAlsoSearched;

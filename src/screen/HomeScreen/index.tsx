@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import products from '../../assets/data/product';
+import product from '../../assets/data/product';
 import category from '../../assets/data/category';
 import HotDealItem from '../../component/HotDeal';
 import CategoryList from '../../component/CategoryItem';
@@ -14,7 +14,6 @@ import ProductItem from '../../component/ProductItem';
 import Button from '../../component/Button';
 import LinkButton from '../../component/Button/LinkButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParameterList } from '../../MainNavigator';
@@ -30,7 +29,6 @@ import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-import AppStatusBar from '../../component/AppStatusBar';
 
 
 const HomeScreen = () => {
@@ -83,7 +81,7 @@ const HomeScreen = () => {
 
                   <FlatList
                     horizontal
-                    data={products}
+                    data={product}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
                     keyExtractor={item => item.id}
@@ -138,9 +136,9 @@ const HomeScreen = () => {
               </View>
               <FlatList
                 contentContainerStyle={styles.ProductItemList}
-                data={products}
+                data={product}
                 numColumns={2}
-                renderItem={({ item }) => <ProductItem item={item} />}
+                renderItem={({ item }) => <ProductItem product={item} />}
               />
             </View>
           </ScrollView>

@@ -36,7 +36,7 @@ const CategoryItem = ({ category }: categoryItemProps) => {
                 <Image style={styles.image} source={category.image} />
                 <View style={styles.tittleContainer}>
                     <Text style={styles.title}
-                        onPress={() => { navigation.navigate('ProductSearchedByCategory', { data }); }}
+                        onPress={() => { navigation.navigate('PostSearchedByCategory', { data }); }}
                         numberOfLines={2}>{category.name}</Text>
                 </View>
             </View>

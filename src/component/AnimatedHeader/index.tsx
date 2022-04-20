@@ -1,14 +1,13 @@
 import React from 'react';
-import { Animated, View, StyleSheet, Image } from 'react-native';
+import { Animated, View, StyleSheet, Image, TextInput } from 'react-native';
 import { Logo, Heading6 } from '../../component/Text';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Header } from 'react-native-elements';
-import { Icon } from 'react-native-elements'
 import SearchBar from '../SearchBar';
-import SearchBox from '../SearchBox';
+
 import { Button } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
@@ -16,11 +15,14 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParameterList } from '../../MainNavigator';
+//set something when screen is focused(status bar), because it is not rerendered when screen is load
+import { useIsFocused } from '@react-navigation/native';
 
 
 const HEADER_HEIGHT = 145;
 const HomeHeader = () => {
     const navigation = useNavigation();
+
 
     return (
         <View style={styles.root}>
@@ -75,9 +77,7 @@ const HomeHeader = () => {
             </View>
             <View style={styles.middleContainer} >
 
-                <View style={styles.search} >
-                    <SearchBar />
-                </View>
+                <SearchBar />
 
             </View>
 
@@ -124,15 +124,12 @@ const styles = StyleSheet.create({
 
     middleContainer: {
         alignItems: 'center',
+        width: "100%",
+        bottom: 15,
 
-        bottom: 20,
-
-
-    },
-    search: {
-        width: '95%',
 
     },
+
 
 
 });

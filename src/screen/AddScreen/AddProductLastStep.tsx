@@ -7,7 +7,7 @@ import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from 'react-native-elements';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import CategoryList from '../../component/CategoryItem';
 //import data
@@ -40,7 +40,20 @@ const AddProductScreen = (Props) => {
     const statePhone = '097773777'
     const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
     const data = { productId: 'Tên sản phẩm nè' }
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        console.warn("A date has been picked: ", date);
+        hideDatePicker();
+    };
     return (
         <SafeAreaProvider>
 
@@ -159,8 +172,16 @@ const AddProductScreen = (Props) => {
 
                                     <Icon name='calendar-month-outline' size={26} color='#5C8700' />
                                     <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Ngày hết hàng</Heading6>
+                                    <Button title="Show Date Picker" onPress={showDatePicker} />
                                 </View>
                                 <View style={styles.productOutOfStockDateContainerContainer}>
+                                    <DateTimePickerModal
+                                        minimumDate={new Date(1950, 0, 1)}
+                                        isVisible={isDatePickerVisible}
+                                        mode="date"
+                                        onConfirm={handleConfirm}
+                                        onCancel={hideDatePicker}
+                                    />
                                     {/*  <DateTimePicker
                                       
                                         

@@ -11,56 +11,11 @@ import PostTab from './PostTab';
 import HistoryTab from './HistoryTab';
 
 
-
-interface productProps {
-
-    product: {
-        id: string,
-        title: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-        askedTimes: number,
-
-    }
-}
-interface UserProps {
-    user: {
-        id: string,
-        name: string,
-        avatar: string,
-
-
-    }
-
-}
-interface commentProps {
-    comment: {
-        id: string,
-        productId: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-
-
-    }
-
-}
 import { Icon } from 'react-native-elements';
 
 // import components
 import ButtonNormal from '../../component/Button';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Header } from 'react-native-elements';
-import HeaderIconButton from '../../component/HeaderButton'
-
-const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
 
 // import color, layout, style
 import color from '../../theme/color';
@@ -75,8 +30,8 @@ import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLin
 
 const ProductDetailScreen = ({ Props, route }) => {
     const navigation = useNavigation();
-    const { data } = route.params;
-
+    /*     const { data } = route.params;
+     */
     const [ProfileTab, setProfileTab] = useState(1);
     const onSelectSwitch = value => {
         setProfileTab(value);
@@ -99,7 +54,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     type='material-community'
                                     color='#FFffff'
                                     size={40}
-                                    onPress={() => navigation.navigate('MyProfileScreen', { data })}
+                                    onPress={() => navigation.goBack()}
                                 />
                             }
                         />
@@ -122,9 +77,22 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                         source={require('../../assets/avatar/11.png')}
                                     />
-                                    <View style={{ alignItems: 'center' }}>
+
+                                    <View style={styles.followContainer}>
+
+                                        <View style={styles.userAttributes}>
+
+                                            <Heading6>4</Heading6>
+                                            <Text style={styles.userAttributesText}> đang theo</Text>
+                                        </View>
+                                        <View style={styles.userAttributes}>
+
+                                            <Heading6>5</Heading6>
+                                            <Text style={styles.userAttributesText}> người theo</Text>
+                                        </View>
 
                                     </View>
+
                                 </View>
 
 
@@ -132,6 +100,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                             <View style={styles.userContainer}>
 
                                 <View style={[styles.userInfomationContainer]}>
+
                                     <Text style={styles.userName} numberOfLines={1}>Mén Nguyễn</Text>
                                     <Text style={{ fontSize: 18, }}>@Sockute</Text>
 
@@ -139,13 +108,13 @@ const ProductDetailScreen = ({ Props, route }) => {
 
 
                                 </View>
-                                <View style={styles.followContainer}>
+                                <View style={styles.followProfileButtonContainer}>
 
-                                    <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }}
-                                        buttonStyle={styles.followButton}
-                                        title={'Chỉnh sửa thông tin'}>
-                                    </ButtonNormal>
-                                    <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '600', flexDirection: 'column' }} numberOfLines={1}>
+                                    <View style={styles.followButtonContainer}>
+
+                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                    </View>
+                                    <Text style={styles.addressBox} numberOfLines={1}>
                                         <Icon
 
                                             name='md-location-outline'
@@ -156,24 +125,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     </Text>
                                 </View>
                             </View>
-                            <View style={styles.userInfomationCounters}>
-                                <View style={styles.userAttributes}>
 
-                                    <Heading6>54</Heading6>
-                                    <Text style={{ fontSize: 16, }}> ngày ở Misao</Text>
-                                </View>
-                                <View style={styles.userAttributes}>
-
-                                    <Heading6>4</Heading6>
-                                    <Text style={{ fontSize: 16, }}> Sản phẩm</Text>
-                                </View>
-                                <View style={styles.userAttributes}>
-
-                                    <Heading6>5</Heading6>
-                                    <Text style={{ fontSize: 16, }}> Tin mua</Text>
-                                </View>
-
-                            </View>
 
 
 
@@ -230,11 +182,11 @@ const styles = StyleSheet.create({
 
     },
     userNameContainer: {
-
+        width: '100%',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
 
-        alignItems: 'center',
+
     },
     userName: {
 
@@ -243,15 +195,21 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 20
     },
-    followContainer: {
+    followProfileButtonContainer: {
         justifyContent: 'center',
+        alignItems: 'center',
 
+        width: '60%',
 
     },
-    followButton: {
+    editProfileButton: {
         padding: 10,
         height: 40,
-        backgroundColor: color.themeBackground
+        borderRadius: 20,
+        color: '#000',
+
+        /*  backgroundColor: color.white, */
+
     },
 
 
@@ -259,10 +217,10 @@ const styles = StyleSheet.create({
 
     },
     userInfomationCounters: {
-        marginTop: 20,
+        marginTop: 10,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around'
 
     },
 
@@ -292,6 +250,36 @@ const styles = StyleSheet.create({
 
         alignItems: 'center',
     },
+    followContainer: {
+        width: '60%',
+
+        flexDirection: 'row',
+        alignItems: 'center',
+
+        justifyContent: 'space-around',
+    },
+    followButtonContainer: {
+
+    },
+    followButton: {
+        height: 30,
+        paddingLeft: 10,
+        paddingRight: 10,
+        backgroundColor: color.themeBackground,
+
+    },
+    userAttributesText: {
+        fontSize: 18,
+
+    },
+    addressBox: {
+        fontSize: 18,
+        color: color.primaryText,
+
+        fontWeight: '600',
+        flexDirection: 'column',
+        marginTop: 10,
+    }
 
 });
 

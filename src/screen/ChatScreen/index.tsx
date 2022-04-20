@@ -1,26 +1,18 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Heading6 } from '../../component/Text';
+import { View, StyleSheet, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // import components
-import Button from '../../component/Button';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+
 import { Header } from 'react-native-elements';
 import HeaderIconButton from '../../component/HeaderButton';
-import SearchBar from '../../component/SearchBar';
-import ButtonNormal from '../../component/Button';
+import SearchBar from '../../component/SearchBar/SearchBarItem';
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
 const DELETE_ICON = Platform.OS === 'ios' ? 'ios-trash-outline' : 'md-trash-outline';
-import AppStatusBar from '../../component/AppStatusBar';
 
 // import color, layout, style
 import color from '../../theme/color';
-import layout from '../../theme/layout';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
 
@@ -131,14 +123,14 @@ const styles = StyleSheet.create({
   },
   middleContainer: {
     alignItems: 'center',
-
+    width: '100%',
     bottom: 20,
 
 
   },
   search: {
 
-    width: '95%',
+    width: '100%',
     paddingTop: 20,
 
 

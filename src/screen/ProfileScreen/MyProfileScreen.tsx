@@ -11,6 +11,21 @@ import PostTab from './PostTab';
 import HistoryTab from './HistoryTab';
 
 
+import { Icon } from 'react-native-elements';
+
+// import components
+import ButtonNormal from '../../component/Button';
+import { Header } from 'react-native-elements';
+
+// import color, layout, style
+import color from '../../theme/color';
+
+import { useNavigation } from '@react-navigation/native';
+
+import ChatTypeScreen from '../ChatScreen/ChatTypeScreen'
+
+import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
+
 
 interface productProps {
 
@@ -52,25 +67,6 @@ interface commentProps {
     }
 
 }
-import { Icon } from 'react-native-elements';
-
-// import components
-import ButtonNormal from '../../component/Button';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { Header } from 'react-native-elements';
-import HeaderIconButton from '../../component/HeaderButton'
-
-const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
-
-// import color, layout, style
-import color from '../../theme/color';
-
-import { useNavigation } from '@react-navigation/native';
-
-import ChatTypeScreen from '../ChatScreen/ChatTypeScreen'
-
-import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
-
 
 
 const ProductDetailScreen = ({ Props, route }) => {
@@ -145,6 +141,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                             <View style={styles.userContainer}>
 
                                 <View style={[styles.userInfomationContainer]}>
+
                                     <Text style={styles.userName} numberOfLines={1}>Mén Nguyễn</Text>
                                     <Text style={{ fontSize: 18, }}>@Sockute</Text>
 
@@ -154,7 +151,11 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 </View>
                                 <View style={styles.editProfileButtonContainer}>
 
-                                    <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }}
+                                    <ButtonNormal
+                                        outlined
+                                        borderColor={color.linkButton}
+                                        titleColor={color.linkButton}
+                                        onPress={() => { navigation.navigate('Login'); }}
                                         buttonStyle={styles.editProfileButton}
                                         title={'Chỉnh sửa thông tin'}>
                                     </ButtonNormal>
@@ -169,24 +170,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     </Text>
                                 </View>
                             </View>
-                            <View style={styles.userInfomationCounters}>
-                                <View style={styles.userAttributes}>
 
-                                    <Heading6>54</Heading6>
-                                    <Text style={{ fontSize: 18, }}> ngày ở Misao</Text>
-                                </View>
-                                <View style={styles.userAttributes}>
-
-                                    <Heading6>4</Heading6>
-                                    <Text style={{ fontSize: 18, }}> Sản phẩm</Text>
-                                </View>
-                                <View style={styles.userAttributes}>
-
-                                    <Heading6>5</Heading6>
-                                    <Text style={{ fontSize: 18, }}> Tin mua</Text>
-                                </View>
-
-                            </View>
 
 
 
@@ -265,7 +249,9 @@ const styles = StyleSheet.create({
         padding: 10,
         height: 40,
         borderRadius: 20,
-        backgroundColor: color.white,
+        color: '#000',
+
+        /*  backgroundColor: color.white, */
 
     },
 
@@ -317,7 +303,6 @@ const styles = StyleSheet.create({
     },
     userAttributesText: {
         fontSize: 18,
-        color: color.normalText,
 
     }
 

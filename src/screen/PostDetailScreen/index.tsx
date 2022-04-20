@@ -123,7 +123,7 @@ const PostDetailScreen = ({ Props, route }) => {
                     <ScrollView>
                         <View style={styles.container}>
                             <View style={[styles.box, styles.productDetailContainer]}>
-                                <View style={[styles.userContainer, styles.box]}>
+                                <View style={[styles.userContainer, styles.box, { paddingTop: 0 }]}>
 
                                     <View style={styles.userNameContainer}>
                                         <Avatar
@@ -279,7 +279,7 @@ const PostDetailScreen = ({ Props, route }) => {
 
 
                         <ButtonNormal
-                            buttonStyle={styles.customButtonBackToHome}
+                            buttonStyle={styles.customButtonChatNow}
                             onPress={() => { navigation.navigate('Login'); }}
                             title={'Hỏi Thăm'.toUpperCase()}
                         />
@@ -481,9 +481,10 @@ const styles = StyleSheet.create({
 
         padding: 10
     },
-    customButtonBackToHome: {
+    customButtonChatNow: {
         position: 'absolute',
         bottom: 0,
+        backgroundColor: color.primaryColor,
     }
 });
 
