@@ -4,10 +4,10 @@ import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
 import CategoryItem from '../../component/CategoryItem';
-import PostItem from '../../component/PostItem';
+import ProductItem from '../../component/ProductItem';
 //import data
 import category from '../../assets/data/category';
-import post from '../../assets/data/post';
+import products from '../../assets/data/product';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -45,9 +45,9 @@ const ProductsSaved = () => {
 
                             <FlatList
                                 contentContainerStyle={styles.ProductItemList}
-                                data={post}
-
-                                renderItem={({ item }) => <PostItem post={item} />}
+                                data={products}
+                                numColumns={2}
+                                renderItem={({ item }) => <ProductItem product={item} />}
                             />
                         </View>
                     </ScrollView>

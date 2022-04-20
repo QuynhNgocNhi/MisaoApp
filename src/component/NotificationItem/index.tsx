@@ -43,29 +43,23 @@ const PostItem = ({ post }: PostsProps) => {
                             source={post.avatar}
                         />
 
-                        <Text onPress={() => navigation.navigate('UserProfileScreen')} style={styles.userName} numberOfLines={1}>{post.name}</Text>
+                        <Text style={styles.content}><Text onPress={() => navigation.navigate('UserProfileScreen')}
+                            style={styles.userName} numberOfLines={2}>{post.name}
+
+                        </Text> {post.content}</Text>
+
                     </View>
-                    <View style={styles.bookmarkContainer}>
 
-                        <FontAwesome name={'bookmark-o'} color={color.lightBlack} size={22} />
+
+
+                    <View style={styles.bottomContainer}>
+
+
+                        <Text numberOfLines={1} style={styles.postTime}><FontAwesome name={'clock-o'} size={22} /> {post.time} {post.timeUnit} trước
+                        </Text>
+
+
                     </View>
-                </View>
-
-                <View style={styles.middleContainer}>
-
-                    <Text onPress={() => { navigation.navigate('PostDetail', { data }); }} numberOfLines={1} style={styles.title}>{post.title}
-                    </Text>
-                    <Text numberOfLines={1} style={styles.content}>{post.content}
-                    </Text>
-                </View>
-                <View style={styles.bottomContainer}>
-
-
-                    <Text numberOfLines={1} style={styles.postTime}><FontAwesome name={'clock-o'} size={22} /> {post.time} {post.timeUnit} trước
-                    </Text>
-
-                    <Text numberOfLines={1} style={styles.askedTimes}>{post.askedTimes} người đang hỏi
-                    </Text>
                 </View>
             </View>
         </View>
@@ -80,18 +74,19 @@ const styles = StyleSheet.create({
         borderColor: '#d1d1d1',
         backgroundColor: '#fff',
         borderRadius: 5,
-
+        width: '100%',
     },
 
     topContainer:
     {
         width: '90%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
+        alignItems: 'center',
         margin: 5,
     },
     userContainer:
     {
+        margin: 5,
         flexDirection: 'row',
 
 
@@ -104,8 +99,9 @@ const styles = StyleSheet.create({
     },
 
     userName: {
-        margin: 5,
+
         paddingLeft: 10,
+        paddingRight: 10,
         fontWeight: 'bold',
         color: '#000',
         fontSize: 20
@@ -119,6 +115,7 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 18,
         fontWeight: 'bold',
+
 
     },
     content: {
@@ -136,6 +133,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 10,
         marginTop: 5,
+
 
 
     },

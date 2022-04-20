@@ -4,7 +4,7 @@ import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
 import CategoryItem from '../../component/CategoryItem';
-import PostItem from '../../component/PostItem';
+import NotificationItem from '../../component/NotificationItem';
 //import data
 import category from '../../assets/data/category';
 import post from '../../assets/data/post';
@@ -47,7 +47,7 @@ const Notification = () => {
                                 contentContainerStyle={styles.ProductItemList}
                                 data={post}
 
-                                renderItem={({ item }) => <PostItem post={item} />}
+                                renderItem={({ item }) => <NotificationItem post={item} />}
                             />
                         </View>
                     </ScrollView>

@@ -7,6 +7,7 @@ import color from '../../theme/color';
 import layout from '../../theme/layout';
 import NumberFormat from 'react-number-format';
 import { Avatar } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 
 //import image from '../../data/image'
@@ -28,10 +29,8 @@ interface userItemProps {
 
 
 const userItem = ({ User }: userItemProps) => {
-    useEffect(() => {
+    const navigation = useNavigation();
 
-        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-    }, [])
     return (
         <View style={styles.chatItemContainer}>
 
@@ -50,21 +49,21 @@ const userItem = ({ User }: userItemProps) => {
                 <View style={styles.userNameContainer}>
                     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
 
-                        <Text style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{User.name}</Text>
-                        <Text style={styles.commentTime} numberOfLines={1}>{User.hour}:{User.minute} {User.timePeriod == 0 ? ('AM') : ('PM')}</Text>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen')} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{User.name}</Text>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen')} style={styles.commentTime} numberOfLines={1}>{User.hour}:{User.minute} {User.timePeriod == 0 ? ('AM') : ('PM')}</Text>
 
                     </View>
 
                 </View>
                 <View style={styles.commentContentContainer}>
-                    <Text style={styles.commentContent} numberOfLines={1}>{User.content}</Text>
+                    <Text onPress={() => navigation.navigate('ChatRoomScreen')} style={styles.commentContent} numberOfLines={1}>{User.content}</Text>
 
                 </View>
             </View>
             {User.productImage && (
                 <View style={styles.productImageContainer}>
 
-                    <Image style={styles.productImage} source={User.productImage} />
+                    <Image onPress={() => navigation.navigate('ChatRoomScreen')} style={styles.productImage} source={User.productImage} />
                 </View>
             )}
 

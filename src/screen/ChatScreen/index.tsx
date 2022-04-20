@@ -60,6 +60,7 @@ const ChatScreen = () => {
                   name={DELETE_ICON}
                   color={color.lightBlack}
                 />
+
               }
 
 

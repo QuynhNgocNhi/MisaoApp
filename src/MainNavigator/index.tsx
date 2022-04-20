@@ -16,6 +16,7 @@ import UserProfileScreen from '../../src/screen/ProfileScreen/UserProfileScreen'
 // import Add screen
 import AddItem from '../screen/AddScreen';
 import ChatScreen from '../screen/ChatScreen';
+import ChatRoomScreen from '../screen/ChatRoom';
 // import Add Product screen
 import AddProduct from '../screen/AddScreen/AddProduct';
 import AddPost from '../screen/AddScreen/AddPost';
@@ -79,6 +80,7 @@ export type RootStackParameterList = {
   };
 
   ChatScreen;
+  ChatRoomScreen;
   ProfileScreen;
   UserProfileScreen: {
     userId: string;
@@ -118,6 +120,7 @@ const MainNavigator = () => {
         <RootStack.Group>
 
           <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
+          <RootStack.Screen name="ChatRoomScreen" options={{ headerShown: false }} component={ChatRoomScreen} />
           <RootStack.Screen name="PostSearchedByCategory" options={{ headerShown: false }} component={PostSearchedByCategory} />
           <RootStack.Screen name="ProductSearchedByCategory" options={{ headerShown: false }} component={ProductSearchedByCategory} />
           <RootStack.Screen name="UserProfileScreen" options={{ headerShown: false }} component={UserProfileScreen} />
