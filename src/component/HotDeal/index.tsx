@@ -14,7 +14,7 @@ import layout from '../../theme/layout';
 interface ProductItemProps {
     item: {
         id: string,
-        title: string,
+        name: string,
         image: string,
         price: number,
         oldPrice?: number,
@@ -37,13 +37,13 @@ const HotDealItem = ({ item }: ProductItemProps) => {
 
                 <Image style={styles.image} source={item.image} />
                 <View style={styles.tittleContainer}>
-                    <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+                    <Text style={styles.title} numberOfLines={1}>{item.name}</Text>
                 </View>
 
 
 
                 <Text style={styles.price}>đ{item.price}
-                   
+
                 </Text>
                 <View style={styles.discountLabelContainer}>
                     <Text style={styles.label}>{`- ${item.discountPercentage}%`}</Text>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
 
     },
-    
+
     text: {
 
         color: '#000',

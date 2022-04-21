@@ -104,7 +104,9 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         color: '#000',
         fontSize: 16,
-        padding: 5
+        padding: 5,
+        width: '80%',
+        alignSelf: 'center',
 
 
 
@@ -122,8 +124,11 @@ const styles = StyleSheet.create({
     },
 
     imageContainer: {
+        width: '20%'
 
-
+    },
+    middleContainer: {
+        width: '90%',
     },
     productImage: {
         marginLeft: 10,

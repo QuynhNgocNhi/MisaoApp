@@ -119,12 +119,12 @@ const MainNavigator = () => {
 
         <RootStack.Group>
 
+          <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
           <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
           <RootStack.Screen name="ChatRoomScreen" options={{ headerShown: false }} component={ChatRoomScreen} />
           <RootStack.Screen name="PostSearchedByCategory" options={{ headerShown: false }} component={PostSearchedByCategory} />
           <RootStack.Screen name="ProductSearchedByCategory" options={{ headerShown: false }} component={ProductSearchedByCategory} />
           <RootStack.Screen name="UserProfileScreen" options={{ headerShown: false }} component={UserProfileScreen} />
-          <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
           <RootStack.Screen name="MyProfileScreen" options={{ headerShown: false }} component={MyProfileScreen} />
 
           <RootStack.Screen name="ChatScreen" options={{ headerShown: false }} component={ChatScreen} />
