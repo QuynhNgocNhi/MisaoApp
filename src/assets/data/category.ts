@@ -2,7 +2,7 @@ export default [
     {
         id: '1',
         name: 'Rau, củ, quả',
-        image: require('../../assets/categoryImage/rauCuQua.png'),
+        image: require('../../assets/categoryImage/rauCuQua.webp'),
 
     },
     {
