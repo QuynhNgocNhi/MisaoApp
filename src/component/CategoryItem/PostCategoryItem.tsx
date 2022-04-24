@@ -47,7 +47,7 @@ const CategoryItem = ({ category }: categoryItemProps) => {
 const styles = StyleSheet.create({
     container: {
 
-        margin: 4,
+        margin: 5,
         width: (layout.SCREEN_WIDTH - 5 * 8) / 5,
     },
     borderContainer: {
@@ -67,9 +67,8 @@ const styles = StyleSheet.create({
 
     image: {
 
-        width: '100%',
-        height: 80,
-        resizeMode: 'cover',
+        height: 70,
+        width: 70,
 
     },
 
@@ -77,7 +76,8 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 5,
         color: '#000',
-        fontSize: 16
+        fontSize: 16,
+        textAlign: 'center'
     },
 
 

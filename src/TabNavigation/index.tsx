@@ -43,7 +43,7 @@ function TabNavigation() {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            backBehavior="initialRoute"
+            backBehavior="firstRoute"
             screenOptions={{ headerShown: false }}
             /* screenOptions={({ route }) => ({
                 TabBadgeIcon: ({ color, focused, size }: Props) => {
@@ -66,6 +66,7 @@ function TabNavigation() {
             })} */
             screenOptions={{
                 headerShown: false,
+
                 "tabBarHideOnKeyboard": true,
                 "tabBarActiveTintColor": "#006623",
                 "tabBarInactiveTintColor": "#010203",
@@ -82,6 +83,7 @@ function TabNavigation() {
             <Tab.Screen name="Home" component={Home}
 
                 options={{
+
                     tabBarIcon: props => (
                         <TabBadgeIcon
                             name={`home${props.focused ? '' : '-outline'}`}
@@ -108,7 +110,9 @@ function TabNavigation() {
                 }}
             />
             <Tab.Screen name="AddItem" component={AddItem}
+
                 options={{
+
                     tabBarStyle: {
                         display: "none"
                     },

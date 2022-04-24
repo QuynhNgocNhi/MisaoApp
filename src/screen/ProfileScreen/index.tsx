@@ -142,7 +142,7 @@ const HomeScreen = () => {
 
                             <Icon
                                 raised
-                                name='file-text'
+                                name='address-book-o'
                                 type='font-awesome'
                                 color='#7339ab'
                                 size={25}

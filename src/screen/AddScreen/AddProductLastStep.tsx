@@ -1,5 +1,5 @@
 //to do: onpress change state button
-
+//to do: xem trước khi đăng để có chỉnh sửa gì rồi về trang chủ
 import React, { useState, Component } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';

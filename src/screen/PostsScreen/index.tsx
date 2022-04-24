@@ -1,3 +1,5 @@
+//toDo: chỉnh lại post item nhìn chuyên nghiệp hơn
+
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -14,11 +16,7 @@ import Button from '../../component/Button';
 import LinkButton from '../../component/Button/LinkButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-/* to ignore the warning message: 'VirtualizedLists should never be nested inside plain ScrollViews 
-with the same orientation because it can break windowing and other functionality - use another 
-VirtualizedList-backed container instead.' */
-import LogBox from 'react-native';
-// import color, layout, style
+
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 import CustomSwitch from '../../component/CustomSwitch';
@@ -61,12 +59,12 @@ const HomeScreen = () => {
 
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText, { color: color.primaryText }]}>Danh mục </Heading6>
-
-
-
+                    <Heading6 style={[styles.titleText, { color: color.primaryText }]}>
+                      Danh mục
+                    </Heading6>
                   </View>
                 </View>
+
                 <View style={styles.CategoryListContainer}>
 
                   <FlatList
@@ -74,7 +72,7 @@ const HomeScreen = () => {
                     data={category}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
-                    keyExtractor={category => category.id}
+                    keyExtractor={item => item.id}
                     renderItem={({ item }) => <CategoryItem category={item} />}
                   />
                 </View>
@@ -182,7 +180,7 @@ const styles = StyleSheet.create({
   centerContent: {
 
     backgroundColor: color.white,
-
+    width: '100%',
 
   },
   hotDealContentainer: {

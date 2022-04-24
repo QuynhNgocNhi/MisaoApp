@@ -15,6 +15,10 @@ interface PostsProps {
     post: {
         id: string,
         categoryId: string,
+        location: string,
+        askedQuantity: number,
+        unitQuantity: string,
+        image: string,
         title: string,
         content: string,
         userId: string,
@@ -35,16 +39,6 @@ const PostItem = ({ post }: PostsProps) => {
         <View>
             <View style={styles.root}>
                 <View style={styles.topContainer}>
-
-                    <View style={styles.userContainer}>
-                        <Avatar
-                            size="medium"
-                            rounded
-                            source={post.avatar}
-                        />
-
-                        <Text onPress={() => navigation.navigate('UserProfileScreen')} style={styles.userName} numberOfLines={1}>{post.name}</Text>
-                    </View>
                     <View style={styles.bookmarkContainer}>
 
                         <FontAwesome name={'bookmark-o'} color={color.lightBlack} size={22} />
@@ -52,20 +46,30 @@ const PostItem = ({ post }: PostsProps) => {
                 </View>
 
                 <View style={styles.middleContainer}>
+                    <Image style={styles.image} source={post.image} />
+                    <View style={styles.postContent}>
 
-                    <Text onPress={() => { navigation.navigate('PostDetail', { data }); }} numberOfLines={1} style={styles.title}>{post.title}
-                    </Text>
-                    <Text numberOfLines={1} style={styles.content}>{post.content}
-                    </Text>
-                </View>
-                <View style={styles.bottomContainer}>
+                        <Text onPress={() => { navigation.navigate('PostDetail', { data }); }} numberOfLines={2} style={styles.title}>{post.title}
+                        </Text>
+                        <Text numberOfLines={1} style={styles.content}>{post.content}
+                        </Text>
+                        <View style={styles.centerContainer}>
 
 
-                    <Text numberOfLines={1} style={styles.postTime}><FontAwesome name={'clock-o'} size={22} /> {post.time} {post.timeUnit} trước
-                    </Text>
+                            <Text numberOfLines={1} style={styles.postLocation}><FontAwesome name={'map-marker'} size={22} /> {post.location}
+                            </Text>
 
-                    <Text numberOfLines={1} style={styles.askedTimes}>{post.askedTimes} người đang hỏi
-                    </Text>
+
+                        </View>
+                        <View style={styles.bottomContainer}>
+
+
+
+
+                            <Text numberOfLines={1} style={styles.askedTimes}>{post.askedTimes} người đang hỏi
+                            </Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         </View>
@@ -111,7 +115,8 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     middleContainer: {
-        width: '90%',
+
+        flexDirection: 'row',
     },
     title: {
 
@@ -139,9 +144,37 @@ const styles = StyleSheet.create({
 
 
     },
+    postContent: {
+        flex: 1,
+        paddingTop: 10,
+        justifyContent: 'space-between',
+    },
     postTime: {
 
+    },
+    askedTimes: {
+        color: color.normalText,
+    },
+    image: {
+        height: 100,
+        width: 100,
+        margin: 10,
+    },
+    centerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '90%',
+    },
+    postLocation: {
+        fontSize: 16,
+        color: color.primaryColor
+    },
+    askedQuantity: {
+        fontSize: 16,
+        color: color.important
     }
+
+
 
 });
 export default PostItem;
