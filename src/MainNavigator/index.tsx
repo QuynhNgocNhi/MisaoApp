@@ -7,6 +7,7 @@ import Login from '../../src/screen/LoginScreen';
 import Register from '../../src/screen/RegisterScreen';
 import RegisterSuccessful from '../../src/screen/RegisterSuccessfulScreen';
 import Welcome from '../../src/screen/Welcome';
+import EnterOTP from '../../src/screen/EnterOTP';
 import PostsScreen from '../../src/screen/PostsScreen';
 import PostsSaved from '../../src/screen/PostsSaved';
 import ProductsSaved from '../../src/screen/ProductsSaved';
@@ -39,7 +40,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 }; */
 // import color, layout, style
 import color from '../theme/color';
-import layout from '../theme/layout';
 
 // MainNavigatorA Config
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
@@ -89,6 +89,9 @@ export type RootStackParameterList = {
     userId: string;
   };
   Welcome: {
+    phoneNumber: number;
+  };
+  EnterOTP: {
     phoneNumber: number;
   };
   Login: {
@@ -150,6 +153,19 @@ const MainNavigator = () => {
             ),
           })}
             component={Login} />
+          <RootStack.Screen name="EnterOTP" options={({ navigation }) => ({
+            /* title: 'Edit Profile', */
+            title: 'Xác nhận OTP',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+          })}
+            component={EnterOTP} />
           {/*         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
  */}
           <RootStack.Screen name="Posts" options={{ headerShown: false }} component={PostsScreen} />

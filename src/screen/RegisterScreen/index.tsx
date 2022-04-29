@@ -111,12 +111,12 @@ export default class Register extends Component {
                             <View style={styles.buttonsGroup}>
                                 <Button
                                     buttonStyle={styles.customButton}
-                                    onPress={this.navigateTo('Register')}
+                                    onPress={this.navigateTo('HomeNavigation')}
                                     title={'Đăng ký'.toUpperCase()}
                                 />
                             </View>
                             <LinkButton
-                                onPress={this.navigateTo('HomeNavigator')}
+                                onPress={this.navigateTo('Welcome')}
                                 title="Quay trở lại"
                                 titleStyle={styles.goBackButton}
                             />

@@ -134,6 +134,7 @@ const HomeScreen = () => {
 
                 </View>
               </View>
+
               <FlatList
                 contentContainerStyle={styles.ProductItemList}
                 data={product}

@@ -24,7 +24,8 @@ const INPUT_BORDER_COLOR = color.borderColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
 
-const Login = () => {
+const Login = ({ route }) => {
+
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.screenContainer}>
@@ -69,7 +70,7 @@ const Login = () => {
               <UnderlineTextInput
                 blurOnSubmit={false}
                 keyboardType="email-address"
-                placeholder="Số điện thoại của bạn"
+                placeholder={route.params.phoneNumber}
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
                 borderColor={INPUT_BORDER_COLOR}
@@ -100,6 +101,7 @@ const Login = () => {
               title="Quên mật khẩu"
               titleStyle={styles.forgotPasswordText}
             />
+            <Text>{route.params.paramKey}</Text>
           </View>
         </KeyboardAwareScrollView>
         <View style={styles.termBox}>

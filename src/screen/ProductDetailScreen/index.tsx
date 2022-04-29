@@ -131,7 +131,8 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>{data.userName}</Text>
+                                            <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
+                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
                                             <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
                                         </View>
                                     </View>
@@ -228,7 +229,8 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>{data.userName}</Text>
+                                            <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
+                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
                                             <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
                                         </View>
                                     </View>

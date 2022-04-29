@@ -62,7 +62,16 @@ const AddProductScreen = () => {
                     </View>
                     <ScrollView>
 
+                        <View style={[styles.box, styles.imageAddContainer]}>
+                            <View style={styles.tittleContainer}>
 
+                                <Icon name='image-multiple-outline' size={28} color='#5C8700' />
+                                <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Ảnh sản phẩm cần mua (nếu có)</Heading6>
+                            </View>
+                            <View style={styles.imageAddBox}>
+                                <Button type="clear" onPress={() => navigation.push('AddProduct')} icon={<Icon name={'image-plus'} size={62} color={color.borderColor} />} />
+                            </View>
+                        </View>
 
                         <View style={[styles.box, styles.productNameAddContainer, { marginTop: 10 }]}>
                             <View style={styles.tittleContainer}>
@@ -75,7 +84,7 @@ const AddProductScreen = () => {
                                     style={{ fontSize: 20, padding: 10 }}
 
                                     maxFontSizeMultiplier={5}
-                                    placeholder="Cần mua 50kg sầu riêng Ri6... "
+                                    placeholder="Cần mua 50kg sầu riêng Ri6 tại... "
                                     placeholderTextColor={'#424242'}
 
                                     // Inherit any props passed to it; e.g., multiline, numberOfLines below

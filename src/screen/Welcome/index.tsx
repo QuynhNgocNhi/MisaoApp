@@ -1,8 +1,8 @@
 
 
 // import dependencies
-import React, { Component } from 'react';
-import { ImageBackground, StatusBar, StyleSheet, View, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { ImageBackground, StatusBar, StyleSheet, View, SafeAreaView, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -26,10 +26,11 @@ const headerImg = require('../../image/HappyFarmerGirl.jpg')
 type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
 
 // Welcome
-const Welcome: React.FC<WelcomeProps> = ({ phoneNumber }) => {
+const Welcome: React.FC<WelcomeProps> = () => {
   const navigationRef = useNavigationContainerRef();
   const navigation = useNavigation();
-
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const data = { phoneNumber: phoneNumber };
   return (
     <SafeAreaView style={styles.screenContainer}>
       <StatusBar translucent backgroundColor='transparent' />
@@ -60,14 +61,14 @@ const Welcome: React.FC<WelcomeProps> = ({ phoneNumber }) => {
                   blurOnSubmit={false}
                   keyboardType="phone-pad"
                   placeholder="Số điện thoại"
-
+                  onChangeText={(val: number) => setPhoneNumber(val)}
                 />
               </View>
 
               <View style={styles.buttonsGroup}>
                 <Button
                   buttonStyle={styles.customButton}
-                  onPress={() => { navigation.navigate('Login'); }}
+                  onPress={() => { navigation.navigate('Login', { phoneNumber: phoneNumber }); }}
                   title={'Tiếp tục'.toUpperCase()}
                 />
               </View>

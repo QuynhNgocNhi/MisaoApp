@@ -35,6 +35,7 @@ const PostItem = ({ post }: PostsProps) => {
     const navigation = useNavigation();
     const data = { postId: post.id, title: post.title, content: post.content, userId: post.userId, userName: post.name }
 
+
     return (
         <View>
             <View style={styles.root}>

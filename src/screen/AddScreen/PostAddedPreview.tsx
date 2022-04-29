@@ -178,7 +178,7 @@ const PostAddedPreviewScreen = ({ Props, route }) => {
                         <ButtonNormal
                             buttonStyle={styles.customButtonBackToHome}
                             onPress={() => { navigation.navigate('HomeNavigation'); }}
-                            title={'Về trang chủ'.toUpperCase()}
+                            title={'Xác nhận'.toUpperCase()}
                         />
                     </View>
 

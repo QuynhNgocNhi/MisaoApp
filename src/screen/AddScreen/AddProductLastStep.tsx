@@ -171,8 +171,10 @@ const AddProductScreen = (Props) => {
                                 <View style={styles.tittleContainer}>
 
                                     <Icon name='calendar-month-outline' size={26} color='#5C8700' />
-                                    <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Ngày hết hàng</Heading6>
-                                    <Button title="Show Date Picker" onPress={showDatePicker} />
+                                    <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết hàng</Heading6>
+
+
+                                    <Button outline style={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
                                 </View>
                                 <View style={styles.productOutOfStockDateContainerContainer}>
                                     <DateTimePickerModal
@@ -290,6 +292,8 @@ const styles = StyleSheet.create({
 
     datePickerStyle: {
         width: '80%',
+        color: '#FFFFFF',
+
     },
     productNameAddBox: {
         alignItems: 'center',
