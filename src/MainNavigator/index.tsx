@@ -1,6 +1,5 @@
 // import dependencies
-
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StatusBar, View, Platform } from 'react-native';
 import Home from '../../src/screen/HomeScreen';
 import Login from '../../src/screen/LoginScreen';
@@ -40,6 +39,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 }; */
 // import color, layout, style
 import color from '../theme/color';
+import { useDispatch, useSelector } from 'react-redux';
+import { tokenSelector } from '../modules/auth/selectors';
+import { _setToken } from '../services';
 
 // MainNavigatorA Config
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
@@ -47,15 +49,15 @@ export type RootStackParameterList = {
   HomeNavigation: {
     userName: string;
   };
-  SearchModal;
-  Posts;
-  PostsSaved;
-  PostSearchedByCategory;
-  ProductSearchedByCategory;
-  ProductsSaved;
-  Notification;
-  AddItem;
-  AddProduct;
+  SearchModal: any;
+  Posts: any;
+  PostsSaved: any;
+  PostSearchedByCategory: any;
+  ProductSearchedByCategory: any;
+  ProductsSaved: any;
+  Notification: any;
+  AddItem: any;
+  AddProduct: any;
   AddPost: {
     postId: string;
   };
@@ -79,9 +81,9 @@ export type RootStackParameterList = {
 
   };
 
-  ChatScreen;
-  ChatRoomScreen;
-  ProfileScreen;
+  ChatScreen: any;
+  ChatRoomScreen: any;
+  ProfileScreen: any;
   UserProfileScreen: {
     userId: string;
   };
@@ -104,25 +106,37 @@ export type RootStackParameterList = {
     password: string;
   };
   RegisterSuccessful: {
-
   };
-
 
 };
 
 const RootStack = createNativeStackNavigator<RootStackParameterList>();
 
-
 // MainNavigator
 const MainNavigator = () => {
+  const dispatch = useDispatch()
+  const token = useSelector(tokenSelector)
+
+  useEffect(() => {
+    _setToken(token)
+  }, [token])
   return (
     <NavigationContainer>
-
-      <RootStack.Navigator >
-
+      <RootStack.Navigator initialRouteName={token ? 'HomeNavigation' : 'Login'} >
         <RootStack.Group>
-
           <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
+          <RootStack.Screen name="Login" options={({ navigation }) => ({
+            /* title: 'Edit Profile', */
+            headerShown: false,
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+          })}
+            component={Login} />
           <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
           <RootStack.Screen name="ChatRoomScreen" options={{ headerShown: false }} component={ChatRoomScreen} />
           <RootStack.Screen name="PostSearchedByCategory" options={{ headerShown: false }} component={PostSearchedByCategory} />
@@ -141,18 +155,7 @@ const MainNavigator = () => {
           <RootStack.Screen name="ProductDetail" options={{ headerShown: false }} component={ProductDetail} />
           <RootStack.Screen name="PostDetail" options={{ headerShown: false }} component={PostDetail} />
 
-          <RootStack.Screen name="Login" options={({ navigation }) => ({
-            /* title: 'Edit Profile', */
-            headerShown: false,
-            headerLeft: () => (
-              <HeaderIconButton
-                onPress={() => navigation.goBack()}
-                name={BACK_ICON}
-                color={color.primaryColor}
-              />
-            ),
-          })}
-            component={Login} />
+
           <RootStack.Screen name="EnterOTP" options={({ navigation }) => ({
             /* title: 'Edit Profile', */
             title: 'Xác nhận OTP',

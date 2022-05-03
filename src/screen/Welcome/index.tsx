@@ -2,7 +2,7 @@
 
 // import dependencies
 import React, { useState } from 'react';
-import { ImageBackground, StatusBar, StyleSheet, View, SafeAreaView, Text } from 'react-native';
+import { ImageBackground, StatusBar, StyleSheet, View, SafeAreaView, Text, Alert } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -18,6 +18,8 @@ import { RootStackParameterList } from '../../MainNavigator';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+import { checkPhoneExistsAPI } from '../../services';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 // Welcome Config
 const headerImg = require('../../image/HappyFarmerGirl.jpg')
@@ -28,9 +30,34 @@ type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
 // Welcome
 const Welcome: React.FC<WelcomeProps> = () => {
   const navigationRef = useNavigationContainerRef();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [phoneNumber, setPhoneNumber] = useState('');
   const data = { phoneNumber: phoneNumber };
+  const [loading, setLoading] = useState<boolean>(false)
+  const onCheckPhoneExists = async () => {
+    if (phoneNumber) {
+      setLoading(true)
+      const response = await checkPhoneExistsAPI(phoneNumber)
+      if (response.__typename !== 'ErrorResponse') {
+        navigation.navigate('Login', { phoneNumber: phoneNumber });
+      } else {
+        Alert.alert("", "Bạn chưa đăng ký tài khoản với số điện thoại này!",
+          [
+            {
+              text: "Hủy",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "Đăng ký", onPress: () => navigation.navigate('Register') }
+          ])
+      }
+
+      setLoading(false)
+
+    } else {
+      Alert.alert("", "Vui lòng nhập số điện thoại!")
+    }
+  }
   return (
     <SafeAreaView style={styles.screenContainer}>
       <StatusBar translucent backgroundColor='transparent' />
@@ -51,7 +78,6 @@ const Welcome: React.FC<WelcomeProps> = () => {
               <Heading6 style={styles.headingText}>trên khắp mọi vùng miền tại Việt Nam</Heading6>
             </View>
 
-
             <View style={styles.center}>
 
               <View style={styles.buttonsGroup}>
@@ -61,14 +87,14 @@ const Welcome: React.FC<WelcomeProps> = () => {
                   blurOnSubmit={false}
                   keyboardType="phone-pad"
                   placeholder="Số điện thoại"
-                  onChangeText={(val: number) => setPhoneNumber(val)}
+                  onChangeText={(val: any) => setPhoneNumber(val)}
                 />
               </View>
 
               <View style={styles.buttonsGroup}>
                 <Button
                   buttonStyle={styles.customButton}
-                  onPress={() => { navigation.navigate('Login', { phoneNumber: phoneNumber }); }}
+                  onPress={onCheckPhoneExists}
                   title={'Tiếp tục'.toUpperCase()}
                 />
               </View>
@@ -82,6 +108,7 @@ const Welcome: React.FC<WelcomeProps> = () => {
           </View>
         </View>
       </KeyboardAwareScrollView>
+      <LoadingOverlay loading={loading} />
     </SafeAreaView>
   );
 

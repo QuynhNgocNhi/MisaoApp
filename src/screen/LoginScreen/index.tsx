@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView } from 'react-native';
+import React, { Component, useState } from 'react';
+import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView, Alert } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 // import color
@@ -15,6 +15,10 @@ import UnderlinePasswordInput from '../../component/InputPassword';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { onlogin } from '../../modules/auth/slice';
+import LoadingOverlay from '../../component/LoadingOverlay';
+import { loadingLoginSelector } from '../../modules/auth/selectors';
 // SignIn Config
 const headerImg = require('../../image/LoginHeader.jpg')
 
@@ -24,9 +28,34 @@ const INPUT_BORDER_COLOR = color.borderColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
 
-const Login = ({ route }) => {
+const Login = ({ route }: any) => {
+  const [phone, setPhone] = useState<string>(route.params.phoneNumber ?? '')
+  const [password, setPassword] = useState<string>()
+  const dispatch = useDispatch()
+  const navigation = useNavigation<any>();
+  console.log({ phone });
+  const loading = useSelector(loadingLoginSelector)
 
-  const navigation = useNavigation();
+  const onClickLogin = () => {
+    if (phone && password) {
+      dispatch(
+        onlogin({
+          data: {
+            phone: phone,
+            password: password,
+          },
+          onSuccess: (response: any) => {
+            navigation.replace('HomeNavigation')
+          },
+          onError: () => { },
+        }),
+      );
+
+    } else {
+      Alert.alert("", "Vui lòng nhập mật khẩu của bạn!")
+    }
+  }
+
   return (
     <SafeAreaView style={styles.screenContainer}>
       <StatusBar translucent backgroundColor='transparent' />
@@ -70,7 +99,7 @@ const Login = ({ route }) => {
               <UnderlineTextInput
                 blurOnSubmit={false}
                 keyboardType="email-address"
-                placeholder={route.params.phoneNumber}
+                value={route.params.phoneNumber}
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
                 borderColor={INPUT_BORDER_COLOR}
@@ -85,6 +114,8 @@ const Login = ({ route }) => {
                 placeholder="Nhập mật khẩu của bạn"
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
+                value={password}
+                onChangeText={(value: any) => setPassword(value)}
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
               />
@@ -92,7 +123,7 @@ const Login = ({ route }) => {
             <View style={styles.buttonsGroup}>
               <ButtonNormal
                 buttonStyle={styles.customButton}
-                onPress={() => { navigation.navigate('HomeNavigation'); }}
+                onPress={onClickLogin}
                 title={'Đăng nhập'.toUpperCase()}
               />
             </View>
@@ -125,7 +156,7 @@ const Login = ({ route }) => {
           </TouchableWithoutFeedback>
         </View>
       </View>
-
+      <LoadingOverlay loading={loading} />
     </SafeAreaView >
   );
 };
