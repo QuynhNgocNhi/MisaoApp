@@ -107,6 +107,7 @@ export type RootStackParameterList = {
   };
   RegisterSuccessful: {
   };
+  EnterOTPRegister: {}
 
 };
 
@@ -122,9 +123,10 @@ const MainNavigator = () => {
   }, [token])
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName={token ? 'HomeNavigation' : 'Login'} >
+      <RootStack.Navigator initialRouteName={token ? 'HomeNavigation' : 'Welcome'} >
         <RootStack.Group>
           <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
+          
           <RootStack.Screen name="Login" options={({ navigation }) => ({
             /* title: 'Edit Profile', */
             headerShown: false,
@@ -157,7 +159,6 @@ const MainNavigator = () => {
 
 
           <RootStack.Screen name="EnterOTP" options={({ navigation }) => ({
-            /* title: 'Edit Profile', */
             title: 'Xác nhận OTP',
             headerTitleAlign: 'center',
             headerLeft: () => (

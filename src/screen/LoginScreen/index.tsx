@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react';
 import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView, Alert } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-
 // import color
 import color from '../../theme/color';
 import layout from '../../theme/layout';
@@ -19,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { onlogin } from '../../modules/auth/slice';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import { loadingLoginSelector } from '../../modules/auth/selectors';
+import { getUserInfo } from '../../modules/user/slice';
+import { getMasterData } from '../../modules/search/slice';
 // SignIn Config
 const headerImg = require('../../image/LoginHeader.jpg')
 
@@ -33,7 +34,6 @@ const Login = ({ route }: any) => {
   const [password, setPassword] = useState<string>()
   const dispatch = useDispatch()
   const navigation = useNavigation<any>();
-  console.log({ phone });
   const loading = useSelector(loadingLoginSelector)
 
   const onClickLogin = () => {
@@ -45,6 +45,8 @@ const Login = ({ route }: any) => {
             password: password,
           },
           onSuccess: (response: any) => {
+            dispatch(getUserInfo())
+            dispatch(getMasterData())
             navigation.replace('HomeNavigation')
           },
           onError: () => { },

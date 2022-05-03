@@ -241,7 +241,7 @@ export const register = async (userInfo: UserInfo): Promise<BaseResponse | Error
 
 export const getMasterDataApi = async (): Promise<ObjectResponse<MasterDataResponse> | ErrorResponse> => {
     try {
-        const response = await get<ObjectResponse<MasterDataResponse>>('/master-data');
+        const response = await get<ObjectResponse<MasterDataResponse>>('/master-data/categories');
         return response.data
     } catch (error: any) {
         return handleServerError(error);
