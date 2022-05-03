@@ -1,52 +1,50 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox } from 'react-native'
+import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Heading6 } from '../Text';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 
 
 
 //10 latest product that have oldprice
 
-//import image from '../../data/image'
 interface categoryItemProps {
     category: {
-        id: string,
-        name: string,
+        value: number,
+        label: string,
         image: string,
-
-
     }
 }
 
 
 const CategoryItem = ({ category }: categoryItemProps) => {
     const navigation = useNavigation();
+    const data = { categoryId: category.value, categoryName: category.label }
 
-    const data = { categoryId: category.id, categoryName: category.name }
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            onPress={() => { navigation.navigate('ProductSearchedByCategory', { data }); }}
+            style={styles.container}>
 
             <View style={styles.bottomContainer}>
-
-                <Image style={styles.image} source={category.image} />
+                <FastImage resizeMode={FastImage.resizeMode.cover}
+                    style={styles.image}
+                    source={{ uri: category.image }} />
                 <View style={styles.tittleContainer}>
                     <Text style={styles.title}
-                        onPress={() => { navigation.navigate('ProductSearchedByCategory', { data }); }}
-                        numberOfLines={2}>{category.name}</Text>
+
+                        numberOfLines={2}>{category.label}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
 
     )
 }
 const styles = StyleSheet.create({
     container: {
-
         margin: 5,
         width: (layout.SCREEN_WIDTH - 5 * 8) / 5,
     },
@@ -66,10 +64,8 @@ const styles = StyleSheet.create({
     },
 
     image: {
-
         height: 70,
         width: 70,
-
     },
 
     title: {

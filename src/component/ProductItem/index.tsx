@@ -7,7 +7,9 @@ import color from '../../theme/color';
 import layout from '../../theme/layout';
 import NumberFormat from 'react-number-format';
 import { useNavigation } from '@react-navigation/native';
-
+import 'intl';
+import 'intl/locale-data/jsonp/en';
+import FastImage from 'react-native-fast-image';
 
 //import image from '../../data/image'
 interface ProductItemProps {
@@ -28,6 +30,8 @@ interface ProductItemProps {
     timeUnit: string,
     dateCreated: string,
     availability: number,
+    discount: number,
+    images: any
 
     //for optional props: oldPrice? 
 
@@ -63,24 +67,30 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
       <View style={styles.bottomContainer}>
 
-        <Image style={styles.image} source={product.image} />
+        {product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full ? (
+          <FastImage style={styles.image}
+            source={{ uri: product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full }} />
+        ) : (
+          <></>
+        )}
         <View style={styles.tittleContainer}>
-          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }} style={styles.title} numberOfLines={2}>{product.name}</Text>
+          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }}
+            style={styles.title} numberOfLines={2}>{product.name}</Text>
         </View>
 
 
         <View style={styles.unitPriceRow}>
 
-          <Text style={styles.price}>đ{product.price}
-            {product.oldPrice && (<Text style={styles.oldPrice}> ${product.oldPrice}</Text>)}
+          <Text style={styles.price}>đ{new Intl.NumberFormat().format(product?.price)}
+            {/* {product.oldPrice && (<Text style={styles.oldPrice}> ${product.oldPrice}</Text>)} */}
 
           </Text>
           <Text style={styles.unitPrice}> {product.unitPrice} </Text>
         </View>
-        <Text style={styles.askedTimes}> {product.askedTimes} người đang hỏi </Text>
+        <Text style={styles.askedTimes}> {product.askedTimes ?? 0} người đang hỏi </Text>
 
-        {product.discountPercentage && (<View style={styles.discountLabelContainer}>
-          <Text style={styles.label}>{`- ${product.discountPercentage}%`}</Text>
+        {product.discount && (<View style={styles.discountLabelContainer}>
+          <Text style={styles.label}>{`- ${product.discount}%`}</Text>
 
         </View>)}
         <View style={styles.wishlistContainer}>

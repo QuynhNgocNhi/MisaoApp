@@ -1,11 +1,9 @@
-import React, { useRef } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
 import product from '../../assets/data/product';
-import category from '../../assets/data/category';
 import HotDealItem from '../../component/HotDeal';
 import CategoryList from '../../component/CategoryItem';
 import ProductItem from '../../component/ProductItem';
@@ -29,6 +27,9 @@ import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+import { useSelector } from 'react-redux';
+import { masterDataSelector } from '../../modules/search/selectors';
+import { getHotProductListAPI, getProductListAPI } from '../../services';
 
 
 const HomeScreen = () => {
@@ -36,6 +37,30 @@ const HomeScreen = () => {
   const isFocused = useIsFocused();
   const statusbar = () => { return <StatusBar /> }
 
+  const categoriesList = useSelector(masterDataSelector)
+  const [hotProductList, setHotProductList] = useState<any>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [productList, setProductList] = useState<any>([])
+  const fetchData = async () => {
+    setLoading(true)
+    const productResponse = await getProductListAPI()
+    const response = await getHotProductListAPI()
+    if (response.__typename !== 'ErrorResponse' && productResponse.__typename !== 'ErrorResponse') {
+      setHotProductList(response.data)
+      setProductList(response.data)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator animating />
+    </View>)
+  }
   return (
     <SafeAreaProvider>
 
@@ -81,21 +106,21 @@ const HomeScreen = () => {
 
                   <FlatList
                     horizontal
-                    data={product}
+                    data={hotProductList}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => {
                       return (
                         <View>
-                          {
-                            item.discountPercentage && (
-                              <HotDealItem item={item}
-                                contentContainerStyle={styles.hotDealList}
-                                scrollEnabled={false}
-                              />
-                            )
-                          }
+                          {/* {
+                            item.discountPercentage && ( */}
+                          <HotDealItem item={item}
+                            contentContainerStyle={styles.hotDealList}
+                            scrollEnabled={false}
+                          />
+                          {/* )
+                          } */}
                         </View>
                       )
                     }}
@@ -114,10 +139,10 @@ const HomeScreen = () => {
 
                   <FlatList
                     horizontal
-                    data={category}
+                    data={categoriesList}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => <CategoryList category={item} />}
                   />
                 </View>
@@ -137,7 +162,7 @@ const HomeScreen = () => {
 
               <FlatList
                 contentContainerStyle={styles.ProductItemList}
-                data={product}
+                data={productList}
                 numColumns={2}
                 renderItem={({ item }) => <ProductItem product={item} />}
               />

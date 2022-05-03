@@ -1,6 +1,6 @@
 import {
     Auth, BaseResponse, ErrorResponse, UserInfo, ObjectResponse,
-    MasterDataResponse, ParamsLogin,
+    MasterDataResponse, ParamsLogin, ListResponse,
 } from './../type';
 import { Alert } from 'react-native';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
@@ -275,5 +275,24 @@ export const checkPhoneExistsAPI = async (phone: string): Promise<BaseResponse |
     } catch (error: any) {
         return handleServerError(error);
 
+    }
+}
+
+
+export const getHotProductListAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/product/hot`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const getProductListAPI = async (data?: any): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/product`, { ...data });
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
     }
 }
