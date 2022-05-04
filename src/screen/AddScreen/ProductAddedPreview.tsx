@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -61,7 +61,7 @@ interface commentProps {
     }
 
 }
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, RouteProp, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CategoryList from '../../component/CategoryList';
 //import data
@@ -83,17 +83,50 @@ import layout from '../../theme/layout';
 
 import { useNavigation } from '@react-navigation/native';
 import Comment from '../../assets/data/comment';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
+import { masterDataSelector } from '../../modules/search/selectors';
+import LoadingOverlay from '../../component/LoadingOverlay';
+import { addProductAPI } from '../../services';
+import { getUserInfo } from '../../modules/user/slice';
 
 
-
-const ProductDetailScreen = ({ Props, route }) => {
-    const navigation = useNavigation();
+type RouteParams = {
+    data: any
+}
+const ProductDetailScreen = ({ Props, route }: any) => {
+    const navigation = useNavigation<any>();
+    const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const { data } = route.params;
     const [date, setDate] = useState('09-10-2020');
+    const userInfo = useSelector(userSelector)
+    const categories = useSelector(masterDataSelector)
+    const [loading, setLoading] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
-    const stateName = 'Nguyễn Văn A'
-    const statePhone = '097773777'
-    const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
+    const onAddProduct = async () => {
+        setLoading(true)
+        const response = await addProductAPI(data)
+        console.log({ response });
+
+        if (response.__typename !== 'ErrorResponse') {
+            dispatch(getUserInfo())
+            Alert.alert("", "Đăng sản phẩm thành công!", [
+                {
+                    text: 'OK',
+                    onPress: () => navigation.replace("HomeNavigation")
+                }
+            ])
+        } else {
+            Alert.alert("", "Đăng sản phẩm thất bại! Vui lòng thử lại sau.", [
+                {
+                    text: 'OK',
+                    onPress: () => { }
+                }
+            ])
+        }
+        setLoading(false)
+    }
 
 
     return (
@@ -134,12 +167,12 @@ const ProductDetailScreen = ({ Props, route }) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={require('../../image/symbol.png')}
+                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
+                                            <Text style={styles.userName} numberOfLines={1}>{userInfo?.name}</Text>
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text> */}
                                         </View>
                                     </View>
 
@@ -148,8 +181,8 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                     <View style={styles.unitPriceRow}>
 
-                                        <Text style={styles.price}>50000 đ</Text>
-                                        <Text style={styles.oldPrice}> 59000 đ</Text>
+                                        <Text style={styles.price}>{new Intl.NumberFormat().format(data?.price - data?.price * (data?.discount / 100))} đ</Text>
+                                        <Text style={styles.oldPrice}> {new Intl.NumberFormat().format(data?.price)} đ</Text>
 
                                     </View>
                                     <View style={styles.Line}></View>
@@ -159,15 +192,14 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
                                     <Text style={styles.productStatus}>Tình trạng</Text>
 
-                                    <ButtonNormal buttonStyle={styles.statusButton} outlined title={'Còn hàng'}></ButtonNormal>
+                                    <ButtonNormal buttonStyle={styles.statusButton} outlined title={data?.is_availabel === 0 ? 'Còn hàng' : 'Hết hàng'}></ButtonNormal>
 
 
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={[styles.productStatus, { marginBottom: 20 }]}>Mô tả sản phẩm</Text>
                                     <Text style={styles.productDescription}>
-                                        Panse mang một vẻ đẹp ngọt ngào, đằm thắm nhưng không kém phần rực rỡ mà không phải loài hoa nào cũng có.
-                                        Nó là loài cây biểu tượng của mặt trời của hi vọng, của sự ấm áp, hướng về những điều tốt đẹp nhất. Hiện nay có khá nhiều người yêu thích loại cây xinh đẹp này, trồng trong nhà như một cây trang trí tô điểm không gian.
+                                        {data?.description}
                                     </Text>
 
 
@@ -175,19 +207,18 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 <View style={[styles.productContainer, styles.productAdjust]}>
                                     <Text style={styles.productStatus}>Chi tiết sản phẩm</Text>
                                     <View style={styles.productStatusItem}>
-
                                         <Text style={{ fontSize: 18 }}>Danh mục</Text>
-                                        <Text style={{ fontSize: 18 }}>Trái cây</Text>
+                                        <Text style={{ fontSize: 18 }}>{categories?.find((item: any) => item.value === data?.category_id)?.label}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Nơi bán</Text>
-                                        <Text style={{ fontSize: 18 }}>Tiền Giang</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.seller_address}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Số lượng</Text>
-                                        <Text style={{ fontSize: 18 }}>50 kg</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.inventory_number ?? '-'} {data?.unit}</Text>
                                     </View>
 
 
@@ -199,10 +230,9 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     <Text style={[styles.productStatus, { alignSelf: 'flex-start' }]}>Ảnh sản phẩm</Text>
 
                                     <View style={styles.productImage}>
-
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-1.jpg')} />
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-2.jpg')} />
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-3.jpg')} />
+                                        {data?.image_list?.map((image: any, index: number) => (
+                                            <Image style={styles.image} key={index} source={{ uri: image.url_full }} />
+                                        ))}
                                     </View>
 
                                 </View>
@@ -218,7 +248,7 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                         <ButtonNormal
                             buttonStyle={styles.customButtonBackToHome}
-                            onPress={() => { navigation.navigate('HomeNavigation'); }}
+                            onPress={onAddProduct}
                             title={'Xác nhận'.toUpperCase()}
                         />
                     </View>
@@ -227,6 +257,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                 </View>
 
             </SafeAreaView>
+            <LoadingOverlay loading={loading} />
         </SafeAreaProvider >
     );
 };

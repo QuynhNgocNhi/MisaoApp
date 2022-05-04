@@ -22,14 +22,19 @@ const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevr
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-
+import CategoryList from '../../component/CategoryItem';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { masterDataSelector } from '../../modules/search/selectors';
 
 
 
 
 const AddProductScreen = () => {
     const navigation = useNavigation();
+    const categoriesList = useSelector(masterDataSelector)
+    console.log({categoriesList});
+    
 
 
     return (
@@ -128,11 +133,11 @@ const AddProductScreen = () => {
                             <View style={styles.productCategoryAddBox}>
                                 <FlatList
                                     horizontal
-                                    data={category}
+                                    data={categoriesList}
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
-                                    keyExtractor={item => item.id}
-                                    renderItem={({ item }) => <CategoryItem category={item} />}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item }) => <CategoryList category={item} />}
                                 />
                             </View>
 

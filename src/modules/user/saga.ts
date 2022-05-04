@@ -7,8 +7,8 @@ import { logout } from '../auth/slice';
 
 function* getUserInfoSideEffect() {
     try {
-        const response: ObjectResponse<UserInfo> = yield call(getMe);
-        if (response?.status === 401) {
+        const response: any = yield call(getMe);
+        if (response?.message === "Unauthenticated.") {
             yield put(logout())
         } else {
             yield put(getUserInfoSuccess(response))

@@ -1,14 +1,12 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox } from 'react-native'
+import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox, Touchable, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Heading6 } from '../../component/Text';
-// import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 import FastImage from 'react-native-fast-image';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
-
+import { useNavigation } from '@react-navigation/native';
+LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
 
 //10 latest product that have oldprice
 
@@ -28,22 +26,19 @@ interface ProductItemProps {
 
 
 const HotDealItem = ({ item }: ProductItemProps) => {
-    useEffect(() => {
-
-        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-    }, [])
+    const navigation = useNavigation<any>()
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            onPress={() => { navigation.navigate('ProductDetail', { data: item }); }}
+            style={styles.container}>
 
             <View style={styles.bottomContainer}>
-
                 {item.images && item.images?.length > 0 && item.images[0].url && item.images[0].url_full ? (
                     <FastImage style={styles.image}
                         source={{ uri: item.images && item.images?.length > 0 && item.images[0].url && item.images[0].url_full }} />
                 ) : (
                     <></>
                 )}
-
                 <View style={styles.tittleContainer}>
                     <Text style={styles.title} numberOfLines={1}>{item.name}</Text>
                 </View>
@@ -57,7 +52,7 @@ const HotDealItem = ({ item }: ProductItemProps) => {
                     <Text style={styles.label}>{`- ${item.discount}%`}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
 
     )
 }

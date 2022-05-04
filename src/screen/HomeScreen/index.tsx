@@ -30,10 +30,11 @@ import layout from '../../theme/layout';
 import { useSelector } from 'react-redux';
 import { masterDataSelector } from '../../modules/search/selectors';
 import { getHotProductListAPI, getProductListAPI } from '../../services';
+import { tokenSelector } from '../../modules/auth/selectors';
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const isFocused = useIsFocused();
   const statusbar = () => { return <StatusBar /> }
 
@@ -41,7 +42,11 @@ const HomeScreen = () => {
   const [hotProductList, setHotProductList] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [productList, setProductList] = useState<any>([])
+  const token = useSelector(tokenSelector)
   const fetchData = async () => {
+    if(!token) {
+      navigation.replace('')
+    }
     setLoading(true)
     const productResponse = await getProductListAPI()
     const response = await getHotProductListAPI()

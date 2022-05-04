@@ -1,5 +1,5 @@
 // import dependencies
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar, View, Platform } from 'react-native';
 import Home from '../../src/screen/HomeScreen';
 import Login from '../../src/screen/LoginScreen';
@@ -42,6 +42,7 @@ import color from '../theme/color';
 import { useDispatch, useSelector } from 'react-redux';
 import { tokenSelector } from '../modules/auth/selectors';
 import { _setToken } from '../services';
+import { getUserInfo } from '../modules/user/slice';
 
 // MainNavigatorA Config
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
@@ -117,16 +118,25 @@ const RootStack = createNativeStackNavigator<RootStackParameterList>();
 const MainNavigator = () => {
   const dispatch = useDispatch()
   const token = useSelector(tokenSelector)
+  const [loading, setLoading] = useState<boolean>(true)
+  console.log({ token });
 
   useEffect(() => {
     _setToken(token)
+    if (token) {
+      dispatch(getUserInfo())
+    }
+    setLoading(false)
+
   }, [token])
+
+  if (loading) return null
   return (
     <NavigationContainer>
       <RootStack.Navigator initialRouteName={token ? 'HomeNavigation' : 'Welcome'} >
         <RootStack.Group>
           <RootStack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
-          
+
           <RootStack.Screen name="Login" options={({ navigation }) => ({
             /* title: 'Edit Profile', */
             headerShown: false,

@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import FastImage from 'react-native-fast-image';
-
+LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
 //import image from '../../data/image'
 interface ProductItemProps {
   product: {
@@ -39,11 +39,7 @@ interface ProductItemProps {
 }
 
 
-const ProductItem = ({ product }: ProductItemProps) => {
-  useEffect(() => {
-
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-  }, [])
+const ProductItem = ({ product }: any) => {
   const navigation = useNavigation();
   const data = {
     productId: product.id,
@@ -60,13 +56,10 @@ const ProductItem = ({ product }: ProductItemProps) => {
     userAvatar: product.userAvatar,
     time: product.time,
     timeUnit: product.timeUnit,
-
   }
   return (
     <View style={styles.container} >
-
       <View style={styles.bottomContainer}>
-
         {product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full ? (
           <FastImage style={styles.image}
             source={{ uri: product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full }} />

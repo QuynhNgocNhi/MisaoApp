@@ -5,7 +5,8 @@ import {
 import { Alert } from 'react-native';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import "react-native-get-random-values";
-
+import { v4 as uuidv4 } from 'uuid';
+import "react-native-get-random-values";
 
 const BASE_URL = 'http://misao.one/api'
 const TIMEOUT = 10000;
@@ -148,7 +149,7 @@ const handleServerError = (error: AxiosError): ErrorResponse => {
         if (response.status >= 500) {
             Alert.alert(
                 "",
-                "システムにエラーがあります。後でもう一度やり直してください。",
+                "Hệ thống đang lỗi, vui lòng thử lại sau!",
                 [
                     {
                         text: "OK",
@@ -201,10 +202,10 @@ const handleServerError = (error: AxiosError): ErrorResponse => {
     } else {
         Alert.alert(
             "",
-            "ネットワーク接続が安定していません。後でもう一度やり直してください。",
+            "Hệ thống đang lỗi, vui lòng thử lại sau!",
             [
                 {
-                    text: "はい",
+                    text: "OK",
                     style: "cancel",
                     onPress: () => { }
                 }
@@ -294,5 +295,70 @@ export const getProductListAPI = async (data?: any): Promise<ListResponse<any> |
         return response.data.data
     } catch (error: any) {
         return handleServerError(error);
+    }
+}
+
+
+export const getProductDetailAPI = async (id?: any): Promise<ObjectResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ObjectResponse<any>>(`/product/${id}`);
+        return response.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const followUserAPI = async (id: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`/user/${id}/follow`, {});
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
+export const orderProductAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`/order`, { ...data });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
+export const addProductAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const formData = new FormData();
+        formData.append('category_id', data?.category_id)
+        formData.append('price', data?.price)
+        formData.append('name', data?.name)
+        formData.append('unit', data?.unit)
+        formData.append('is_availabel', data?.is_availabel)
+        formData.append('discount', data?.discount)
+        formData.append('inventory_number', data?.inventory_number)
+        formData.append('seller_address', data?.seller_address)
+        formData.append('seller_phone', data?.seller_phone)
+        formData.append('seller_name', data?.seller_name)
+        formData.append('description', data?.description)
+        formData.append('confirm', true)
+        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
+        formData.append('out_of_stock_date', out_of_stock_date)
+        if (data?.image_list) {
+            data?.image_list.forEach((file: any) => {
+                formData.append('files[]', {
+                    uri: file.url_full,
+                    type: 'image/jpeg',
+                    name: `${uuidv4()}.jpg`,
+                })
+            });
+        }
+        const response = await postFile<any>(`/product-manager`, formData);
+
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
     }
 }

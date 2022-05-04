@@ -2,11 +2,8 @@ import React, { useRef } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomeHeader from '../../component/AnimatedHeader';
-import CategoryItem from '../../component/CategoryItem';
 import ProductItem from '../../component/ProductItem';
 //import data
-import category from '../../assets/data/category';
 import products from '../../assets/data/product';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -33,13 +30,7 @@ const ProductsSaved = () => {
                         nestedScrollEnabled={false}
                     >
 
-
-                        {/* Render Product Component */}
-                        {/* <ProductItem item = {products[0]}/> */}
                         <View style={styles.middleContainer}>
-
-
-
                         </View>
                         <View style={styles.bottomContainer}>
 

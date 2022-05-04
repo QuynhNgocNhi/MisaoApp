@@ -42,6 +42,7 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={null} >

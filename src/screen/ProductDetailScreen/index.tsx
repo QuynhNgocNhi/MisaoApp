@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -13,7 +13,8 @@ import AddComment from '../../component/AddComment';
 //import data
 import comment from '../../assets/data/comment';
 import products from '../../assets/data/product';
-
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 
 
 
@@ -74,17 +75,64 @@ const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevr
 import color from '../../theme/color';
 
 import { useNavigation } from '@react-navigation/native';
+import { followUserAPI, getProductDetailAPI, orderProductAPI } from '../../services';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 
 
-const ProductDetailScreen = ({ Props, route }) => {
+const ProductDetailScreen = ({ Props, route }: any) => {
     const navigation = useNavigation();
-    const { data } = route.params;
+    const routeParams = route?.params?.data;
     const [date, setDate] = useState('09-10-2020');
+    const [data, setData] = useState<any>()
+    const [updating, setUpdating] = useState<boolean>(false)
+    const userInfo = useSelector(userSelector)
 
-    const stateName = 'Nguyễn Văn A'
-    const statePhone = '097773777'
-    const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
+    const [loading, setLoading] = useState<boolean>(true)
+
+    const fetchProductDetail = async () => {
+        setLoading(true)
+        const response = await getProductDetailAPI(routeParams?.id)
+        if (response.__typename !== 'ErrorResponse') {
+            setData(response.data)
+        }
+        setLoading(false)
+    }
+
+    const onFollowUser = async (userID: any) => {
+        const response = await followUserAPI(userID)
+
+    }
+
+    const onOrderProduct = async (userID: any) => {
+        setUpdating(true)
+        const response = await orderProductAPI({
+            confirm: true,
+            user_seller_id: data?.user?.id,
+            product_id: data?.id
+        })
+        if (response.__typename !== 'ErrorResponse') {
+            //todo: UPDATE HERE
+        }
+        setUpdating(false)
+
+
+    }
+
+
+    useEffect(() => {
+        fetchProductDetail()
+    }, [routeParams?.id])
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator animating />
+            </View>
+        )
+    }
 
 
     return (
@@ -100,7 +148,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 <Text numberOfLines={1} style={
 
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>{data.productName}
+                                }>{data.name ?? ''}
                                 </Text>
                             }
                             leftComponent={
@@ -132,25 +180,34 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         <View style={{ alignItems: 'center' }}>
 
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
-                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
+                                                style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
-                                    <View style={styles.followContainer}>
+                                    {userInfo?.id !== data?.user?.id ? (
+                                        <TouchableOpacity
+                                            onPress={() => onFollowUser(data?.user?.id)}
+                                            style={styles.followContainer}>
+                                            <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Theo dõi'}></ButtonNormal>
+                                        </TouchableOpacity>
+                                    ) : <View style={{ width: 10, height: 10 }} />}
 
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
-                                    </View>
                                 </View>
                                 <View style={styles.productContainer}>
                                     <Text style={styles.productName}>{data.productName}
                                     </Text>
+                                    {data?.discount > 0 ? (
+                                        <View style={styles.unitPriceRow}>
+                                            <Text style={styles.price}>{new Intl.NumberFormat().format(data?.price - data?.price * (data?.discount / 100))} đ</Text>
+                                            <Text style={styles.oldPrice}> {new Intl.NumberFormat().format(data?.price)} đ</Text>
 
-                                    <View style={styles.unitPriceRow}>
+                                        </View>
+                                    ) : (
+                                        <View style={styles.unitPriceRow}>
+                                            <Text style={styles.price}>{new Intl.NumberFormat().format(data?.price)} đ</Text>
+                                        </View>
+                                    )}
 
-                                        <Text style={styles.price}>{data.productPrice} đ</Text>
-                                        <Text style={styles.oldPrice}> {data.oldPrice} đ</Text>
-
-                                    </View>
                                     <View style={styles.Line}></View>
 
 
@@ -158,14 +215,12 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
                                     <Text style={styles.productStatus}>Tình trạng</Text>
 
-                                    <ButtonNormal buttonStyle={styles.statusButton} outlined title={'Còn hàng'}></ButtonNormal>
-
-
+                                    <ButtonNormal buttonStyle={styles.statusButton} outlined title={data?.is_availabel === 0 ? 'Còn hàng' : 'Hết hàng'}></ButtonNormal>
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={[styles.productStatus, { marginBottom: 20 }]}>Mô tả sản phẩm</Text>
                                     <Text style={styles.productDescription}>
-                                        {data.productDescription}
+                                        {data?.description}
                                     </Text>
 
 
@@ -175,17 +230,17 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Danh mục</Text>
-                                        <Text style={{ fontSize: 18 }}>Trái cây</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.category?.name}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Nơi bán</Text>
-                                        <Text style={{ fontSize: 18 }}>Tiền Giang</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.seller_address}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Số lượng</Text>
-                                        <Text style={{ fontSize: 18 }}>50 kg</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.inventory_number ?? '-'} {data?.unit ?? ''}</Text>
                                     </View>
 
 
@@ -197,10 +252,10 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     <Text style={[styles.productStatus, { alignSelf: 'flex-start' }]}>Ảnh sản phẩm</Text>
 
                                     <View style={styles.productImage}>
+                                        {data?.images?.map((image: any, index: number) => (
+                                            <Image style={styles.image} key={index} source={{ uri: image?.url_full ?? '' }} />
 
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-1.jpg')} />
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-2.jpg')} />
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-3.jpg')} />
+                                        ))}
                                     </View>
                                     <View style={styles.productStatusItem}>
 
@@ -295,21 +350,22 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                         </View>
                     </ScrollView>
-                    <View style={[styles.box, styles.contentContainer]}>
+                    {userInfo?.id !== data?.user?.id && (
+                        <View style={[styles.box, styles.contentContainer]}>
+                            <ButtonNormal
+                                buttonStyle={styles.customButtonBackToHome}
+                                onPress={onOrderProduct}
+                                title={'Chốt'.toUpperCase()}
+                            />
+                        </View>
+                    )}
 
-
-                        <ButtonNormal
-
-                            buttonStyle={styles.customButtonBackToHome}
-                            onPress={() => { navigation.navigate('Login'); }}
-                            title={'Chốt'.toUpperCase()}
-                        />
-                    </View>
 
 
                 </View>
 
             </SafeAreaView>
+            <LoadingOverlay loading={updating} />
         </SafeAreaProvider >
     );
 };
