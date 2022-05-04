@@ -107,7 +107,7 @@ const AddProductScreen = (Props) => {
 
                         />
                     </View>
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         <View style={styles.container}>
 
 
@@ -292,7 +292,7 @@ const AddProductScreen = (Props) => {
 
                                 </View>
                             </View>
-                            <View style={{ height: 100 }} />
+
                         </View>
                     </ScrollView>
 

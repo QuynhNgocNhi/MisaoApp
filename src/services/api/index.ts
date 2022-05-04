@@ -297,6 +297,14 @@ export const getProductListAPI = async (data?: any): Promise<ListResponse<any> |
         return handleServerError(error);
     }
 }
+export const getPostListAPI = async (data?: any): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/buy-request`, { ...data });
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
 
 
 export const getProductDetailAPI = async (id?: any): Promise<ObjectResponse<any> | ErrorResponse> => {

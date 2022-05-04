@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     image: {
 
         width: '100%',
-        height: 80,
+        height: 70,
         resizeMode: 'cover',
         borderWidth: 1,
         borderColor: '#FF0000',

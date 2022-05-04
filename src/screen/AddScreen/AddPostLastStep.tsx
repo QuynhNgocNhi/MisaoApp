@@ -57,10 +57,16 @@ const AddPostLastStep = (Props) => {
     };
 
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
+        setDate(date);
         hideDatePicker();
-    };
 
+    };
+    const getDate = () => {
+
+        return date !== ''
+            ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+            : '';
+    };
     const onGoToPreview = () => {
         if (product?.seller_name && product?.seller_phone && product?.seller_address) {
             let productInfo = {
@@ -72,7 +78,9 @@ const AddPostLastStep = (Props) => {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của tin mua!")
         }
     }
-    console.log({ date });
+
+
+
     return (
         <SafeAreaProvider>
 
@@ -101,7 +109,7 @@ const AddPostLastStep = (Props) => {
 
                         />
                     </View>
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         <View style={styles.container}>
 
 
@@ -109,24 +117,33 @@ const AddPostLastStep = (Props) => {
                                 <View style={styles.tittleContainer}>
                                     <Icon name='calendar-month-outline' size={26} color='#5C8700' />
                                     <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết mua</Heading6>
-                                    <Button outline style={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
                                 </View>
-                                <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>{`${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`}</Text>
+                                <View style={[styles.tittleContainer, { width: '100%', justifyContent: 'space-between', alignItems: 'center', }]}>
+
+                                    <ButtonNormal outlined buttonStyle={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
+                                    <TextInput
+                                        style={{ fontSize: 20, padding: 10, borderBottomWidth: 1, borderColor: color.borderColor, }}
+                                        value={getDate()}
+                                        placeholder="Date..."
+                                    />
+                                </View>
                                 <View style={styles.productOutOfStockDateContainer}>
                                     <DateTimePickerModal
-                                        minimumDate={new Date(1950, 0, 1)}
+
+
+                                        minimumDate={new Date()}
                                         isVisible={isDatePickerVisible}
                                         mode="date"
                                         onConfirm={handleConfirm}
                                         onCancel={hideDatePicker}
-                                        date={date}
                                         onChange={(value: any) => setDate(value)}
+                                        date={date}
                                     />
 
                                 </View>
 
                             </View>
-                            <View style={[styles.box, styles.productCategoryAddContainer, { marginTop: 10, flex: 1 }]}>
+                            <View style={[styles.box, styles.productCategoryAddContainer, { marginTop: 10, flexGrow: 1 }]}>
                                 <View style={styles.tittleContainer}>
 
                                     <Ionicons name='location' size={26} color='#5C8700' />
@@ -248,7 +265,9 @@ const styles = StyleSheet.create({
     },
 
     datePickerStyle: {
-        width: '80%',
+        width: '40%',
+
+        backgroundColor: color.primaryColorLight,
     },
     productNameAddBox: {
         alignItems: 'center',
