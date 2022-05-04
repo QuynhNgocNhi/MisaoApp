@@ -34,7 +34,7 @@ const AddPostLastStep = (Props) => {
     const navigation = useNavigation<any>();
     const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const userInfo = useSelector(userSelector)
-    const [titleDate, setTitleDate] = useState<any>('Chọn ngày')
+
     const [date, setDate] = useState(new Date());
     const [product, setProduct] = useState<any>({
         ...params?.data,
@@ -57,12 +57,16 @@ const AddPostLastStep = (Props) => {
     };
 
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
-        const out_of_stock_dat = `${date.getDay()} - ${date.getMonth()} - ${date.getFullYear()}`;
+        setDate(date);
         hideDatePicker();
-        setTitleDate(out_of_stock_dat);
-    };
 
+    };
+    const getDate = () => {
+
+        return date !== ''
+            ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+            : '';
+    };
     const onGoToPreview = () => {
         if (product?.seller_name && product?.seller_phone && product?.seller_address) {
             let productInfo = {
@@ -105,7 +109,7 @@ const AddPostLastStep = (Props) => {
 
                         />
                     </View>
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         <View style={styles.container}>
 
 
@@ -116,9 +120,12 @@ const AddPostLastStep = (Props) => {
                                 </View>
                                 <View style={[styles.tittleContainer, { width: '100%', justifyContent: 'space-between', alignItems: 'center', }]}>
 
-                                    <ButtonNormal outlined buttonStyle={styles.datePickerStyle} title={titleDate} onPress={showDatePicker} />
-                                    <Text style={{ fontSize: 20, fontWeight: '500', color: 'black', padding: 9, borderWidth: 1, borderColor: color.borderColor, width: '50%', textAlign: 'center', alignSelf: 'center', marginTop: 20 }}>
-                                        {`${date.getDay()} - ${date.getMonth()} - ${date.getFullYear()}`}</Text>
+                                    <ButtonNormal outlined buttonStyle={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
+                                    <TextInput
+                                        style={{ fontSize: 20, padding: 10, borderBottomWidth: 1, borderColor: color.borderColor, }}
+                                        value={getDate()}
+                                        placeholder="Date..."
+                                    />
                                 </View>
                                 <View style={styles.productOutOfStockDateContainer}>
                                     <DateTimePickerModal
@@ -136,7 +143,7 @@ const AddPostLastStep = (Props) => {
                                 </View>
 
                             </View>
-                            <View style={[styles.box, styles.productCategoryAddContainer, { marginTop: 10, flex: 1 }]}>
+                            <View style={[styles.box, styles.productCategoryAddContainer, { marginTop: 10, flexGrow: 1 }]}>
                                 <View style={styles.tittleContainer}>
 
                                     <Ionicons name='location' size={26} color='#5C8700' />

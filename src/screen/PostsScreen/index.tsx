@@ -81,6 +81,7 @@ const PostScreen = () => {
 
           <ScrollView
             nestedScrollEnabled={false}
+            contentContainerStyle={{ flexGrow: 1 }}
           >
 
             <View style={styles.middleContainer}>
@@ -172,6 +173,8 @@ const styles = StyleSheet.create({
   },
 
   middleContainer: {
+
+
     padding: 10,
     backgroundColor: color.background,
   },
@@ -211,8 +214,9 @@ const styles = StyleSheet.create({
 
   },
   bottomContainer: {
-
+    flex: 1,
     width: '100%',
+    backgroundColor: color.background
 
   },
   centerContent: {

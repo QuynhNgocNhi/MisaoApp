@@ -58,7 +58,7 @@ const PostItem = ({ post }: any) => {
                     <View style={styles.postContent}>
 
                         <Text onPress={() => { navigation.navigate('PostDetail', { data }); }}
-                            numberOfLines={2} style={styles.title}>{post.name}
+                            numberOfLines={1} style={styles.title}>{post.name}
                         </Text>
                         <Text numberOfLines={1} style={styles.content}>{post.description}
                         </Text>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     },
     bookmarkContainer: {
         position: 'absolute',
-        top: 10,
+        top: 0,
         right: 0,
 
     },

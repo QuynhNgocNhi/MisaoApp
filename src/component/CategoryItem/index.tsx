@@ -66,6 +66,8 @@ const styles = StyleSheet.create({
     image: {
         height: 70,
         width: 70,
+        resizeMode: "contain",
+        backgroundColor: color.white,
     },
 
     title: {
