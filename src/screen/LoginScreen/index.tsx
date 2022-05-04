@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
@@ -25,8 +25,51 @@ const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
 
 const Login = ({ route }) => {
+  const [password, setPassword] = useState('');
+  const temp = route.params.phoneNumber;
+  const [phoneNumber, setPhoneNumber] = useState(temp);
 
+  const [statusChecked, setStatusChecked] = useState('');
   const navigation = useNavigation();
+  const authAccount = (phoneNumber: string, password: string) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "phone": phoneNumber,
+      "password": password
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    return fetch("http://misao.one/api/auth/login", requestOptions)
+      .then(response => response.json())
+      .then(json => {
+        if (json.success == true) {
+          const user = json.data;
+          const userObj = JSON.stringify(user.access_token);
+
+          navigation.navigate('HomeNavigation', {
+            screen: 'Home',
+            params: { user: userObj },
+
+            //setStatusChecked(userObj);
+
+          })
+        }
+        else {
+          setStatusChecked("Sai tài khoản hoặc mật khẩu. Vui lòng nhập lại");
+
+        }
+      }
+      )
+      .catch(error => console.log('error', error));
+  }
   return (
     <SafeAreaView style={styles.screenContainer}>
       <StatusBar translucent backgroundColor='transparent' />
@@ -65,17 +108,20 @@ const Login = ({ route }) => {
         <KeyboardAwareScrollView
           contentContainerStyle={styles.contentContainerStyle}>
           <View style={styles.form}>
+            <Text style={styles.statusChecked}>{statusChecked}</Text>
+
             <View style={styles.inputGroup}>
 
               <UnderlineTextInput
                 blurOnSubmit={false}
-                keyboardType="email-address"
-                placeholder={route.params.phoneNumber}
+                keyboardType="phone-pad"
+                placeholder={phoneNumber}
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                 inputContainerStyle={styles.inputContainer}
+                onChangeText={(val: string) => setPhoneNumber(val)}
               />
             </View>
             <View style={styles.inputGroup}>
@@ -87,12 +133,14 @@ const Login = ({ route }) => {
                 inputTextColor={INPUT_TEXT_COLOR}
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                onChangeText={(val: string) => setPassword(val)}
+
               />
             </View>
             <View style={styles.buttonsGroup}>
               <ButtonNormal
                 buttonStyle={styles.customButton}
-                onPress={() => { navigation.navigate('HomeNavigation'); }}
+                onPress={() => { authAccount(phoneNumber, password); }}
                 title={'Đăng nhập'.toUpperCase()}
               />
             </View>
@@ -224,6 +272,10 @@ const styles = StyleSheet.create({
     color: color.black,
     textDecorationLine: 'underline',
   },
+  statusChecked: {
+    color: color.important,
+    paddingBottom: 10
+  }
 });
 
 export default Login;

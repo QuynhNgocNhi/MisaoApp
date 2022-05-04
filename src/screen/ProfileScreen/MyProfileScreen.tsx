@@ -1,6 +1,6 @@
 //to do: onpress change state button
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -71,12 +71,37 @@ interface commentProps {
 
 const ProductDetailScreen = ({ Props, route }) => {
     const navigation = useNavigation();
-    const { data } = route.params;
-
     const [ProfileTab, setProfileTab] = useState(1);
     const onSelectSwitch = value => {
         setProfileTab(value);
     };
+
+    const dataUserToken = 'route.params.user';
+    const access_token = ("Bearer".concat(dataUserToken));
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+    //console.log(data);
+    useEffect(() => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", access_token);
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch('http://misao.one/api/me')
+            .then((response) => response.json())
+            .then((json) => setData(json))
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
+    }, []);
+
+
 
     return (
         <SafeAreaProvider>
@@ -100,100 +125,102 @@ const ProductDetailScreen = ({ Props, route }) => {
                             }
                         />
                     </View>
+                    {isLoading ? <Text>Loading...</Text> : (
 
-                    <View style={styles.container}>
-                        <View style={[styles.box,]}>
+                        <View style={styles.container}>
+                            <View style={[styles.box,]}>
 
-                            <View style={[styles.userContainer]}>
+                                <View style={[styles.userContainer]}>
 
-                                <View style={styles.userNameContainer}>
-                                    <Avatar
-                                        size="large"
-                                        rounded
-                                        containerStyle={{
-                                            borderColor: 'grey',
-                                            borderStyle: 'solid',
-                                            borderWidth: 1,
-                                        }}
+                                    <View style={styles.userNameContainer}>
+                                        <Avatar
+                                            size="large"
+                                            rounded
+                                            containerStyle={{
+                                                borderColor: 'grey',
+                                                borderStyle: 'solid',
+                                                borderWidth: 1,
+                                            }}
 
-                                        source={require('../../assets/avatar/11.png')}
-                                    />
+                                            source={require('../../assets/avatar/11.png')}
+                                        />
 
-                                    <View style={styles.followContainer}>
+                                        <View style={styles.followContainer}>
 
-                                        <View style={styles.userAttributes}>
+                                            <View style={styles.userAttributes}>
 
-                                            <Heading6>4</Heading6>
-                                            <Text style={styles.userAttributesText}> đang theo</Text>
-                                        </View>
-                                        <View style={styles.userAttributes}>
+                                                <Heading6>4</Heading6>
+                                                <Text style={styles.userAttributesText}> đang theo</Text>
+                                            </View>
+                                            <View style={styles.userAttributes}>
 
-                                            <Heading6>5</Heading6>
-                                            <Text style={styles.userAttributesText}> người theo</Text>
+                                                <Heading6>5</Heading6>
+                                                <Text style={styles.userAttributesText}> người theo</Text>
+                                            </View>
+
                                         </View>
 
                                     </View>
 
+
                                 </View>
+                                <View style={styles.userContainer}>
+
+                                    <View style={[styles.userInfomationContainer]}>
+
+                                        <Text style={styles.userName} numberOfLines={1}>Mén Nguyễn</Text>
+                                        <Text style={{ fontSize: 18, }}>{data}</Text>
+
+                                        <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>Bán hoài không nghỉ</Text>
+
+
+                                    </View>
+                                    <View style={styles.editProfileButtonContainer}>
+
+                                        <ButtonNormal
+                                            outlined
+                                            borderColor={color.linkButton}
+                                            titleColor={color.linkButton}
+                                            onPress={() => { navigation.navigate('Login'); }}
+                                            buttonStyle={styles.editProfileButton}
+                                            title={'Chỉnh sửa thông tin'}>
+                                        </ButtonNormal>
+                                        <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '600', flexDirection: 'column' }} numberOfLines={1}>
+                                            <Icon
+
+                                                name='md-location-outline'
+                                                type='ionicon'
+                                                color={color.black}
+                                                size={30}
+                                            /> Đà Lạt
+                                        </Text>
+                                    </View>
+                                </View>
+
+
+
 
 
                             </View>
-                            <View style={styles.userContainer}>
 
-                                <View style={[styles.userInfomationContainer]}>
+                            <View style={styles.switchTabContainer}>
+                                <CustomSwitch
+                                    selectionMode={1}
+                                    option1="Sản phẩm"
+                                    option2="Tin Mua"
+                                    option3="Lịch sử"
+                                    onSelectSwitch={onSelectSwitch}
+                                />
 
-                                    <Text style={styles.userName} numberOfLines={1}>Mén Nguyễn</Text>
-                                    <Text style={{ fontSize: 18, }}>@Sockute</Text>
-
-                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>Bán hoài không nghỉ</Text>
-
-
-                                </View>
-                                <View style={styles.editProfileButtonContainer}>
-
-                                    <ButtonNormal
-                                        outlined
-                                        borderColor={color.linkButton}
-                                        titleColor={color.linkButton}
-                                        onPress={() => { navigation.navigate('Login'); }}
-                                        buttonStyle={styles.editProfileButton}
-                                        title={'Chỉnh sửa thông tin'}>
-                                    </ButtonNormal>
-                                    <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '600', flexDirection: 'column' }} numberOfLines={1}>
-                                        <Icon
-
-                                            name='md-location-outline'
-                                            type='ionicon'
-                                            color={color.black}
-                                            size={30}
-                                        /> Đà Lạt
-                                    </Text>
-                                </View>
                             </View>
-
-
-
-
-
+                            {ProfileTab == 1 &&
+                                <ProductTab />}
+                            {ProfileTab == 2 &&
+                                <PostTab />}
+                            {ProfileTab == 3 &&
+                                <HistoryTab />}
                         </View>
-
-                        <View style={styles.switchTabContainer}>
-                            <CustomSwitch
-                                selectionMode={1}
-                                option1="Sản phẩm"
-                                option2="Tin Mua"
-                                option3="Lịch sử"
-                                onSelectSwitch={onSelectSwitch}
-                            />
-
-                        </View>
-                        {ProfileTab == 1 &&
-                            <ProductTab />}
-                        {ProfileTab == 2 &&
-                            <PostTab />}
-                        {ProfileTab == 3 &&
-                            <HistoryTab />}
-                    </View>
+                    )}
 
 
 

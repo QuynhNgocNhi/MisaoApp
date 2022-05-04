@@ -37,7 +37,7 @@ const AddScreen = ({ route }) => {
     const state = {
         text: '',
     };
-
+    const data = route.params.user;
 
 
 
@@ -52,7 +52,7 @@ const AddScreen = ({ route }) => {
 
                     <View style={styles.contentContainer}>
                         <View style={styles.paragraphGroup}>
-                            <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>Nhập mã OTP vừa được gửi đến số điện thoại +84 {route.params.phoneNumber} </Heading6>
+                            <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>{data}Nhập mã OTP vừa được gửi đến số điện thoại +84 {route.params.phoneNumber} </Heading6>
                         </View>
 
 

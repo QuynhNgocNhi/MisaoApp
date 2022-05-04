@@ -31,8 +31,10 @@ import color from '../../theme/color';
 import layout from '../../theme/layout';
 
 
-const HomeScreen = () => {
+const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
+  const data = route.params.user;
+
   const isFocused = useIsFocused();
   const statusbar = () => { return <StatusBar /> }
 
@@ -67,7 +69,7 @@ const HomeScreen = () => {
               <View style={styles.centerContent}>
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText]}>Giá sốc hôm nay <FontAwesome name={'bolt'} color={'#FF0000'} size={22} /></Heading6>
+                    <Heading6 style={[styles.titleText]}>{data} Giá sốc hôm nay <FontAwesome name={'bolt'} color={'#FF0000'} size={22} /></Heading6>
 
                     <LinkButton
                       title="Xem thêm"

@@ -1,38 +1,51 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomeHeader from '../../component/AnimatedHeader';
-import CategoryItem from '../../component/CategoryItem';
-import PostItem from '../../component/PostItem';
+
 import { Avatar } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
-//import data
-import category from '../../assets/data/category';
-import post from '../../assets/data/post';
 
-import LinkButton from '../../component/Button/LinkButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-/* to ignore the warning message: 'VirtualizedLists should never be nested inside plain ScrollViews 
-with the same orientation because it can break windowing and other functionality - use another 
-VirtualizedList-backed container instead.' */
-import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
-import layout from '../../theme/layout';
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
-import ButtonNormal from '../../component/Button';
 import { useNavigation } from '@react-navigation/native';
 
 
-const HomeScreen = () => {
+const Profile = ({ route }) => {
+
     const isFocused = useIsFocused();
     const navigation = useNavigation();
-    const data = { name: 'Sóc kute', userName: 'pizza03' }
+    //const data = { name: 'Sóc kute', userName: 'pizza03' }
+
+    const dataUserToken = 'route.params.user';
+    const access_token = ("Bearer".concat(dataUserToken));
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+    //console.log(data);
+    useEffect(() => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", access_token);
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch('http://misao.one/api/me')
+            .then((response) => response.json())
+            .then((json) => setData(json))
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
+    }, []);
+
 
     return (
         <SafeAreaProvider>
@@ -60,7 +73,7 @@ const HomeScreen = () => {
                                 <View style={{ alignItems: 'center' }}>
 
                                     <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
-                                    <Text style={{ fontSize: 18, }}>@Sockute</Text>
+                                    <Text style={{ fontSize: 18, }}>@{data}</Text>
                                 </View>
 
                             </View>
@@ -350,4 +363,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default HomeScreen
+export default Profile

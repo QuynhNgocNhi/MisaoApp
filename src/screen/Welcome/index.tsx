@@ -29,7 +29,39 @@ type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
 const Welcome: React.FC<WelcomeProps> = () => {
   const navigationRef = useNavigationContainerRef();
   const navigation = useNavigation();
+  const CheckPhoneNumber = (phoneNumber: string) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "phone": phoneNumber
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("http://misao.one/api/auth/prepare-login", requestOptions)
+      .then(response => response.json())
+      .then(json => {
+        if (json.success == true) {
+          navigation.navigate('Login', { phoneNumber: phoneNumber })
+
+        }
+        else {
+          setStatusChecked("Số điện thoại chưa được đăng ký. Vui lòng thử lại");
+
+        }
+      }
+      )
+
+      .catch(error => console.log('error', error));
+  }
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [statusChecked, setStatusChecked] = useState('');
   const data = { phoneNumber: phoneNumber };
   return (
     <SafeAreaView style={styles.screenContainer}>
@@ -54,27 +86,28 @@ const Welcome: React.FC<WelcomeProps> = () => {
 
             <View style={styles.center}>
 
-              <View style={styles.buttonsGroup}>
+              <View style={[styles.buttonsGroup, { marginBottom: 5 }]}>
                 <UnderlineTextInput
                   inputContainerStyle={styles.inputContainer}
 
                   blurOnSubmit={false}
                   keyboardType="phone-pad"
                   placeholder="Số điện thoại"
-                  onChangeText={(val: number) => setPhoneNumber(val)}
+                  onChangeText={(val: string) => setPhoneNumber(val)}
                 />
               </View>
+              <Text style={styles.statusChecked}>{statusChecked}</Text>
 
               <View style={styles.buttonsGroup}>
                 <Button
                   buttonStyle={styles.customButton}
-                  onPress={() => { navigation.navigate('Login', { phoneNumber: phoneNumber }); }}
+                  onPress={() => { CheckPhoneNumber(phoneNumber); }}
                   title={'Tiếp tục'.toUpperCase()}
                 />
               </View>
 
               <LinkButton
-                onPress={() => { navigation.navigate('Register'); }}
+                onPress={() => { navigation.navigate('Register', { phoneNumber: phoneNumber }); }}
                 title="Chưa có tài khoản"
                 titleStyle={styles.linkButtonText}
               />
@@ -120,7 +153,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headingText: {
-    paddingTop: 15,
+    paddingTop: 10,
 
   },
   center: {
@@ -145,6 +178,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '80%',
+  },
+  statusChecked: {
+    color: color.important,
+    paddingBottom: 10
   }
 });
 
