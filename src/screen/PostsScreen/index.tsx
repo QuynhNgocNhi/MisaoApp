@@ -8,24 +8,17 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
 import CategoryItem from '../../component/CategoryItem/PostCategoryItem';
 import PostItem from '../../component/PostItem';
-//import data
-import category from '../../assets/data/category';
 import post from '../../assets/data/post';
 
-import Button from '../../component/Button';
-import LinkButton from '../../component/Button/LinkButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-
 import color from '../../theme/color';
-import layout from '../../theme/layout';
 import CustomSwitch from '../../component/CustomSwitch';
-import { Compare } from '@material-ui/icons';
 import AppStatusBar from '../../component/AppStatusBar';
 
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
-
+import { useSelector } from 'react-redux';
+import { masterDataSelector } from '../../modules/search/selectors';
+import CategoryList from '../../component/CategoryItem';
 
 const HomeScreen = () => {
   const [PostTab, setPostTab] = useState(1);
@@ -35,6 +28,7 @@ const HomeScreen = () => {
   const PostSortedById = [...post].sort((a, b) => parseInt(b.id) - parseInt(a.id))
   const PostSortedById2 = [...post].sort((a, b) => parseInt(a.id) - parseInt(b.id))
   const isFocused = useIsFocused();
+  const categoriesList = useSelector(masterDataSelector)
 
   return (
     <SafeAreaProvider>
@@ -69,11 +63,11 @@ const HomeScreen = () => {
 
                   <FlatList
                     horizontal
-                    data={category}
+                    data={categoriesList}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => <CategoryItem category={item} />}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => <CategoryList category={item} />}
                   />
                 </View>
 
