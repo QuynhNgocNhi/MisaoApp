@@ -54,7 +54,7 @@ export const SellList = () => {
             renderItem={({ item, index }) => {
                 return (
                     <View>
-                        <UserItem chatRoom={item}/>
+                        <UserItem chatRoom={item} />
                     </View>
                 )
             }}
