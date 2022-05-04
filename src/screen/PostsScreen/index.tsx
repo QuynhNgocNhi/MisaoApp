@@ -1,7 +1,7 @@
 //toDo: chỉnh lại post item nhìn chuyên nghiệp hơn
 
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -13,6 +13,7 @@ import post from '../../assets/data/post';
 import color from '../../theme/color';
 import CustomSwitch from '../../component/CustomSwitch';
 import AppStatusBar from '../../component/AppStatusBar';
+import { useNavigation } from '@react-navigation/native';
 
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
@@ -20,15 +21,52 @@ import { useSelector } from 'react-redux';
 import { masterDataSelector } from '../../modules/search/selectors';
 import CategoryList from '../../component/CategoryItem';
 
-const HomeScreen = () => {
-  const [PostTab, setPostTab] = useState(1);
-  const onSelectSwitch = value => {
-    setPostTab(value);
-  };
-  const PostSortedById = [...post].sort((a, b) => parseInt(b.id) - parseInt(a.id))
-  const PostSortedById2 = [...post].sort((a, b) => parseInt(a.id) - parseInt(b.id))
+import { getPostListAPI } from '../../services';
+import { tokenSelector } from '../../modules/auth/selectors';
+
+const PostScreen = () => {
+  const navigation = useNavigation<any>();
+
   const isFocused = useIsFocused();
+
+
+  const [postList, setPostList] = useState<any>([])
+
   const categoriesList = useSelector(masterDataSelector)
+  const [loading, setLoading] = useState<boolean>(false)
+  const token = useSelector(tokenSelector)
+  const fetchData = async () => {
+    if (!token) {
+      navigation.replace('')
+    }
+    setLoading(true)
+    const postResponse = await getPostListAPI()
+
+    if (postResponse.__typename !== 'ErrorResponse') {
+
+      setPostList(postResponse.data)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator animating />
+    </View>)
+  }
+
+
+  /*  const [PostTab, setPostTab] = useState(1);
+   const onSelectSwitch = value => {
+     setPostTab(value);
+   };
+   const PostSortedById = [...postList].sort((a, b) => parseInt(b.id) - parseInt(a.id))
+   const PostSortedById2 = [...postList].sort((a, b) => parseInt(a.id) - parseInt(b.id))
+   const isFocused = useIsFocused(); */
 
   return (
     <SafeAreaProvider>
@@ -77,7 +115,13 @@ const HomeScreen = () => {
 
 
               <View style={styles.productListContainer}>
-                <View style={styles.switchTabContainer}>
+                <FlatList
+                  contentContainerStyle={styles.ProductItemList}
+                  data={postList}
+
+                  renderItem={({ item }) => <PostItem post={item} />}
+                />
+                {/* <View style={styles.switchTabContainer}>
                   <CustomSwitch
                     selectionMode={1}
                     option1="Mới nhất"
@@ -100,7 +144,7 @@ const HomeScreen = () => {
                     data={PostSortedById2}
 
                     renderItem={({ item }) => <PostItem post={item} />}
-                  />)}
+                  />)} */}
 
                 {/*                   <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>*/}
 
@@ -213,6 +257,9 @@ const styles = StyleSheet.create({
     backgroundColor: color.background,
 
   },
+  ProductItemList: {
+    width: '100%',
+  },
   switchTabContainer: {
     flexDirection: 'row',
     width: '85%',
@@ -229,4 +276,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default HomeScreen
+export default PostScreen

@@ -34,7 +34,7 @@ const AddPostLastStep = (Props) => {
     const navigation = useNavigation<any>();
     const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const userInfo = useSelector(userSelector)
-
+    const [titleDate, setTitleDate] = useState<any>('Chọn ngày')
     const [date, setDate] = useState(new Date());
     const [product, setProduct] = useState<any>({
         ...params?.data,
@@ -58,7 +58,9 @@ const AddPostLastStep = (Props) => {
 
     const handleConfirm = (date) => {
         console.warn("A date has been picked: ", date);
+        const out_of_stock_dat = `${date.getDay()} - ${date.getMonth()} - ${date.getFullYear()}`;
         hideDatePicker();
+        setTitleDate(out_of_stock_dat);
     };
 
     const onGoToPreview = () => {
@@ -72,7 +74,9 @@ const AddPostLastStep = (Props) => {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của tin mua!")
         }
     }
-    console.log({ date });
+
+
+
     return (
         <SafeAreaProvider>
 
@@ -109,18 +113,24 @@ const AddPostLastStep = (Props) => {
                                 <View style={styles.tittleContainer}>
                                     <Icon name='calendar-month-outline' size={26} color='#5C8700' />
                                     <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết mua</Heading6>
-                                    <Button outline style={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
                                 </View>
-                                <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>{`${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`}</Text>
+                                <View style={[styles.tittleContainer, { width: '100%', justifyContent: 'space-between', alignItems: 'center', }]}>
+
+                                    <ButtonNormal outlined buttonStyle={styles.datePickerStyle} title={titleDate} onPress={showDatePicker} />
+                                    <Text style={{ fontSize: 20, fontWeight: '500', color: 'black', padding: 9, borderWidth: 1, borderColor: color.borderColor, width: '50%', textAlign: 'center', alignSelf: 'center', marginTop: 20 }}>
+                                        {`${date.getDay()} - ${date.getMonth()} - ${date.getFullYear()}`}</Text>
+                                </View>
                                 <View style={styles.productOutOfStockDateContainer}>
                                     <DateTimePickerModal
-                                        minimumDate={new Date(1950, 0, 1)}
+
+
+                                        minimumDate={new Date()}
                                         isVisible={isDatePickerVisible}
                                         mode="date"
                                         onConfirm={handleConfirm}
                                         onCancel={hideDatePicker}
-                                        date={date}
                                         onChange={(value: any) => setDate(value)}
+                                        date={date}
                                     />
 
                                 </View>
@@ -248,7 +258,9 @@ const styles = StyleSheet.create({
     },
 
     datePickerStyle: {
-        width: '80%',
+        width: '40%',
+
+        backgroundColor: color.primaryColorLight,
     },
     productNameAddBox: {
         alignItems: 'center',
