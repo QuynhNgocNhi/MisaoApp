@@ -362,3 +362,34 @@ export const addProductAPI = async (data: any): Promise<BaseResponse | ErrorResp
 
     }
 }
+export const addPostAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const formData = new FormData();
+        formData.append('category_id', data?.category_id)
+        formData.append('name', data?.name)
+        formData.append('is_availabel', data?.is_availabel)
+        formData.append('inventory_number', data?.inventory_number)
+        formData.append('seller_address', data?.seller_address)
+        formData.append('seller_phone', data?.seller_phone)
+        formData.append('seller_name', data?.seller_name)
+        formData.append('description', data?.description)
+        formData.append('confirm', true)
+        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
+        formData.append('limited_date', out_of_stock_date)
+        if (data?.image_list) {
+            data?.image_list.forEach((file: any) => {
+                formData.append('files[]', {
+                    uri: file.url_full,
+                    type: 'image/jpeg',
+                    name: `${uuidv4()}.jpg`,
+                })
+            });
+        }
+        const response = await postFile<any>(`/buy-request-manager`, formData);
+
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}

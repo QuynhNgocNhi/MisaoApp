@@ -30,7 +30,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitch';
 
-const ChatScreen = () => {
+const SearchScreen = () => {
 
     const navigation = useNavigation();
     const isFocused = useIsFocused();
@@ -204,4 +204,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ChatScreen
+export default SearchScreen

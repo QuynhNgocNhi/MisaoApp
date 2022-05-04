@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -67,18 +67,56 @@ const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevr
 
 // import color, layout, style
 import color from '../../theme/color';
-import { useNavigation } from '@react-navigation/native';
 
-const PostAddedPreviewScreen = ({ Props, route }) => {
-    const navigation = useNavigation();
+import { NavigationContainer, RouteProp, useRoute } from '@react-navigation/native';
+
+import { useNavigation } from '@react-navigation/native';
+import Comment from '../../assets/data/comment';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
+import { masterDataSelector } from '../../modules/search/selectors';
+import LoadingOverlay from '../../component/LoadingOverlay';
+import { addPostAPI } from '../../services';
+import { getUserInfo } from '../../modules/user/slice';
+
+
+type RouteParams = {
+    data: any
+}
+const PostAddedPreviewScreen = ({ Props, route }: any) => {
+    const navigation = useNavigation<any>();
+    const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const { data } = route.params;
     const [date, setDate] = useState('09-10-2020');
+    const userInfo = useSelector(userSelector)
+    const categories = useSelector(masterDataSelector)
+    const [loading, setLoading] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
-    const stateName = 'Nguyễn Văn A'
-    const statePhone = '097773777'
-    const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
+    const onAddPost = async () => {
+        setLoading(true)
+        const response = await addPostAPI(data)
+        console.log({ response });
 
-
+        if (response.__typename !== 'ErrorResponse') {
+            dispatch(getUserInfo())
+            Alert.alert("", "Đăng tin mua thành công!", [
+                {
+                    text: 'OK',
+                    onPress: () => navigation.replace("HomeNavigation")
+                }
+            ])
+        } else {
+            Alert.alert("", "Đăng tin mua thất bại! Vui lòng thử lại sau.", [
+                {
+                    text: 'OK',
+                    onPress: () => { }
+                }
+            ])
+        }
+        setLoading(false)
+    }
+    let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.screenContainer}>
@@ -91,7 +129,7 @@ const PostAddedPreviewScreen = ({ Props, route }) => {
                             centerComponent={
                                 <Text style={
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>{data.productId}
+                                }>tin mua
                                 </Text>
                             }
                             leftComponent={
@@ -117,27 +155,26 @@ const PostAddedPreviewScreen = ({ Props, route }) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={require('../../image/symbol.png')}
+                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
+                                            <Text style={styles.userName} numberOfLines={1}>{userInfo?.name}</Text>
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text> */}
                                         </View>
                                     </View>
 
                                 </View>
 
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
-                                    <Text style={styles.productName}>Cần mua 20kh cần tây</Text>
+                                    <Text style={styles.productName}>{data.name}</Text>
 
 
 
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={styles.productDescription}>
-                                        Panse mang một vẻ đẹp ngọt ngào, đằm thắm nhưng không kém phần rực rỡ mà không phải loài hoa nào cũng có.
-                                        Nó là loài cây biểu tượng của mặt trời của hi vọng, của sự ấm áp, hướng về những điều tốt đẹp nhất. Hiện nay có khá nhiều người yêu thích loại cây xinh đẹp này, trồng trong nhà như một cây trang trí tô điểm không gian.
+                                        {data?.description}
                                     </Text>
 
 
@@ -147,17 +184,17 @@ const PostAddedPreviewScreen = ({ Props, route }) => {
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Danh mục</Text>
-                                        <Text style={styles.requireAnswer}>Trái cây</Text>
+                                        <Text style={styles.requireAnswer}>{categories?.find((item: any) => item.value === data?.category_id)?.label}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Giao tới</Text>
-                                        <Text style={styles.requireAnswer}>Tiền Giang</Text>
+                                        <Text style={styles.requireAnswer}>{data?.seller_address}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Ngày còn hạn</Text>
-                                        <Text style={styles.requireAnswer}>21/10/2022</Text>
+                                        <Text style={styles.requireAnswer}>{out_of_stock_date}</Text>
                                     </View>
 
 
@@ -177,7 +214,7 @@ const PostAddedPreviewScreen = ({ Props, route }) => {
 
                         <ButtonNormal
                             buttonStyle={styles.customButtonBackToHome}
-                            onPress={() => { navigation.navigate('HomeNavigation'); }}
+                            onPress={onAddPost}
                             title={'Xác nhận'.toUpperCase()}
                         />
                     </View>

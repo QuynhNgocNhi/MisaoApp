@@ -80,7 +80,12 @@ import { useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 import LoadingOverlay from '../../component/LoadingOverlay';
 
+import { getHotProductListAPI, getProductListAPI } from '../../services';
+import { tokenSelector } from '../../modules/auth/selectors';
 
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParameterList } from '../../MainNavigator';
+type HomeProps = NativeStackScreenProps<RootStackParameterList, "Home">
 
 const ProductDetailScreen = ({ Props, route }: any) => {
     const navigation = useNavigation();
@@ -94,7 +99,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
     const fetchProductDetail = async () => {
         setLoading(true)
-        const response = await getProductDetailAPI(routeParams?.id)
+        const response = await getProductDetailAPI(routeParams?.productId)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
         }
@@ -125,6 +130,33 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     useEffect(() => {
         fetchProductDetail()
     }, [routeParams?.id])
+
+
+
+    const [productList, setProductList] = useState<any>([])
+    const token = useSelector(tokenSelector)
+
+
+    const fetchData = async () => {
+        if (!token) {
+            navigation.replace('')
+        }
+        setLoading(true)
+        const productResponse = await getProductListAPI()
+        const response = await getHotProductListAPI()
+        if (response.__typename !== 'ErrorResponse' && productResponse.__typename !== 'ErrorResponse') {
+
+            setProductList(response.data)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
+
 
     if (loading) {
         return (
@@ -164,7 +196,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                         <View style={styles.container}>
                             <View style={[styles.box, styles.productDetailContainer]}>
 
-                                <View style={[styles.userContainer, styles.box, { paddingTop: 0 }]}>
+                                <View style={[styles.userContainer, { paddingBottom: 10 }]}>
 
                                     <View style={styles.userNameContainer}>
                                         <Avatar
@@ -175,7 +207,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={require('../../image/symbol.png')}
+                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
@@ -188,13 +220,13 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                         <TouchableOpacity
                                             onPress={() => onFollowUser(data?.user?.id)}
                                             style={styles.followContainer}>
-                                            <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Theo dõi'}></ButtonNormal>
+                                            <ButtonNormal outlined buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
                                         </TouchableOpacity>
                                     ) : <View style={{ width: 10, height: 10 }} />}
 
                                 </View>
                                 <View style={styles.productContainer}>
-                                    <Text style={styles.productName}>{data.productName}
+                                    <Text style={styles.productName}>{data.name ?? ''}
                                     </Text>
                                     {data?.discount > 0 ? (
                                         <View style={styles.unitPriceRow}>
@@ -280,18 +312,24 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                                 borderWidth: 1,
                                             }}
 
-                                            source={require('../../assets/avatar/11.png')}
+                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
-                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
+                                                style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
                                     <View style={styles.followContainer}>
 
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                        {userInfo?.id !== data?.user?.id ? (
+                                            <TouchableOpacity
+                                                onPress={() => onFollowUser(data?.user?.id)}
+                                                style={styles.followContainer}>
+                                                <ButtonNormal outlined buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                            </TouchableOpacity>
+                                        ) : <View style={{ width: 10, height: 10 }} />}
                                     </View>
 
                                 </View>
@@ -340,7 +378,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
                                     <FlatList
                                         contentContainerStyle={styles.ProductItemList}
-                                        data={products}
+                                        data={productList}
                                         numColumns={2}
                                         renderItem={({ item }) => <ProductItem product={item} />}
                                     />
@@ -384,12 +422,14 @@ const styles = StyleSheet.create({
     },
     userContainer: {
         flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
 
 
     },
     userNameContainer: {
 
-        width: '90%',
+
         flexDirection: 'row',
         justifyContent: 'flex-start',
 
