@@ -83,7 +83,7 @@ import LoadingOverlay from '../../component/LoadingOverlay';
 
 
 const ProductDetailScreen = ({ Props, route }: any) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const routeParams = route?.params?.data;
     const [date, setDate] = useState('09-10-2020');
     const [data, setData] = useState<any>()
@@ -106,7 +106,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
     }
 
-    const onOrderProduct = async (userID: any) => {
+    const onOrderProduct = async () => {
         setUpdating(true)
         const response = await orderProductAPI({
             confirm: true,
@@ -114,7 +114,9 @@ const ProductDetailScreen = ({ Props, route }: any) => {
             product_id: data?.id
         })
         if (response.__typename !== 'ErrorResponse') {
-            //todo: UPDATE HERE
+            navigation.navigate('ChatRoomScreen', {
+                id: response?.chat_room?.id
+            })
         }
         setUpdating(false)
 
@@ -359,9 +361,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                             />
                         </View>
                     )}
-
-
-
                 </View>
 
             </SafeAreaView>

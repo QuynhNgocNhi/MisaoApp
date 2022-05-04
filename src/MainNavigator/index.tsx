@@ -15,7 +15,6 @@ import HomeNavigation from '../../src/TabNavigation';
 import UserProfileScreen from '../../src/screen/ProfileScreen/UserProfileScreen';
 // import Add screen
 import AddItem from '../screen/AddScreen';
-import ChatScreen from '../screen/ChatScreen';
 import ChatRoomScreen from '../screen/ChatRoom';
 // import Add Product screen
 import AddProduct from '../screen/AddScreen/AddProduct';
@@ -43,6 +42,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { tokenSelector } from '../modules/auth/selectors';
 import { _setToken } from '../services';
 import { getUserInfo } from '../modules/user/slice';
+import ChatScreen from '../screen/ChatScreen';
 
 // MainNavigatorA Config
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';

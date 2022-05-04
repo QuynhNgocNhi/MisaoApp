@@ -318,9 +318,9 @@ export const followUserAPI = async (id: string): Promise<BaseResponse | ErrorRes
     }
 }
 
-export const orderProductAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
+export const orderProductAPI = async (data: any): Promise<any | ErrorResponse> => {
     try {
-        const response = await post<BaseResponse>(`/order`, { ...data });
+        const response = await post<any>(`/order`, { ...data });
         return response.data;
     } catch (error: any) {
         return handleServerError(error);
@@ -360,5 +360,14 @@ export const addProductAPI = async (data: any): Promise<BaseResponse | ErrorResp
     } catch (error: any) {
         return handleServerError(error);
 
+    }
+}
+
+export const getCharRoomAPI = async (type: any): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/chat`, { params: { type } });
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
     }
 }

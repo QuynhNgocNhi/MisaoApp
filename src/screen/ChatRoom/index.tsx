@@ -20,7 +20,7 @@ import Message from "../../component/Message";
 import MessageInput from "../../component/MessageInput";
 import messages from '../../assets/data/Chat'
 export default function ChatRoomScreen() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
 
 
     return (
