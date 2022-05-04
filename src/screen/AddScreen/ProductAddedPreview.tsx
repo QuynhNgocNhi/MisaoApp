@@ -141,7 +141,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                             centerComponent={
                                 <Text style={
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>{data.productId}
+                                }>{data.name}
                                 </Text>
                             }
                             leftComponent={

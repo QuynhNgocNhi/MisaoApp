@@ -371,3 +371,72 @@ export const getCharRoomAPI = async (type: any): Promise<ListResponse<any> | Err
         return handleServerError(error);
     }
 }
+export const addPostAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const formData = new FormData();
+        formData.append('category_id', data?.category_id)
+        formData.append('name', data?.name)
+        formData.append('is_availabel', data?.is_availabel)
+        formData.append('inventory_number', data?.inventory_number)
+        formData.append('seller_address', data?.seller_address)
+        formData.append('seller_phone', data?.seller_phone)
+        formData.append('seller_name', data?.seller_name)
+        formData.append('description', data?.description)
+        formData.append('confirm', true)
+        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
+        formData.append('limited_date', out_of_stock_date)
+        if (data?.image_list) {
+            data?.image_list.forEach((file: any) => {
+                formData.append('files[]', {
+                    uri: file.url_full,
+                    type: 'image/jpeg',
+                    name: `${uuidv4()}.jpg`,
+                })
+            });
+        }
+        const response = await postFile<any>(`/buy-request-manager`, formData);
+
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+export const getMessageListAPI = async (roomID: number, last_id?: number): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/chat/${roomID}/message`, {
+            params: {
+                last_id
+            }
+        });
+        return response.data.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const sendMessageTextAPI = async (chatRoomID: number, content: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`/chat/${chatRoomID}/message`, { content });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const sendMessageFileAPI = async (chatRoomID: number, file: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const formData = new FormData();
+        if (file) {
+            formData.append('file', {
+                uri: file,
+                type: 'image/jpeg',
+                name: `${uuidv4()}.jpg`,
+            });
+        }
+        const response = await postFile<BaseResponse>(`/chat/${chatRoomID}/message`, formData);
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}

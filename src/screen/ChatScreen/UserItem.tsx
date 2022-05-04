@@ -8,6 +8,9 @@ import layout from '../../theme/layout';
 import NumberFormat from 'react-number-format';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
+import moment from 'moment';
 
 
 //import image from '../../data/image'
@@ -28,8 +31,11 @@ interface userItemProps {
 }
 
 
-const userItem = ({ User }: userItemProps) => {
-    const navigation = useNavigation();
+const userItem = ({ chatRoom }: any) => {
+    const navigation = useNavigation<any>();
+    const user = useSelector(userSelector)
+
+
 
     return (
         <View style={styles.chatItemContainer}>
@@ -42,28 +48,28 @@ const userItem = ({ User }: userItemProps) => {
                     borderStyle: 'solid',
                     borderWidth: 1,
                 }}
-                source={User.avatar}
+                source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }}
             />
-            <View style={[styles.userItem, { width: User.productImage ? '70%' : '90%', }]}>
+            <View style={[styles.userItem, { width: '90%', }]}>
 
                 <View style={styles.userNameContainer}>
                     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
 
-                        <Text onPress={() => navigation.navigate('ChatRoomScreen')} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{User.name}</Text>
-                        <Text onPress={() => navigation.navigate('ChatRoomScreen')} style={styles.commentTime} numberOfLines={1}>{User.hour}:{User.minute} {User.timePeriod == 0 ? ('AM') : ('PM')}</Text>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.name : chatRoom?.buyer?.name}</Text>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={styles.commentTime} numberOfLines={1}>{moment(chatRoom?.last_message?.updated_at).fromNow()}</Text>
 
                     </View>
 
                 </View>
                 <View style={styles.commentContentContainer}>
-                    <Text onPress={() => navigation.navigate('ChatRoomScreen')} style={styles.commentContent} numberOfLines={1}>{User.content}</Text>
+                    <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={styles.commentContent} numberOfLines={1}>{chatRoom?.last_message?.content ?? 'Hãy bắt đầu trò chuyện'}</Text>
 
                 </View>
             </View>
-            {User.productImage && (
+            {user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image : chatRoom?.buyer?.profile_image && (
                 <View style={styles.productImageContainer}>
 
-                    <Image onPress={() => navigation.navigate('ChatRoomScreen')} style={styles.productImage} source={User.productImage} />
+                    <Image onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom.id })} style={styles.productImage} source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }} />
                 </View>
             )}
 

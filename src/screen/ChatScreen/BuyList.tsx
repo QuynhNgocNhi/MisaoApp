@@ -39,6 +39,9 @@ export const BuyList = () => {
         )
     }
 
+    console.log({data});
+    
+
     return (
         <FlatList
             /* onEndReached={true} */
@@ -54,12 +57,10 @@ export const BuyList = () => {
             renderItem={({ item, index }) => {
                 return (
                     <View>
-                        {
-                            item.chatTypeId == '2' && (
-                                <UserItem User={item}
+                      
+                                <UserItem chatRoom={item}
                                 />
-                            )
-                        }
+                            
                     </View>
                 )
             }}

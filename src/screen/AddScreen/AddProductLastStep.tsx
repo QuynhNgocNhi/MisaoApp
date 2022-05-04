@@ -50,10 +50,7 @@ const AddProductScreen = (Props) => {
         is_availabel: 0
     })
 
-    const stateName = 'Nguyễn Văn A'
-    const statePhone = '097773777'
-    const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
-    const data = { productId: 'Tên sản phẩm nè' }
+
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
@@ -70,14 +67,14 @@ const AddProductScreen = (Props) => {
     };
 
     const onGoToPreview = () => {
-        if(product?.inventory_number && product?.unit && product?.price && product?.seller_name && product?.seller_phone && product?.seller_address) {
+        if (product?.inventory_number && product?.unit && product?.price && product?.seller_name && product?.seller_phone && product?.seller_address) {
             let productInfo = {
                 ...product,
-                out_of_stock_date : date
+                out_of_stock_date: date
             }
-            navigation.navigate("ProductAddedPreview",{data: productInfo})
+            navigation.navigate("ProductAddedPreview", { data: productInfo })
         } else {
-            Alert.alert("","Vui lòng điền đầy đủ thông tin của sản phẩm!")
+            Alert.alert("", "Vui lòng điền đầy đủ thông tin của sản phẩm!")
         }
     }
     console.log({ date });
@@ -223,7 +220,7 @@ const AddProductScreen = (Props) => {
                                     <Button outline style={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
                                 </View>
                                 <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>{`${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`}</Text>
-                                <View style={styles.productOutOfStockDateContainerContainer}>
+                                <View style={styles.productOutOfStockDateContainer}>
                                     <DateTimePickerModal
                                         minimumDate={new Date(1950, 0, 1)}
                                         isVisible={isDatePickerVisible}
@@ -233,12 +230,7 @@ const AddProductScreen = (Props) => {
                                         date={date}
                                         onChange={(value: any) => setDate(value)}
                                     />
-                                    {/*  <DateTimePicker
-                                      
-                                        
-                                        mode='date'
-                                        display='default'
-                                        onChange={date => this.setState({ date })} /> */}
+
                                 </View>
 
                             </View>
@@ -250,34 +242,31 @@ const AddProductScreen = (Props) => {
                                 </View>
                                 <View style={styles.ownerAddress}>
                                     <View style={styles.addressBox}>
-                                        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>Tên người bán</Text>
                                         <TextInput
                                             value={product?.seller_name}
                                             placeholder="Tên người bán"
                                             onChangeText={(value: any) => setProduct({ ...product, seller_name: value })}
                                             style={{
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
-                                                borderWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
+                                                borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
                                             }}
                                         />
-                                        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>SDT người bán</Text>
                                         <TextInput
                                             value={product?.seller_phone}
                                             placeholder="SDT người bán"
                                             onChangeText={(value: any) => setProduct({ ...product, seller_phone: value })}
                                             style={{
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
-                                                borderWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
+                                                borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
                                             }}
                                         />
-                                        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>Địa chỉ người bán</Text>
                                         <TextInput
                                             value={product?.seller_address}
                                             placeholder="Địa chỉ người bán"
                                             onChangeText={(value: any) => setProduct({ ...product, seller_address: value })}
                                             style={{
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
-                                                borderWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
+                                                borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
                                             }}
                                         />
                                     </View>
@@ -362,7 +351,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
 
     },
-    productOutOfStockDateContainerContainer: {
+    productOutOfStockDateContainer: {
         width: 100,
     },
 
@@ -390,7 +379,7 @@ const styles = StyleSheet.create({
         borderColor: color.borderColor,
         padding: 10,
         marginTop: 10,
-        borderRadius: 5,
+
 
     },
     addressBox: {

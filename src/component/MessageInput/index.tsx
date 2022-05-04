@@ -9,6 +9,7 @@ import {
     Platform,
     Image,
     Alert,
+    TouchableOpacity,
 } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
@@ -16,10 +17,16 @@ import { Icon } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 // import color, layout, style
 import color from '../../theme/color';
+import FastImage from "react-native-fast-image";
 
-const MessageInput = () => {
-    const [message, setMessage] = useState("");
-    const navigation = useNavigation();
+const MessageInput = ({
+    messsage,
+    setMessage,
+    onSendMessage,
+    onPickImage,
+    tempImage,
+    setTempImage
+}: any) => {
 
     return (
 
@@ -33,27 +40,54 @@ const MessageInput = () => {
                     style={styles.icon}
 
                 />
-                <TextInput
-                    placeholder="Nhập tin nhắn..."
+                {tempImage ? (
+                    <View style={{ flex: 1, margin: 5 }}>
+                        <TouchableOpacity
+                            onPress={() => setTempImage(null)}
+                            style={{ position: 'absolute', top: 5, left: 80, zIndex: 9999 }}>
+                            <Icon
+                                name='close'
+                                type='simple-line-icon'
+                                color={color.normalText}
+                                size={20}
+                                style={styles.icon}
 
-                    style={styles.input}
-                    value={message}
-                    onChangeText={setMessage}>
-                </TextInput>
+                            />
+                        </TouchableOpacity>
+                        <FastImage
+                            source={{ uri: tempImage }}
+                            style={{
+                                width: 100,
+                                height: 100
+                            }}
+                        />
+                    </View>
+                ) : (
+                    <TextInput
+                        placeholder="Nhập tin nhắn..."
+
+                        style={styles.input}
+                        value={messsage}
+                        onChangeText={(value: any) => setMessage(value)}>
+                    </TextInput>
+                )}
 
 
                 <Button
+                    onPress={onSendMessage}
                     type='clear'
                     title='Gửi'
                     titleStyle={{ fontSize: 20, color: color.primaryColor }}
                 />
-                <Icon
-                    name='image'
-                    type='feather'
-                    color={color.normalText}
-                    size={25}
-                    style={styles.icon}
-                />
+                <TouchableOpacity onPress={onPickImage}>
+                    <Icon
+                        name='image'
+                        type='feather'
+                        color={color.normalText}
+                        size={25}
+                        style={styles.icon}
+                    />
+                </TouchableOpacity>
             </View>
 
 

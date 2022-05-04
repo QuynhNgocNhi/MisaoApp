@@ -6,9 +6,10 @@ import {
     FlatList,
     SafeAreaView,
     ActivityIndicator,
-    Platform
+    Platform,
+    Alert
 } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import { Header } from 'react-native-elements';
 // import color, layout, style
@@ -19,8 +20,79 @@ const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevr
 import Message from "../../component/Message";
 import MessageInput from "../../component/MessageInput";
 import messages from '../../assets/data/Chat'
+import { getMessageListAPI, sendMessageFileAPI, sendMessageTextAPI } from "../../services";
+import { userSelector } from "../../modules/user/selectors";
+import { useSelector } from "react-redux";
+import ImagePicker from 'react-native-image-crop-picker';
+type RouteParams = {
+    id: any
+}
 export default function ChatRoomScreen() {
     const navigation = useNavigation<any>();
+    const [messageList, setMessageList] = useState<any>([])
+    const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
+    const [message, setMessage] = useState<string>('')
+    const [refresh, setRefresh] = useState<boolean>(false)
+    const [tempImage, setTempImage] = useState<any>(null)
+    const [isSending, setIsSending] = useState<boolean>(false)
+    const userInfo = useSelector(userSelector)
+
+    const fetchMessageList = async (lastId?: number) => {
+        const response = await getMessageListAPI(params?.id, lastId)
+        if (response.__typename !== 'ErrorResponse') {
+            if (response.data) {
+                setMessageList(response.data)
+
+            }
+        }
+    }
+    useEffect(() => {
+        if (params?.id) {
+            fetchMessageList()
+
+        }
+    }, [isSending])
+
+
+    useEffect(() => {
+        const reloadInterval = setInterval(() => {
+            if (params?.id) {
+                fetchMessageList()
+            }
+        }, 10000)
+        return () => clearInterval(reloadInterval)
+    }, [])
+    const onPickImage = () => {
+        ImagePicker.openPicker({
+            mediaType: 'photo',
+        }).then(image => {
+            setTempImage(image.path)
+        });
+
+    }
+    const onSendMessage = async () => {
+        setIsSending(true)
+        if (tempImage) {
+            const response = await sendMessageFileAPI(params?.id, tempImage)
+            if (response.__typename !== 'ErrorResponse') {
+                setTempImage(null)
+                setRefresh(!refresh)
+            }
+        } else if (message) {
+            const response = await sendMessageTextAPI(params?.id, message)
+            if (response.__typename !== 'ErrorResponse') {
+                setMessage('')
+                setRefresh(!refresh)
+            }
+        } else {
+            Alert.alert("", "Vui lòng nhập nội dung tin nhắn",
+                [
+                    { text: "OK", onPress: () => { } }
+                ])
+        }
+        setIsSending(false)
+    }
+    console.log({ messageList });
 
 
     return (
@@ -65,16 +137,22 @@ export default function ChatRoomScreen() {
                 />
             </View>
             <FlatList
-                data={messages.messages}
+                data={messageList}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                     <Message
                         message={item}
-
                     />
                 )}
                 inverted
             />
             <MessageInput
+                tempImage={tempImage}
+                setTempImage={setTempImage}
+                onPickImage={onPickImage}
+                message={message}
+                setMessage={setMessage}
+                onSendMessage={onSendMessage}
 
             />
         </SafeAreaView>
