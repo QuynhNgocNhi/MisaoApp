@@ -54,7 +54,7 @@ const App = () => {
     </SafeAreaProvider>
   );
 };
-{/* <RegisterScreen />
+{/* <RegisterScreen />  
 <SearchBox />
 <LoginScreen/>
 <RegisterSuccessfulScreen/>
