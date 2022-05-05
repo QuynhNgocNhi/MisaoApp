@@ -164,14 +164,14 @@ const SearchScreen = () => {
                             </Heading6>
                             <View style={styles.peopleAlsoSearched} >
 
-                                {/* <FlatList
-                                    data={product}
+                                <FlatList
+                                    data={productList}
                                     numColumns={2}
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
                                     keyExtractor={product => product.id}
                                     renderItem={({ item }) => <PeopleAlsoSearched product={item} />}
-                                /> */}
+                                />
 
                             </View>
 
