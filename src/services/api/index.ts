@@ -469,3 +469,12 @@ export const likeBuyRequestAPI = async (id: number): Promise<BaseResponse | Erro
     }
 }
 
+export const getHistorySearchAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/search-recent`);
+        return response.data.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
