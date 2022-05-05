@@ -20,7 +20,7 @@ import color from '../../theme/color';
 import FastImage from "react-native-fast-image";
 
 const MessageInput = ({
-    messsage,
+    message,
     setMessage,
     onSendMessage,
     onPickImage,
@@ -65,9 +65,8 @@ const MessageInput = ({
                 ) : (
                     <TextInput
                         placeholder="Nhập tin nhắn..."
-
                         style={styles.input}
-                        value={messsage}
+                        value={message}
                         onChangeText={(value: any) => setMessage(value)}>
                     </TextInput>
                 )}

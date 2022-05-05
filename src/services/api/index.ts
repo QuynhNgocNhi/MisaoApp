@@ -458,3 +458,14 @@ export const likeProductAPI = async (product_id: number): Promise<BaseResponse |
         return handleServerError(error);
     }
 }
+
+
+export const likeBuyRequestAPI = async (id: number): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`/buy-request/${id}/favorite`, {});
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
