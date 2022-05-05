@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -28,6 +28,7 @@ import AppStatusBar from '../../component/AppStatusBar';
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { getProductListAPI } from '../../services';
 
 
 const PostSearchedByCategory = ({ categoryId, route }) => {
@@ -36,6 +37,32 @@ const PostSearchedByCategory = ({ categoryId, route }) => {
     const ProductByCategoryId = [...product].filter(p => p.categoryId === data.categoryId)
 
     const isFocused = useIsFocused();
+    const [productList, setProductList] = useState<any>([])
+    const [loading, setLoading] = useState<boolean>(false)
+    const [updating, setUpadting] = useState<boolean>(false)
+
+    const fetchProduct = async () => {
+        setLoading(true)
+        const response = await getProductListAPI({
+            category_id: data?.categoryId
+        })
+        if (response.__typename !== 'ErrorResponse') {
+            setProductList(response.data)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchProduct()
+    }, [])
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator animating />
+            </View>
+        )
+    }
 
 
     return (
@@ -87,10 +114,16 @@ const PostSearchedByCategory = ({ categoryId, route }) => {
 
                             <View style={styles.productListContainer}>
                                 <FlatList
-                                    data={ProductByCategoryId}
+                                    ListEmptyComponent={() => {
+                                        return (
+                                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                                <Text>Không có sản phẩm để hiện thị.</Text>
+                                            </View>
+                                        )
+                                    }}
+                                    data={productList}
                                     numColumns={2}
                                     renderItem={({ item }) => <ProductItem product={item} />}
-
                                 />
                                 {/*  <FlatList
                                     contentContainerStyle={styles.postListContainer}

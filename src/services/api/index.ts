@@ -290,8 +290,9 @@ export const getHotProductListAPI = async (): Promise<ListResponse<any> | ErrorR
 }
 
 export const getProductListAPI = async (data?: any): Promise<ListResponse<any> | ErrorResponse> => {
+
     try {
-        const response = await get<ListResponse<any>>(`/product`, { ...data });
+        const response = await get<ListResponse<any>>(`/product`, { params: { ...data } });
         return response.data.data
     } catch (error: any) {
         return handleServerError(error);
@@ -299,7 +300,7 @@ export const getProductListAPI = async (data?: any): Promise<ListResponse<any> |
 }
 export const getPostListAPI = async (data?: any): Promise<ListResponse<any> | ErrorResponse> => {
     try {
-        const response = await get<ListResponse<any>>(`/buy-request`, { ...data });
+        const response = await get<ListResponse<any>>(`/buy-request`, { params: { ...data } });
         return response.data.data
     } catch (error: any) {
         return handleServerError(error);
@@ -443,6 +444,15 @@ export const sendMessageFileAPI = async (chatRoomID: number, file: string): Prom
             });
         }
         const response = await postFile<BaseResponse>(`/chat/${chatRoomID}/message`, formData);
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const likeProductAPI = async (product_id: number): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`/product/${product_id}/favorite`, {});
         return response.data;
     } catch (error: any) {
         return handleServerError(error);

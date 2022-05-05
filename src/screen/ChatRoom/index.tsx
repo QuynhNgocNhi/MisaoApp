@@ -131,9 +131,6 @@ export default function ChatRoomScreen() {
                         </View>
 
                     }
-
-
-
                 />
             </View>
             <FlatList
