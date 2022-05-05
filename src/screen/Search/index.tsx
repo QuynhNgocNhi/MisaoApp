@@ -133,7 +133,7 @@ const SearchScreen = () => {
                     <View style={styles.middleContainer} >
 
                         <View style={styles.search} >
-                            <SearchBarItem keyword={keyword} setKeyword={setKeyword} onSearch={onSearch} />
+                            <SearchBarItem keyword={keyword} setKeyword={setKeyword} onSearch={onSearchWithKeyword} />
                         </View>
 
                     </View>
