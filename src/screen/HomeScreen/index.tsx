@@ -44,9 +44,6 @@ const HomeScreen = () => {
   const [productList, setProductList] = useState<any>([])
   const token = useSelector(tokenSelector)
   const fetchData = async () => {
-    if (!token) {
-      navigation.replace('')
-    }
     setLoading(true)
     const productResponse = await getProductListAPI()
     const response = await getHotProductListAPI()

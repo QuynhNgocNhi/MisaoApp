@@ -478,3 +478,11 @@ export const getHistorySearchAPI = async (): Promise<ListResponse<any> | ErrorRe
     }
 }
 
+export const getListProductFavoriteAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/product/favorite`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
