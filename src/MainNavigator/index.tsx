@@ -43,6 +43,8 @@ import { tokenSelector } from '../modules/auth/selectors';
 import { _setToken } from '../services';
 import { getUserInfo } from '../modules/user/slice';
 import ChatScreen from '../screen/ChatScreen';
+import MyProducts from '../screen/MyProducts';
+import MyBuyRequest from '../screen/MyBuyRequest';
 
 // MainNavigatorA Config
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
@@ -108,8 +110,9 @@ export type RootStackParameterList = {
   };
   RegisterSuccessful: {
   };
-  EnterOTPRegister: {}
-
+  EnterOTPRegister: {};
+  MyProducts :{};
+  MyBuyRequest :{};
 };
 
 const RootStack = createNativeStackNavigator<RootStackParameterList>();
@@ -219,6 +222,30 @@ const MainNavigator = () => {
             ),
 
           })} component={ProductsSaved} />
+          <RootStack.Screen name="MyProducts" options={({ navigation }) => ({
+            title: 'Sản phẩm của tôi',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+
+          })} component={MyProducts} />
+           <RootStack.Screen name="MyBuyRequest" options={({ navigation }) => ({
+            title: 'Tin mua của tôi',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+
+          })} component={MyBuyRequest} />
           <RootStack.Screen name="Notification" options={({ navigation }) => ({
             title: 'Thông báo',
             headerTitleAlign: 'center',

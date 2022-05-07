@@ -10,16 +10,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // import color, layout, style
 import color from '../../theme/color';
-import { getListBuyRequestFavoriteAPI } from '../../services';
+import layout from '../../theme/layout';
+import { getListMyBuyRequestAPI } from '../../services';
 
 
-const PostsSaved = () => {
+const MyBuyRequest = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const [productList, setProductList] = useState<any>([])
     const fetchData = async () => {
         setLoading(true)
-        const response = await getListBuyRequestFavoriteAPI()
+        const response = await getListMyBuyRequestAPI()
         if (response.__typename !== 'ErrorResponse') {
             setProductList(response.data)
         }
@@ -153,4 +154,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default PostsSaved
+export default MyBuyRequest

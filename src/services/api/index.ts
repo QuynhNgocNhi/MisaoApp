@@ -486,3 +486,30 @@ export const getListProductFavoriteAPI = async (): Promise<ListResponse<any> | E
         return handleServerError(error);
     }
 }
+
+export const getListMyProductAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/product-manager`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const getListMyBuyRequestAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/buy-request-manager`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const getListBuyRequestFavoriteAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/buy-request/favorite`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
