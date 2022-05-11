@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import ChatRoomScreen from '../ChatRoom'
 import { BuyList } from './BuyList'
 import { SellList } from './SellList'
+import color from '../../theme/color';
 
 
 const Tab = createMaterialTopTabNavigator()
@@ -27,8 +28,9 @@ const ChatScreen = () => {
     // <View>
     //     {tab && (
     <Tab.Navigator
-      style={{ marginTop: 20 }}
+      style={{ marginTop: 20, backgroundColor: color.white }}
       screenOptions={{
+
         title: 'Mua hàng',
         lazy: true,
       }}

@@ -76,6 +76,7 @@ export default function ChatRoomScreen() {
             const response = await sendMessageFileAPI(params?.id, tempImage)
             if (response.__typename !== 'ErrorResponse') {
                 setTempImage(null)
+
                 setRefresh(!refresh)
             }
         } else if (message) {
