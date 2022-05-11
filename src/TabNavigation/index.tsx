@@ -139,7 +139,7 @@ function TabNavigation() {
                     tabBarIcon: props => (
                         <TabBadgeIcon
                             name={`chat-processing${props.focused ? '' : '-outline'}`}
-                            badgeCount={5}
+                            // badgeCount={5}
                             {...props}
                             size={30}
                         />

@@ -19,7 +19,7 @@ const grey = "lightgrey";
 
 const Message = ({ message }: any) => {
     const user = useSelector(userSelector)
-    const isMe = message?.buyer_id === user?.id;
+    const isMe = message?.buyer_id === user?.id || message?.seller_id === user?.id;
     return (
         <View style={[styles.container, isMe ? styles.rightContainer : styles.leftContainer]}>
             {message?.type === 1 ? (

@@ -96,6 +96,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const userInfo = useSelector(userSelector)
 
     const [loading, setLoading] = useState<boolean>(true)
+    const [isFollow, setIsFollow] = useState<boolean>(true)
 
     const fetchProductDetail = async () => {
         setLoading(true)
@@ -108,7 +109,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
     const onFollowUser = async (userID: any) => {
         const response = await followUserAPI(userID)
-
     }
 
     const onOrderProduct = async () => {
@@ -118,9 +118,10 @@ const ProductDetailScreen = ({ Props, route }: any) => {
             user_seller_id: data?.user?.id,
             product_id: data?.id
         })
+
         if (response.__typename !== 'ErrorResponse') {
             navigation.navigate('ChatRoomScreen', {
-                id: response?.chat_room?.id
+                id: response?.data?.chat_room?.id
             })
         }
         setUpdating(false)

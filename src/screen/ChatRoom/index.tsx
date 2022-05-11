@@ -81,6 +81,8 @@ export default function ChatRoomScreen() {
             }
         } else if (message) {
             const response = await sendMessageTextAPI(params?.id, message)
+            console.log({ response });
+
             if (response.__typename !== 'ErrorResponse') {
                 setMessage('')
                 setRefresh(!refresh)
@@ -93,7 +95,6 @@ export default function ChatRoomScreen() {
         }
         setIsSending(false)
     }
-    console.log({ messageList });
 
 
     return (
@@ -132,9 +133,6 @@ export default function ChatRoomScreen() {
                         </View>
 
                     }
-
-
-
                 />
             </View>
             <FlatList

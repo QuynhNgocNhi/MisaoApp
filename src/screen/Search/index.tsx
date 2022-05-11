@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -9,7 +9,6 @@ import Button from '../../component/Button';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Header } from 'react-native-elements';
 import HeaderIconButton from '../../component/HeaderButton';
-import SearchBar from '../../component/SearchBar/SearchBarItem';
 import ButtonNormal from '../../component/Button';
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
 import RecentSearchItem from './RecentSearchItem';
@@ -17,8 +16,7 @@ import PeopleAlsoSearched from './PeopleAlsoSearched';
 import recentSearch from '../../assets/data/searchHistory';
 import category from '../../assets/data/category';
 import product from '../../assets/data/product';
-
-import CategoryItem from '../../component/CategoryItem';
+import CategoryList from '../../component/CategoryItem';
 
 // import color, layout, style
 import color from '../../theme/color';
@@ -29,11 +27,84 @@ import { useNavigation } from '@react-navigation/native';
 
 
 import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitch';
+import { useSelector } from 'react-redux';
+import { masterDataSelector } from '../../modules/search/selectors';
+import { getHistorySearchAPI, getProductListAPI } from '../../services';
+import LoadingOverlay from '../../component/LoadingOverlay';
+import { SearchBarItem } from '../../component/SearchBar/SearchBarItem';
 
 const SearchScreen = () => {
 
     const navigation = useNavigation();
     const isFocused = useIsFocused();
+
+    const categories = useSelector(masterDataSelector)
+
+    const [productList, setProductList] = useState<any>([])
+    const [loading, setLoading] = useState<boolean>(false)
+    const [updating, setUpadting] = useState<boolean>(false)
+    const [keyword, setKeyword] = useState(null)
+    const [historyList, setHistoryList] = useState<any>([])
+
+    const fetchProduct = async () => {
+        const response = await getProductListAPI({
+            keyword
+        })
+        if (response.__typename !== 'ErrorResponse') {
+            setProductList(response.data)
+        }
+    }
+
+    const fetchSearchHistory = async () => {
+        const response = await getHistorySearchAPI()
+        console.log({ response });
+
+        if (response.__typename !== 'ErrorResponse') {
+            setHistoryList(response.data)
+        }
+
+    }
+
+    const onSearch = async () => {
+        setUpadting(true)
+        const response = await getProductListAPI({
+            keyword
+        })
+        if (response.__typename !== 'ErrorResponse') {
+            setProductList(response.data)
+        }
+        setUpadting(false)
+    }
+
+    useEffect(() => {
+        setLoading(true)
+        fetchProduct()
+        fetchSearchHistory()
+        setLoading(false)
+
+    }, [])
+
+
+
+    const onSearchWithKeyword = async (keyword: string) => {
+        setUpadting(true)
+        const response = await getProductListAPI({
+            keyword
+        })
+        if (response.__typename !== 'ErrorResponse') {
+            setProductList(response.data)
+            fetchSearchHistory()
+        }
+        setUpadting(false)
+    }
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator animating />
+            </View>
+        )
+    }
 
     return (
         <SafeAreaProvider>
@@ -44,7 +115,6 @@ const SearchScreen = () => {
                 <View style={styles.container}>
                     <View style={styles.headerContainer}>
                         <Header
-
                             containerStyle={{ borderBottomWidth: 0, }}
                             backgroundColor={color.white}
                             centerComponent={
@@ -57,39 +127,36 @@ const SearchScreen = () => {
                                     color={color.lightBlack}
                                 />
                             }
-
-
-
                         />
                     </View>
 
                     <View style={styles.middleContainer} >
 
                         <View style={styles.search} >
-                            <SearchBar />
+                            <SearchBarItem keyword={keyword} setKeyword={setKeyword} onSearch={onSearchWithKeyword} />
                         </View>
 
                     </View>
                     <ScrollView>
+                        {historyList?.length > 0 && (
+                            <View style={styles.topContainer} >
+                                <Heading6 style={styles.headingText}>
+                                    Tìm kiếm gần đây
+                                </Heading6>
+                                <View style={styles.recentSearchItemStyle} >
 
-                        <View style={styles.topContainer} >
-                            <Heading6 style={styles.headingText}>
-                                Tìm kiếm gần đây
-                            </Heading6>
-                            <View style={styles.recentSearchItemStyle} >
+                                    <FlatList
+                                        data={historyList}
+                                        showsHorizontalScrollIndicator={false}
+                                        alwaysBounceHorizontal={false}
+                                        keyExtractor={(item, index) => index.toString()}
+                                        renderItem={({ item }) => <RecentSearchItem item={item} onSearchWithKeyword={onSearchWithKeyword} />}
+                                    />
 
-                                <FlatList
-                                    data={recentSearch}
-                                    showsHorizontalScrollIndicator={false}
-                                    alwaysBounceHorizontal={false}
-                                    keyExtractor={item => item.id}
-                                    renderItem={({ item }) => <RecentSearchItem item={item} />}
-                                />
-
+                                </View>
                             </View>
+                        )}
 
-
-                        </View>
 
                         <View style={[styles.box, styles.middleContainer]} >
                             <Heading6 style={styles.headingText}>
@@ -98,7 +165,7 @@ const SearchScreen = () => {
                             <View style={styles.peopleAlsoSearched} >
 
                                 <FlatList
-                                    data={product}
+                                    data={productList}
                                     numColumns={2}
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
@@ -118,11 +185,11 @@ const SearchScreen = () => {
 
                                 <FlatList
                                     horizontal
-                                    data={category}
+                                    data={categories}
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
-                                    keyExtractor={category => category.id}
-                                    renderItem={({ item }) => <CategoryItem category={item} />}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item }) => <CategoryList category={item} />}
                                 />
 
                             </View>
@@ -132,13 +199,9 @@ const SearchScreen = () => {
 
 
                     </ScrollView>
-
-
-
-
                 </View>
-
             </SafeAreaView>
+            <LoadingOverlay loading={updating} />
         </SafeAreaProvider >
     );
 };

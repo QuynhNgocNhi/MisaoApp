@@ -125,7 +125,7 @@ const HomeScreen = () => {
                                 type='ionicon'
                                 color='#000000'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("MyProducts")}
                             />
                             <Text style={styles.buttonName}>Sản phẩm</Text>
                         </View>
@@ -137,7 +137,7 @@ const HomeScreen = () => {
                                 type='material-community'
                                 color='#FFB22D'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("MyBuyRequest")}
                             />
                             <Text style={styles.buttonName}>Tin mua</Text>
                         </View>

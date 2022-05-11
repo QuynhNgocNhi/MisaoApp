@@ -1,5 +1,5 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox } from 'react-native'
-import React, { useEffect } from 'react';
+import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Heading6 } from '../../component/Text';
 // import color, layout, style
@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import FastImage from 'react-native-fast-image';
+import { likeProductAPI } from '../../services';
 LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
 //import image from '../../data/image'
 interface ProductItemProps {
@@ -57,6 +58,12 @@ const ProductItem = ({ product }: any) => {
     time: product.time,
     timeUnit: product.timeUnit,
   }
+  const [tempHasFavorite, setTempHasFavorite] = useState(product?.has_favorite)
+  const onLikeProduct = async () => {
+    const response = await likeProductAPI(product?.id)
+    setTempHasFavorite(tempHasFavorite === 0 ? 1 : 0)
+  }
+
   return (
     <View style={styles.container} >
       <View style={styles.bottomContainer}>
@@ -68,7 +75,7 @@ const ProductItem = ({ product }: any) => {
         )}
         <View style={styles.tittleContainer}>
           <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }}
-            style={styles.title} numberOfLines={2}>{product.name}</Text>
+            style={styles.title} numberOfLines={2}>{product?.name}</Text>
         </View>
 
 
@@ -78,17 +85,19 @@ const ProductItem = ({ product }: any) => {
             {/* {product.oldPrice && (<Text style={styles.oldPrice}> ${product.oldPrice}</Text>)} */}
 
           </Text>
-          <Text style={styles.unitPrice}> {product.unitPrice} </Text>
+          <Text style={styles.unitPrice}> {product?.unit} </Text>
         </View>
-        <Text style={styles.askedTimes}> {product.askedTimes ?? 0} người đang hỏi </Text>
+        <Text style={styles.askedTimes}> {product?.order?.length() ? product?.order?.length() + 'người đang hỏi' : ''}</Text>
 
         {product.discount && (<View style={styles.discountLabelContainer}>
-          <Text style={styles.label}>{`- ${product.discount}%`}</Text>
+          <Text style={styles.label}>{`- ${product?.discount}%`}</Text>
 
         </View>)}
-        <View style={styles.wishlistContainer}>
-          <FontAwesome style={styles.wishlist} name={"heart-o"} color={'#FF0000'} size={24} />
-        </View>
+        <TouchableOpacity
+          onPress={onLikeProduct}
+          style={styles.wishlistContainer}>
+          <FontAwesome style={styles.wishlist} name={tempHasFavorite === 0 ? "heart-o" : 'heart'} color={'#FF0000'} size={24} />
+        </TouchableOpacity>
       </View>
     </View>
 
