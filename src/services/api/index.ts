@@ -316,6 +316,14 @@ export const getProductDetailAPI = async (id?: any): Promise<ObjectResponse<any>
         return handleServerError(error);
     }
 }
+export const getPostDetailAPI = async (id?: any): Promise<ObjectResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ObjectResponse<any>>(`/buy-request/${id}`);
+        return response.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
 
 export const followUserAPI = async (id: string): Promise<BaseResponse | ErrorResponse> => {
     try {
