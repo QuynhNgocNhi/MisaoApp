@@ -87,7 +87,7 @@ const ProductItem = ({ product }: any) => {
           </Text>
           <Text style={styles.unitPrice}> {product?.unit} </Text>
         </View>
-        <Text style={styles.askedTimes}> {product?.order?.length ? product?.order?.length + ' lượt chốt' : ''}</Text>
+        <Text style={styles.askedTimes}> {product?.order?.length ? (product?.order?.length) : '0'} người đang hỏi</Text>
 
         {product.discount && (<View style={styles.discountLabelContainer}>
           <Text style={styles.label}>{`- ${product?.discount}%`}</Text>
@@ -186,14 +186,6 @@ const styles = StyleSheet.create({
   },
   wishlist: {
     opacity: 0.5,
-  },
-  price: {
-    marginLeft: 10,
-
-    color: '#000',
-    fontSize: 18,
-    fontWeight: 'bold',
-
   },
   oldPrice: {
 

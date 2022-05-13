@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { getCharRoomAPI } from '../../services';
 import UserItem from './UserItem';
+import color from '../../theme/color';
 
 export const BuyList = () => {
     const [data, setData] = useState<any>([])
@@ -39,11 +40,12 @@ export const BuyList = () => {
         )
     }
 
-    console.log({data});
-    
+    console.log({ data });
+
 
     return (
         <FlatList
+            style={{ backgroundColor: color.white }}
             /* onEndReached={true} */
             data={data}
             keyExtractor={item => item.id}
@@ -57,10 +59,10 @@ export const BuyList = () => {
             renderItem={({ item, index }) => {
                 return (
                     <View>
-                      
-                                <UserItem chatRoom={item}
-                                />
-                            
+
+                        <UserItem chatRoom={item}
+                        />
+
                     </View>
                 )
             }}
