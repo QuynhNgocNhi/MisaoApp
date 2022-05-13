@@ -36,9 +36,6 @@ const PostScreen = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const token = useSelector(tokenSelector)
   const fetchData = async () => {
-    if (!token) {
-      navigation.replace('')
-    }
     setLoading(true)
     const postResponse = await getPostListAPI()
 
@@ -113,7 +110,6 @@ const PostScreen = () => {
               </View>
             </View>
             <View style={styles.bottomContainer}>
-
 
               <View style={styles.productListContainer}>
                 <FlatList

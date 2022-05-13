@@ -1,5 +1,5 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox } from 'react-native'
-import React, { useEffect } from 'react'
+import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Avatar } from 'react-native-elements';
 
@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import FastImage from 'react-native-fast-image';
+import { likePostAPI, likeProductAPI } from '../../services';
 LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
 //import image from '../../data/image'
 interface PostsProps {
@@ -37,15 +38,23 @@ const PostItem = ({ post }: any) => {
     const navigation = useNavigation();
     const data = { postId: post.id, title: post.name, content: post.description, userId: post.userId, userName: post.userName }
 
+    const [tempHasFavorite, setTempHasFavorite] = useState(post?.has_favorite)
+    const onLikePost = async () => {
+        const response = await likePostAPI(post?.id)
+        setTempHasFavorite(tempHasFavorite === 0 ? 1 : 0)
+    }
+    console.log({ post });
 
     return (
         <View>
             <View style={styles.root}>
                 <View style={styles.topContainer}>
-                    <View style={styles.bookmarkContainer}>
+                    <TouchableOpacity
+                        onPress={onLikePost}
+                        style={styles.bookmarkContainer}>
 
-                        <FontAwesome name={'bookmark-o'} color={color.lightBlack} size={22} />
-                    </View>
+                        <FontAwesome name={tempHasFavorite === 0 ? "bookmark-o" : 'bookmark'} color={color.lightBlack} size={22} />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.middleContainer}>
@@ -72,11 +81,7 @@ const PostItem = ({ post }: any) => {
 
                         </View>
                         <View style={styles.bottomContainer}>
-
-
-
-
-                            <Text numberOfLines={1} style={styles.askedTimes}>{post.askedTimes ?? 0} người đang hỏi
+                            <Text numberOfLines={1} style={styles.askedTimes}>{post?.order?.length ? post?.order?.length + 'người quan tâm' : ''}
                             </Text>
                         </View>
                     </View>

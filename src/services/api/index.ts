@@ -337,6 +337,16 @@ export const orderProductAPI = async (data: any): Promise<any | ErrorResponse> =
     }
 }
 
+export const deleteProductAPI = async (id: any): Promise<any | ErrorResponse> => {
+    try {
+        const response = await post<any>(`/product/${id}/delete`, {});
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
 export const addProductAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
     try {
         const formData = new FormData();
@@ -453,6 +463,15 @@ export const sendMessageFileAPI = async (chatRoomID: number, file: string): Prom
 export const likeProductAPI = async (product_id: number): Promise<BaseResponse | ErrorResponse> => {
     try {
         const response = await post<BaseResponse>(`/product/${product_id}/favorite`, {});
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const likePostAPI = async (id: number): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>(`/buy-request/${id}/favorite`, {});
         return response.data;
     } catch (error: any) {
         return handleServerError(error);

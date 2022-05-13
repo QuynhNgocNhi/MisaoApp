@@ -25,6 +25,8 @@ import { useNavigation } from '@react-navigation/native';
 import ChatTypeScreen from '../ChatScreen/ChatTypeScreen'
 
 import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
 
 
 interface productProps {
@@ -62,17 +64,14 @@ interface commentProps {
         avatar: string,
         time: number,
         timeUnit: string,
-
-
     }
 
 }
 
-
 const ProductDetailScreen = ({ Props, route }) => {
     const navigation = useNavigation();
     const { data } = route.params;
-
+    const userInfo = useSelector(userSelector)
     const [ProfileTab, setProfileTab] = useState(1);
     const onSelectSwitch = value => {
         setProfileTab(value);
@@ -123,12 +122,12 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                         <View style={styles.userAttributes}>
 
-                                            <Heading6>4</Heading6>
+                                            <Heading6>{userInfo?.following?.length}</Heading6>
                                             <Text style={styles.userAttributesText}> đang theo</Text>
                                         </View>
                                         <View style={styles.userAttributes}>
 
-                                            <Heading6>5</Heading6>
+                                            <Heading6>{userInfo?.followed?.length}</Heading6>
                                             <Text style={styles.userAttributesText}> người theo</Text>
                                         </View>
 
@@ -142,15 +141,14 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                 <View style={[styles.userInfomationContainer]}>
 
-                                    <Text style={styles.userName} numberOfLines={1}>Mén Nguyễn</Text>
-                                    <Text style={{ fontSize: 18, }}>@Sockute</Text>
+                                    <Text style={styles.userName} numberOfLines={1}>{userInfo?.name}</Text>
+                                    <Text style={{ fontSize: 18, }}>{userInfo?.phone}</Text>
 
-                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>Bán hoài không nghỉ</Text>
+                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>{userInfo?.description}</Text>
 
 
                                 </View>
                                 <View style={styles.editProfileButtonContainer}>
-
                                     <ButtonNormal
                                         outlined
                                         borderColor={color.linkButton}
@@ -166,7 +164,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                             type='ionicon'
                                             color={color.black}
                                             size={30}
-                                        /> Đà Lạt
+                                        /> {userInfo?.address}
                                     </Text>
                                 </View>
                             </View>
@@ -188,9 +186,9 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                         </View>
                         {ProfileTab == 1 &&
-                            <ProductTab />}
+                            <ProductTab products={userInfo?.product} />}
                         {ProfileTab == 2 &&
-                            <PostTab />}
+                            <PostTab buyRequest={userInfo?.buyRequest} />}
                         {ProfileTab == 3 &&
                             <HistoryTab />}
                     </View>

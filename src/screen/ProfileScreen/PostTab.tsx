@@ -5,14 +5,21 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ProductItem from '../../component/ProductItem';
 import products from '../../assets/data/product';
 import DailyPostItem from './DailyPostItem';
-const MyProductList = () => (
+import PostItem from './MyPostItem';
+const MyProductList = ({ buyRequest }: any) => (
+    <View style={styles.container}>
+        <FlatList
+            data={buyRequest}
+            renderItem={({ item }) => <PostItem post={item} />}
+        />
 
+    </View>
 
-    <ScrollView style={styles.container}>
-        <DailyPostItem date={'01-07-2021'} />
-        <DailyPostItem date={'01-06-2021'} />
-        <DailyPostItem date={'21-05-2021'} />
-    </ScrollView>
+    // <ScrollView style={styles.container}>
+    //     <DailyPostItem date={'01-07-2021'} />
+    //     <DailyPostItem date={'01-06-2021'} />
+    //     <DailyPostItem date={'21-05-2021'} />
+    // </ScrollView>
 
 
 );

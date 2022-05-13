@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -74,8 +74,8 @@ const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevr
 // import color, layout, style
 import color from '../../theme/color';
 
-import { useNavigation } from '@react-navigation/native';
-import { followUserAPI, getProductDetailAPI, orderProductAPI } from '../../services';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { deleteProductAPI, followUserAPI, getProductDetailAPI, orderProductAPI } from '../../services';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 import LoadingOverlay from '../../component/LoadingOverlay';
@@ -94,10 +94,10 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const [data, setData] = useState<any>()
     const [updating, setUpdating] = useState<boolean>(false)
     const userInfo = useSelector(userSelector)
+    const isFocused = useIsFocused()
 
     const [loading, setLoading] = useState<boolean>(true)
     const [isFollow, setIsFollow] = useState<boolean>(true)
-
     const fetchProductDetail = async () => {
         setLoading(true)
         const response = await getProductDetailAPI(routeParams?.productId)
@@ -129,10 +129,44 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
     }
 
+    const onDeleteProduct = () => {
+        Alert.alert("", "Bạn chắc chắn muốn xóa sản phẩm này?", [
+            {
+                text: 'Hủy',
+                onPress: () => { },
+                style: 'cancel'
+            },
+            {
+                text: 'Xóa sản phẩm',
+                onPress: async () => {
+                    setUpdating(true)
+                    const response = await deleteProductAPI(routeParams?.productId)
+                    if (response.__typename !== 'ErrorResponse') {
+                        Alert.alert("", "Xóa thành công", [
+                            {
+                                text: 'Hủy',
+                                onPress: () => navigation.goBack(),
+                                style: 'cancel'
+                            }
+                        ])
+                    } else {
+                        Alert.alert("", "Xóa thất bại")
+                    }
+                    setUpdating(false)
+                },
+                style: 'cancel'
+            },
+        ])
+    }
+
+    const onEditProduct = () => {
+
+    }
+
 
     useEffect(() => {
         fetchProductDetail()
-    }, [routeParams?.id])
+    }, [routeParams?.productId, isFocused])
 
 
 
@@ -294,7 +328,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                     </View>
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> {data.productAskTime} người đang hỏi</Text>
+                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> {data?.order?.length ? data?.order?.length + 'lượt mua' : ''}</Text>
                                         <Text style={{ fontSize: 18, padding: 10 }}>Báo xấu <FontAwesome name='exclamation-circle' size={22} color={color.disableText} /></Text>
                                     </View>
                                 </View>
@@ -337,8 +371,8 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
                                 </View>
                                 <View style={[styles.userInfomationContainer]}>
-                                    <Text style={{ fontSize: 18, }}>@Sockute</Text>
-                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>Bán hoài không nghỉ</Text>
+                                    <Text style={{ fontSize: 18, }}>{data?.user?.phone}</Text>
+                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>{data?.user?.description}</Text>
 
 
                                 </View>
@@ -352,7 +386,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
 
                             </View>
-                            <View style={[styles.box, styles.commentContainer, { marginTop: 10 }]}>
+                            {/* <View style={[styles.box, styles.commentContainer, { marginTop: 10 }]}>
                                 <View style={styles.commentCountContainer}>
 
                                     <FontAwesome name='comment-o' size={24} color={color.borderColor} />
@@ -372,7 +406,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                 </View>
 
 
-                            </View>
+                            </View> */}
                             <View style={[styles.upSellProduct, { marginTop: 10 }]}>
                                 <View style={styles.bottomContainer}>
 
@@ -391,13 +425,37 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
                         </View>
                     </ScrollView>
-                    {userInfo?.id !== data?.user?.id && (
+                    {userInfo?.id !== data?.user?.id ? (
                         <View style={[styles.box, styles.contentContainer]}>
                             <ButtonNormal
                                 buttonStyle={styles.customButtonBackToHome}
                                 onPress={onOrderProduct}
                                 title={'Chốt'.toUpperCase()}
                             />
+                        </View>
+                    ) : (
+                        <View style={{
+                            position: 'absolute', bottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                            width: Dimensions.get('window').width
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: '#541690', alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2, marginRight: 20
+                                }}
+                                onPress={onEditProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Sửa sản phẩm</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: '#F32424', alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2
+                                }}
+                                onPress={onDeleteProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Xóa</Text>
+                            </TouchableOpacity>
                         </View>
                     )}
                 </View>

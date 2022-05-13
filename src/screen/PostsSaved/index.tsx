@@ -11,6 +11,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import color, layout, style
 import color from '../../theme/color';
 import { getListBuyRequestFavoriteAPI } from '../../services';
+import PostItem from '../../component/PostItem';
 
 
 const PostsSaved = () => {
@@ -39,23 +40,11 @@ const PostsSaved = () => {
     }
     return (
         <SafeAreaProvider>
-
-            <SafeAreaView style={styles.screenContainer}>
-                <StatusBar translucent backgroundColor='transparent' />
-                <View>
-                    <ScrollView
-                        nestedScrollEnabled={false}
-                    >
-                        <FlatList
-                            contentContainerStyle={styles.ProductItemList}
-                            data={productList}
-                            numColumns={2}
-                            renderItem={({ item }) => <ProductItem product={item} />}
-                        />
-                    </ScrollView>
-                </View>
-
-            </SafeAreaView>
+            <StatusBar translucent backgroundColor='transparent' />
+            <FlatList
+                data={productList}
+                renderItem={({ item }) => <PostItem post={item} />}
+            />
         </SafeAreaProvider>
     );
 };

@@ -87,7 +87,7 @@ const ProductItem = ({ product }: any) => {
           </Text>
           <Text style={styles.unitPrice}> {product?.unit} </Text>
         </View>
-        <Text style={styles.askedTimes}> {product?.order?.length() ? product?.order?.length() + 'người đang hỏi' : ''}</Text>
+        <Text style={styles.askedTimes}> {product?.order?.length ? product?.order?.length + ' lượt chốt' : ''}</Text>
 
         {product.discount && (<View style={styles.discountLabelContainer}>
           <Text style={styles.label}>{`- ${product?.discount}%`}</Text>
