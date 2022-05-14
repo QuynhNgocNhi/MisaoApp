@@ -173,6 +173,8 @@ const Register = ({ UserInfo }: any) => {
                             <Button
                                 buttonStyle={styles.customButton}
                                 onPress={onClickRegister}
+                                /*                                 onPress={() => { navigation.navigate('EnterOTP', { phoneNumber: phoneNumber }); }}
+                                 */
                                 title={'Đăng ký'.toUpperCase()}
                             />
                         </View>

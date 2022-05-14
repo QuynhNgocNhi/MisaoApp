@@ -41,6 +41,7 @@ const AddScreen = ({ route }) => {
 
 
 
+
     return (
         <SafeAreaProvider>
 
@@ -52,7 +53,7 @@ const AddScreen = ({ route }) => {
 
                     <View style={styles.contentContainer}>
                         <View style={styles.paragraphGroup}>
-                            <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>Nhập mã OTP vừa được gửi đến số điện thoại +84 {route.params.phoneNumber} </Heading6>
+                            <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>Nhập mã OTP vừa được gửi đến số điện thoại +84 888 250 764 </Heading6>
                         </View>
 
 
@@ -64,10 +65,10 @@ const AddScreen = ({ route }) => {
                     <View style={styles.enterOTP}>
                         <OTPInputView
                             style={{ width: '80%', height: 200 }}
-                            pinCount={4}
+                            pinCount={6}
                             editable
                             // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-                            // onCodeChanged = {code => { this.setState({code})}}
+                            onCodeChanged={code => { () => this.setState({ code }) }}
                             autoFocusOnLoad={false}
                             codeInputFieldStyle={styles.underlineStyleBase}
                             codeInputHighlightStyle={styles.underlineStyleHighLighted}
@@ -75,7 +76,7 @@ const AddScreen = ({ route }) => {
                                 console.log(`Code is ${code}, you are good to go!`)
                             }}
                             keyboardType="phone-pad"
-                            clearInputs={true}
+
                         />
                     </View>
 
