@@ -6,7 +6,8 @@ import Login from '../../src/screen/LoginScreen';
 import Register from '../../src/screen/RegisterScreen';
 import RegisterSuccessful from '../../src/screen/RegisterSuccessfulScreen';
 import Welcome from '../../src/screen/Welcome';
-import EnterOTP from '../../src/screen/EnterOTP';
+import EnterOTP from '../screen/EnterOTP/index';
+import EnterPhoneNumber from '../screen/EnterPhoneNumber';
 import PostsScreen from '../../src/screen/PostsScreen';
 import PostsSaved from '../../src/screen/PostsSaved';
 import ProductsSaved from '../../src/screen/ProductsSaved';
@@ -96,6 +97,9 @@ export type RootStackParameterList = {
   Welcome: {
     phoneNumber: number;
   };
+  EnterPhoneNumber: {
+    phoneNumber: number;
+  };
   EnterOTP: {
     phoneNumber: number;
   };
@@ -111,8 +115,8 @@ export type RootStackParameterList = {
   RegisterSuccessful: {
   };
   EnterOTPRegister: {};
-  MyProducts :{};
-  MyBuyRequest :{};
+  MyProducts: {};
+  MyBuyRequest: {};
 };
 
 const RootStack = createNativeStackNavigator<RootStackParameterList>();
@@ -171,6 +175,18 @@ const MainNavigator = () => {
           <RootStack.Screen name="PostDetail" options={{ headerShown: false }} component={PostDetail} />
 
 
+          <RootStack.Screen name="EnterPhoneNumber" options={({ navigation }) => ({
+            title: 'Nhập số điện thoại',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+          })}
+            component={EnterPhoneNumber} />
           <RootStack.Screen name="EnterOTP" options={({ navigation }) => ({
             title: 'Xác nhận OTP',
             headerTitleAlign: 'center',
@@ -234,7 +250,7 @@ const MainNavigator = () => {
             ),
 
           })} component={MyProducts} />
-           <RootStack.Screen name="MyBuyRequest" options={({ navigation }) => ({
+          <RootStack.Screen name="MyBuyRequest" options={({ navigation }) => ({
             title: 'Tin mua của tôi',
             headerTitleAlign: 'center',
             headerLeft: () => (

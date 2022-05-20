@@ -100,7 +100,7 @@ const Welcome: React.FC<WelcomeProps> = () => {
               </View>
 
               <LinkButton
-                onPress={() => { navigation.navigate('Register'); }}
+                onPress={() => { navigation.navigate('EnterPhoneNumber'); }}
                 title="Chưa có tài khoản"
                 titleStyle={styles.linkButtonText}
               />
