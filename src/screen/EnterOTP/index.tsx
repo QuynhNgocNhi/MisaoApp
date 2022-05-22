@@ -33,13 +33,21 @@ const EnterOTP = ({ route }: any) => {
     const isFocused = useIsFocused();
 
     const onCheckOTP = async () => {
-        if (value) {
+        if (value && route.params.typeOTP == "Register") {
 
             Alert.alert("", value, [
 
                 { text: "Tiếp tục", onPress: () => navigation.navigate('Register') }
             ]);
 
+        } else if (value && route.params.typeOTP == "forgetPassword") {
+            Alert.alert("", value, [
+
+                { text: "Tiếp tục", onPress: () => navigation.navigate('NewPassword') }
+            ]);
+        }
+        else {
+            Alert.alert("", "Vui lòng nhập mã OTP được gửi đến bạn!")
         }
     }
 

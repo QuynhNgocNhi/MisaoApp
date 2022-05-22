@@ -7,6 +7,7 @@ import Register from '../../src/screen/RegisterScreen';
 import RegisterSuccessful from '../../src/screen/RegisterSuccessfulScreen';
 import Welcome from '../../src/screen/Welcome';
 import EnterOTP from '../screen/EnterOTP/index';
+import NewPassword from '../screen/NewPassword';
 import EnterPhoneNumber from '../screen/EnterPhoneNumber';
 import PostsScreen from '../../src/screen/PostsScreen';
 import PostsSaved from '../../src/screen/PostsSaved';
@@ -101,6 +102,9 @@ export type RootStackParameterList = {
     phoneNumber: number;
   };
   EnterOTP: {
+    phoneNumber: number;
+  };
+  NewPassword: {
     phoneNumber: number;
   };
   Login: {
@@ -199,6 +203,18 @@ const MainNavigator = () => {
             ),
           })}
             component={EnterOTP} />
+          <RootStack.Screen name="NewPassword" options={({ navigation }) => ({
+            title: 'Đổi mật khẩu',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+          })}
+            component={NewPassword} />
           {/*         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
  */}
           <RootStack.Screen name="Posts" options={{ headerShown: false }} component={PostsScreen} />

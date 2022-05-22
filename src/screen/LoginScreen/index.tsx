@@ -130,7 +130,7 @@ const Login = ({ route }: any) => {
               />
             </View>
             <LinkButton
-              onPress={() => { navigation.navigate('HomeNavigation'); }}
+              onPress={() => { navigation.navigate('EnterOTP', { typeOTP: 'forgetPassword', phoneNumber: route.params.phoneNumber }); }}
               title="Quên mật khẩu"
               titleStyle={styles.forgotPasswordText}
             />
@@ -139,7 +139,7 @@ const Login = ({ route }: any) => {
         </KeyboardAwareScrollView>
         <View style={styles.termBox}>
           <TouchableWithoutFeedback
-            onPress={() => { navigation.push('Login'); }}>
+            onPress={() => { navigation.push('Welcome'); }}>
             <View style={styles.termAndCondition}>
               <Text style={styles.footerText}>
                 Bằng việc đăng nhập/đăng ký, bạn đồng ý với

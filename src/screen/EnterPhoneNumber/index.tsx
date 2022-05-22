@@ -29,17 +29,15 @@ type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
 
 // Welcome
 const EnterPhoneNumber: React.FC<WelcomeProps> = () => {
-    const navigationRef = useNavigationContainerRef();
     const navigation = useNavigation<any>();
     const [phoneNumber, setPhoneNumber] = useState('');
-    const data = { phoneNumber: phoneNumber };
     const [loading, setLoading] = useState<boolean>(false)
     const onCheckPhoneExists = async () => {
         if (phoneNumber) {
             setLoading(true)
             const response = await checkPhoneExistsAPI(phoneNumber)
             if (response.__typename == 'ErrorResponse') {
-                navigation.navigate('EnterOTP', { phoneNumber: phoneNumber });
+                navigation.navigate('EnterOTP', { typeOTP: 'Register', phoneNumber: phoneNumber });
             } else {
                 Alert.alert("", "Bạn đã đăng ký tài khoản với số điện thoại này!",
                     [
