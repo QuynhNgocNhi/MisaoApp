@@ -33,7 +33,6 @@ import { userSelector } from '../../modules/user/selectors';
 const HomeScreen = () => {
     const isFocused = useIsFocused();
     const navigation = useNavigation<any>();
-    const data = { name: 'Sóc kute', userName: 'pizza03' }
     const userInfo = useSelector(userSelector)
     console.log({ userInfo });
 
@@ -83,7 +82,7 @@ const HomeScreen = () => {
                                     type='material-community'
                                     color='#000000'
                                     size={45}
-                                    onPress={() => navigation.navigate('MyProfileScreen', { data })}
+                                    onPress={() => navigation.navigate('MyProfileScreen')}
                                 />
                             </View>
 
@@ -237,7 +236,7 @@ const HomeScreen = () => {
                                 type='material-community'
                                 color='#000000'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("ForgetPassword")}
                             />
                             <Text style={styles.buttonName}>Đổi mật khẩu</Text>
                         </View>

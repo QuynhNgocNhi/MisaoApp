@@ -37,13 +37,13 @@ const EnterOTP = ({ route }: any) => {
 
             Alert.alert("", value, [
 
-                { text: "Tiếp tục", onPress: () => navigation.navigate('Register') }
+                { text: "Tiếp tục", onPress: () => navigation.navigate('Register', { phoneNumber: route.params.phoneNumber ?? '' }) }
             ]);
 
         } else if (value && route.params.typeOTP == "forgetPassword") {
             Alert.alert("", value, [
 
-                { text: "Tiếp tục", onPress: () => navigation.navigate('NewPassword') }
+                { text: "Tiếp tục", onPress: () => navigation.navigate('NewPassword', { phoneNumber: route.params.phoneNumber ?? '' }) }
             ]);
         }
         else {

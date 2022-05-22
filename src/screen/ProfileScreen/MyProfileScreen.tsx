@@ -70,7 +70,7 @@ interface commentProps {
 
 const ProductDetailScreen = ({ Props, route }) => {
     const navigation = useNavigation();
-    const { data } = route.params;
+
     const userInfo = useSelector(userSelector)
     const [ProfileTab, setProfileTab] = useState(1);
     const onSelectSwitch = value => {
