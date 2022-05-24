@@ -45,17 +45,18 @@ type Props = {
   onChangeText: () => {},
   onFocus: () => {},
   inputFocused: boolean,
+  editable: boolean,
   onSubmitEditing: () => {},
   returnKeyType: 'done' | 'go' | 'next' | 'search' | 'send',
   blurOnSubmit: boolean,
   onKeyPress: () => {},
   keyboardType:
-    | 'default'
-    | 'number-pad'
-    | 'decimal-pad'
-    | 'numeric'
-    | 'email-address'
-    | 'phone-pad',
+  | 'default'
+  | 'number-pad'
+  | 'decimal-pad'
+  | 'numeric'
+  | 'email-address'
+  | 'phone-pad',
   autoCapitalize: 'none' | 'sentences' | 'words' | 'characters',
   maxLength: number,
   placeholder: string,
@@ -71,9 +72,10 @@ type Props = {
 
 // UnderlineTextInput
 const UnderlineTextInput = ({
-  onRef = () => {},
+  onRef = () => { },
   onChangeText,
   onFocus,
+  editable,
   inputFocused,
   onSubmitEditing,
   returnKeyType,
@@ -95,8 +97,8 @@ const UnderlineTextInput = ({
   <View
     style={[
       styles.container,
-      borderColor && {borderColor},
-      inputFocused && {borderColor: focusedBorderColor},
+      borderColor && { borderColor },
+      inputFocused && { borderColor: focusedBorderColor },
       inputContainerStyle && inputContainerStyle,
     ]}>
     <TextInput
@@ -104,6 +106,7 @@ const UnderlineTextInput = ({
       onChangeText={onChangeText}
       onFocus={onFocus}
       inputFocused={inputFocused}
+      editable={editable}
       onSubmitEditing={onSubmitEditing}
       returnKeyType={returnKeyType}
       blurOnSubmit={blurOnSubmit}
@@ -117,8 +120,8 @@ const UnderlineTextInput = ({
       secureTextEntry={secureTextEntry}
       style={[
         styles.textInput,
-        
-        inputTextColor && {color: inputTextColor},
+
+        inputTextColor && { color: inputTextColor },
         inputStyle,
       ]}
     />

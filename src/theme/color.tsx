@@ -44,6 +44,10 @@ const themes = {
     linkText: "#007537",// xanh đậm
     linkButton: "#4C9EEB",// xanh biển
 
+    // button color
+    disabledButton: "#bfbfbf",
+    normalButton: "#000000",
+    themeButton: "#006623",
     // background, surface
     background: "#ffffff",
     underBackground: "#F4F4F4", //màu xám nhẹ

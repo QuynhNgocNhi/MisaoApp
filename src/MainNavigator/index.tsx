@@ -9,6 +9,7 @@ import Welcome from '../../src/screen/Welcome';
 import EnterOTP from '../screen/EnterOTP/index';
 import NewPassword from '../screen/NewPassword';
 import ForgetPassword from '../screen/ForgetPassword';
+import EditProfile from '../screen/EditProfile';
 import EnterPhoneNumber from '../screen/EnterPhoneNumber';
 import PostsScreen from '../../src/screen/PostsScreen';
 import PostsSaved from '../../src/screen/PostsSaved';
@@ -106,6 +107,9 @@ export type RootStackParameterList = {
     phoneNumber: number;
   };
   NewPassword: {
+    phoneNumber: number;
+  };
+  EditProfile: {
     phoneNumber: number;
   };
   ForgetPassword: {
@@ -231,6 +235,18 @@ const MainNavigator = () => {
             ),
           })}
             component={ForgetPassword} />
+          <RootStack.Screen name="EditProfile" options={({ navigation }) => ({
+            title: 'Chỉnh sửa thông tin',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+          })}
+            component={EditProfile} />
           {/*         <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
  */}
           <RootStack.Screen name="Posts" options={{ headerShown: false }} component={PostsScreen} />

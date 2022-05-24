@@ -155,7 +155,7 @@ const HomeScreen = () => {
                                 type='font-awesome'
                                 color='#7339ab'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("EditProfile")}
                             />
                             <Text style={styles.buttonName}>Thông tin  cá nhân</Text>
                         </View>
