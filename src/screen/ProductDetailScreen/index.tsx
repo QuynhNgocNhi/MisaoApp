@@ -90,7 +90,6 @@ type HomeProps = NativeStackScreenProps<RootStackParameterList, "Home">
 const ProductDetailScreen = ({ Props, route }: any) => {
     const navigation = useNavigation<any>();
     const routeParams = route?.params?.data;
-    const [date, setDate] = useState('09-10-2020');
     const [data, setData] = useState<any>()
     const [updating, setUpdating] = useState<boolean>(false)
     const userInfo = useSelector(userSelector)
@@ -160,7 +159,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     }
 
     const onEditProduct = () => {
-
+        navigation.navigate("EditProduct", { data })
     }
 
 
@@ -435,26 +434,26 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                         </View>
                     ) : (
                         <View style={{
-                            position: 'absolute', bottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                            width: Dimensions.get('window').width
+                            position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                            width: Dimensions.get('window').width, backgroundColor: color.background, padding: 10
                         }}>
                             <TouchableOpacity
                                 style={{
-                                    backgroundColor: '#541690', alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    backgroundColor: color.normalButton, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
                                     width: (Dimensions.get('window').width - 150) / 2, marginRight: 20
                                 }}
                                 onPress={onEditProduct}
                             >
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Sửa sản phẩm</Text>
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Sửa</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={{
-                                    backgroundColor: '#F32424', alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    backgroundColor: color.important, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
                                     width: (Dimensions.get('window').width - 150) / 2
                                 }}
                                 onPress={onDeleteProduct}
                             >
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Xóa</Text>
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Xóa</Text>
                             </TouchableOpacity>
                         </View>
                     )}

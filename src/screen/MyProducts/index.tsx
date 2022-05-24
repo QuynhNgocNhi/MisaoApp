@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ProductItem from '../../component/ProductItem';
+import MyProductItem from '../../component/MyProductItem';
 //import data
 import products from '../../assets/data/product';
 
@@ -51,7 +51,7 @@ const MyProducts = () => {
                             contentContainerStyle={styles.ProductItemList}
                             data={productList}
                             numColumns={2}
-                            renderItem={({ item }) => <ProductItem product={item} />}
+                            renderItem={({ item }) => <MyProductItem product={item} />}
                         />
                     </ScrollView>
                 </View>

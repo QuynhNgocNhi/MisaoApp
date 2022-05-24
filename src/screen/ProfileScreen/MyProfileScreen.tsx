@@ -113,6 +113,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                             borderColor: 'grey',
                                             borderStyle: 'solid',
                                             borderWidth: 1,
+
                                         }}
 
                                         source={require('../../assets/avatar/11.png')}
@@ -153,7 +154,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         outlined
                                         borderColor={color.linkButton}
                                         titleColor={color.linkButton}
-                                        onPress={() => { navigation.navigate('Login'); }}
+                                        onPress={() => { navigation.navigate('EditProfile'); }}
                                         buttonStyle={styles.editProfileButton}
                                         title={'Chỉnh sửa thông tin'}>
                                     </ButtonNormal>
@@ -188,7 +189,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                         {ProfileTab == 1 &&
                             <ProductTab products={userInfo?.product} />}
                         {ProfileTab == 2 &&
-                            <PostTab buyRequest={userInfo?.buyRequest} />}
+                            <PostTab buyRequest={userInfo?.buy_request} />}
                         {ProfileTab == 3 &&
                             <HistoryTab />}
                     </View>

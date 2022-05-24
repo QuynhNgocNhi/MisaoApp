@@ -28,6 +28,8 @@ import AddPostLastStep from '../screen/AddScreen/AddPostLastStep';
 import PostAddedPreview from '../screen/AddScreen/PostAddedPreview';
 import ProductAddedPreview from '../screen/AddScreen/ProductAddedPreview';
 import ProductDetail from '../screen/ProductDetailScreen';
+import EditProduct from '../screen/EditProduct';
+import EditProductLastStep from '../screen/EditProduct/EditProductLastStep';
 import PostDetail from '../screen/PostDetailScreen';
 import MyProfileScreen from '../screen/ProfileScreen/MyProfileScreen';
 import ModalSearch from '../screen/Search';
@@ -65,6 +67,8 @@ export type RootStackParameterList = {
   Notification: any;
   AddItem: any;
   AddProduct: any;
+  EditProduct: any;
+  EditProductLastStep: any;
   AddPost: {
     postId: string;
   };
@@ -185,6 +189,8 @@ const MainNavigator = () => {
           <RootStack.Screen name="PostAddedPreview" options={{ headerShown: false }} component={PostAddedPreview} />
           <RootStack.Screen name="ProductDetail" options={{ headerShown: false }} component={ProductDetail} />
           <RootStack.Screen name="PostDetail" options={{ headerShown: false }} component={PostDetail} />
+          <RootStack.Screen name="EditProduct" options={{ headerShown: false }} component={EditProduct} />
+          <RootStack.Screen name="EditProductLastStep" options={{ headerShown: false }} component={EditProductLastStep} />
 
 
           <RootStack.Screen name="EnterPhoneNumber" options={({ navigation }) => ({

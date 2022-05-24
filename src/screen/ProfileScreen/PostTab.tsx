@@ -5,10 +5,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ProductItem from '../../component/ProductItem';
 import products from '../../assets/data/product';
 import DailyPostItem from './DailyPostItem';
-import PostItem from './MyPostItem';
+import PostItem from '../../component/PostItem';
 const MyProductList = ({ buyRequest }: any) => (
     <View style={styles.container}>
         <FlatList
+            contentContainerStyle={styles.PostItemList}
+
             data={buyRequest}
             renderItem={({ item }) => <PostItem post={item} />}
         />
@@ -31,7 +33,11 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         backgroundColor: '#ffffff',
 
-    }
+    },
+    PostItemList: {
+        width: '100%',
+
+    },
 })
 
 export default MyProductList
