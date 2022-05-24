@@ -63,7 +63,7 @@ const ProductsSaved = () => {
 const styles = StyleSheet.create({
     screenContainer: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'flex-start',
         backgroundColor: color.background,
     },
     container: {

@@ -39,7 +39,7 @@ const PostsSaved = () => {
         </View>)
     }
     return (
-        <SafeAreaProvider>
+        <SafeAreaProvider style={styles.screenContainer}>
             <StatusBar translucent backgroundColor='transparent' />
             <FlatList
                 data={productList}
@@ -51,7 +51,7 @@ const PostsSaved = () => {
 const styles = StyleSheet.create({
     screenContainer: {
         flex: 1,
-        alignItems: 'center',
+
         backgroundColor: color.background,
     },
     container: {
