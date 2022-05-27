@@ -1,13 +1,14 @@
-//to do: onpress change state button
-//to do: xem trước khi đăng để có chỉnh sửa gì rồi về trang chủ
-import React, { useState, Component } from 'react';
+//to do: display product's outOfStockDate
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { Button } from 'react-native-elements';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+//import moment from 'moment';
+import { Icon } from 'react-native-elements';
 
 import CategoryList from '../../component/CategoryItem';
 //import data
@@ -36,36 +37,45 @@ import { userSelector } from '../../modules/user/selectors';
 type RouteParams = {
     data: any
 }
-const AddProductScreen = (Props) => {
+const EditProductScreen = (Props) => {
     const navigation = useNavigation<any>();
     const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const userInfo = useSelector(userSelector)
 
-    const [date, setDate] = useState(new Date());
     const [product, setProduct] = useState<any>({
         ...params?.data,
-        seller_name: userInfo?.name,
-        seller_phone: userInfo?.phone,
-        seller_address: userInfo?.address,
-        is_availabel: 0
+
     })
+
+
+    console.log(product?.category_id);
+    const [day, month, year] = product?.out_of_stock_date.split('-')
+    console.log(`${day}/${month}/${year}`);
+    const [date, setDate] = useState(new Date(`${day}/${month}/${year}`));
 
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
+
     };
 
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
+    const handleConfirm = (date: Date) => {
+        setDate(date);
         hideDatePicker();
-    };
 
+    };
+    const getDate = () => {
+
+        return date !== ''
+            ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+            : '';
+    };
     const onGoToPreview = () => {
         if (product?.inventory_number && product?.unit && product?.price && product?.seller_name && product?.seller_phone && product?.seller_address) {
             let productInfo = {
@@ -77,7 +87,7 @@ const AddProductScreen = (Props) => {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của sản phẩm!")
         }
     }
-    console.log({ date });
+
 
     return (
         <SafeAreaProvider>
@@ -93,7 +103,7 @@ const AddProductScreen = (Props) => {
                             centerComponent={
                                 <Text style={
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>Đăng sản phẩm
+                                }>Sửa sản phẩm
                                 </Text>
                             }
                             leftComponent={
@@ -115,7 +125,7 @@ const AddProductScreen = (Props) => {
                             <View style={[styles.box, styles.productPriceContainer]}>
                                 <View style={styles.tittleContainer}>
 
-                                    <Icon name='bitcoin' size={28} color='#FDBD18' />
+                                    <Icon name='bitcoin' type="material-community" size={28} color='#FDBD18' />
                                     <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Giá bán</Heading6>
                                 </View>
                                 <View style={styles.productRequire}>
@@ -124,7 +134,7 @@ const AddProductScreen = (Props) => {
                                     <View style={styles.verticleLine}></View>
 
                                     <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.price}
+                                        value={product?.price.toString()}
                                         onChangeText={(value: any) => setProduct({ ...product, price: value })}
                                         maxFontSizeMultiplier={1}
                                         placeholder="Nhập giá bán"
@@ -160,7 +170,7 @@ const AddProductScreen = (Props) => {
                                     <View style={styles.verticleLine}></View>
 
                                     <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.inventory_number}
+                                        value={product?.inventory_number.toString()}
                                         onChangeText={(value: any) => setProduct({ ...product, inventory_number: value })}
                                         maxFontSizeMultiplier={1}
                                         placeholder="Nhập số lượng cần bán"
@@ -178,7 +188,7 @@ const AddProductScreen = (Props) => {
                                     <View style={styles.verticleLine}></View>
 
                                     <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.discount}
+                                        value={product?.discount.toString()}
                                         onChangeText={(value: any) => setProduct({ ...product, discount: value })}
                                         maxFontSizeMultiplier={1}
                                         placeholder="5, 10, 15 %"
@@ -213,14 +223,17 @@ const AddProductScreen = (Props) => {
 
 
                             </View>
+
                             <View style={[styles.box, styles.productDescriptionAddContainer, { marginTop: 10 }]}>
                                 <View style={styles.tittleContainer}>
-                                    <Icon name='calendar-month-outline' size={26} color='#5C8700' />
+                                    <Icon name='calendar-month-outline' type="material-community" size={26} color='#5C8700' />
                                     <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết hàng</Heading6>
-                                    <Button outline style={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
+
                                 </View>
-                                <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>{`${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`}</Text>
-                                <View style={styles.productOutOfStockDateContainer}>
+
+                                <View style={[styles.productOutOfStockDateContainer, styles.shadowStyle]}>
+
+                                    <Text style={{ fontSize: 22, fontWeight: '500', color: 'black' }}>{getDate()}</Text>
                                     <DateTimePickerModal
                                         minimumDate={new Date(1950, 0, 1)}
                                         isVisible={isDatePickerVisible}
@@ -229,6 +242,15 @@ const AddProductScreen = (Props) => {
                                         onCancel={hideDatePicker}
                                         date={date}
                                         onChange={(value: any) => setDate(value)}
+                                    />
+                                    <Icon
+
+                                        name='date'
+                                        type='fontisto'
+                                        color={color.important}
+                                        size={25}
+                                        onPress={showDatePicker}
+
                                     />
 
                                 </View>
@@ -352,7 +374,31 @@ const styles = StyleSheet.create({
 
     },
     productOutOfStockDateContainer: {
-        width: 100,
+        width: '100%',
+        height: 60,
+
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+
+        backgroundColor: 'white',
+        borderRadius: 8,
+        paddingHorizontal: 25,
+
+        marginVertical: 10,
+
+    },
+    shadowStyle: {
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+
+        elevation: 3,
     },
 
     datePickerStyle: {
@@ -460,4 +506,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default AddProductScreen
+export default EditProductScreen

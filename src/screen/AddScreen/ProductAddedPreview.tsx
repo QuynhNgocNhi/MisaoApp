@@ -98,6 +98,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const navigation = useNavigation<any>();
     const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const { data } = route.params;
+    console.log(data);
     const [date, setDate] = useState('09-10-2020');
     const userInfo = useSelector(userSelector)
     const categories = useSelector(masterDataSelector)
@@ -208,7 +209,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                     <Text style={styles.productStatus}>Chi tiết sản phẩm</Text>
                                     <View style={styles.productStatusItem}>
                                         <Text style={{ fontSize: 18 }}>Danh mục</Text>
-                                        <Text style={{ fontSize: 18 }}>{categories?.find((item: any) => item.value === data?.category_id)?.label}</Text>
+                                        <Text style={{ fontSize: 18 }}>{categories?.find((item: any) => item.value === data?.category.id)?.label}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 

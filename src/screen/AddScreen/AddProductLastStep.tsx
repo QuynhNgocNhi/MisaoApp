@@ -36,7 +36,7 @@ import { userSelector } from '../../modules/user/selectors';
 type RouteParams = {
     data: any
 }
-const AddProductScreen = (Props) => {
+const AddProductScreen = () => {
     const navigation = useNavigation<any>();
     const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const userInfo = useSelector(userSelector)
@@ -61,7 +61,7 @@ const AddProductScreen = (Props) => {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirm = (date) => {
+    const handleConfirm = (date: Date) => {
         console.warn("A date has been picked: ", date);
         hideDatePicker();
     };
@@ -77,7 +77,7 @@ const AddProductScreen = (Props) => {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của sản phẩm!")
         }
     }
-    console.log({ date });
+
 
     return (
         <SafeAreaProvider>

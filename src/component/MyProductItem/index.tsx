@@ -18,6 +18,7 @@ const MyProductItem = ({ product }: any) => {
     const navigation = useNavigation();
     const data = {
         productId: product.id,
+        categoryId: product.category_id,
         productName: product.name,
         productDescription: product.description,
         productPrice: product.price,

@@ -39,18 +39,21 @@ const EditProductScreen = ({ Props, route }: any) => {
     const isFocused = useIsFocused()
 
     const [loading, setLoading] = useState<boolean>(true)
-    const [isFollow, setIsFollow] = useState<boolean>(true)
+
     const fetchProductDetail = async () => {
         setLoading(true)
         const response = await getProductDetailAPI(routeParams?.productId)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
+            setImageList(response.data.images)
+
         }
         setLoading(false)
     }
 
     useEffect(() => {
         fetchProductDetail()
+
     }, [routeParams?.productId, isFocused])
 
     const onPickImage = () => {
@@ -123,7 +126,7 @@ const EditProductScreen = ({ Props, route }: any) => {
                                 <Button type="clear" onPress={onPickImage} icon={<Icon name={'image-plus'} size={62} color={color.borderColor} />} />
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {imageList?.map((image: any, index: number) => (
+                                {data?.images.map((image: any, index: number) => (
                                     <View key={index} style={{
                                         borderWidth: 1,
                                         borderColor: '#A0BCC2',
@@ -157,7 +160,7 @@ const EditProductScreen = ({ Props, route }: any) => {
                             <View style={styles.productNameAddBox}>
                                 <TextInput
                                     style={{ fontSize: 20, padding: 10 }}
-                                    value={data.name ?? ''}
+                                    value={data?.name}
                                     onChangeText={(value: any) => setData({ ...data, name: value })}
                                     maxFontSizeMultiplier={5}
 
@@ -185,7 +188,6 @@ const EditProductScreen = ({ Props, route }: any) => {
                                     onChangeText={(value: any) => setData({ ...data, description: value })}
                                     maxFontSizeMultiplier={5}
                                     placeholderTextColor={'#424242'}
-
                                     // Inherit any props passed to it; e.g., multiline, numberOfLines below
                                     multiline={true}
                                     numberOfLines={5}
@@ -233,7 +235,7 @@ const EditProductScreen = ({ Props, route }: any) => {
                                                     <Text style={{
                                                         color: '#000',
                                                         fontSize: 16,
-                                                        fontWeight: data?.category_id === item.value ? 'bold' : 'normal',
+                                                        fontWeight: data?.category_id == item.value ? 'bold' : 'normal',
                                                         textAlign: 'center'
                                                     }}
 
