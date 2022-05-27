@@ -5,7 +5,7 @@ import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Icon } from 'react-native-elements';
 
 // import components
 import { Button } from 'react-native-elements';
@@ -115,29 +115,29 @@ const AddPostLastStep = (Props) => {
 
                             <View style={[styles.box, styles.productDescriptionAddContainer]}>
                                 <View style={styles.tittleContainer}>
-                                    <Icon name='calendar-month-outline' size={26} color='#5C8700' />
-                                    <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết mua</Heading6>
+                                    <Icon name='calendar-month-outline' type="material-community" size={26} color='#5C8700' />
+                                    <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết hạn tin mua</Heading6>
                                 </View>
-                                <View style={[styles.tittleContainer, { width: '100%', justifyContent: 'space-between', alignItems: 'center', }]}>
+                                <View style={[styles.productOutOfStockDateContainer, styles.shadowStyle]}>
 
-                                    <ButtonNormal outlined buttonStyle={styles.datePickerStyle} title="Chọn ngày" onPress={showDatePicker} />
-                                    <TextInput
-                                        style={{ fontSize: 20, padding: 10, borderBottomWidth: 1, borderColor: color.borderColor, }}
-                                        value={getDate()}
-                                        placeholder="Date..."
-                                    />
-                                </View>
-                                <View style={styles.productOutOfStockDateContainer}>
+                                    <Text style={{ fontSize: 22, fontWeight: '500', color: 'black' }}>{getDate()}</Text>
                                     <DateTimePickerModal
-
-
-                                        minimumDate={new Date()}
+                                        minimumDate={new Date(1950, 0, 1)}
                                         isVisible={isDatePickerVisible}
                                         mode="date"
                                         onConfirm={handleConfirm}
                                         onCancel={hideDatePicker}
-                                        onChange={(value: any) => setDate(value)}
                                         date={date}
+                                        onChange={(value: any) => setDate(value)}
+                                    />
+                                    <Icon
+
+                                        name='date'
+                                        type='fontisto'
+                                        color={color.important}
+                                        size={25}
+                                        onPress={showDatePicker}
+
                                     />
 
                                 </View>
@@ -263,7 +263,33 @@ const styles = StyleSheet.create({
     productOutOfStockDateContainerContainer: {
         width: 100,
     },
+    productOutOfStockDateContainer: {
+        width: '100%',
+        height: 60,
 
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+
+        backgroundColor: 'white',
+        borderRadius: 8,
+        paddingHorizontal: 25,
+
+        marginVertical: 10,
+
+    },
+    shadowStyle: {
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+
+        elevation: 3,
+    },
     datePickerStyle: {
         width: '40%',
 

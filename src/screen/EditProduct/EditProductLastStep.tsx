@@ -7,7 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Button } from 'react-native-elements';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-//import moment from 'moment';
+
 import { Icon } from 'react-native-elements';
 
 import CategoryList from '../../component/CategoryItem';
@@ -233,7 +233,7 @@ const EditProductScreen = (Props) => {
 
                                 <View style={[styles.productOutOfStockDateContainer, styles.shadowStyle]}>
 
-                                    <Text style={{ fontSize: 22, fontWeight: '500', color: 'black' }}>{getDate()}</Text>
+                                    <Text onPress={showDatePicker} style={{ fontSize: 22, fontWeight: '500', color: 'black' }}>{getDate()}</Text>
                                     <DateTimePickerModal
                                         minimumDate={new Date(1950, 0, 1)}
                                         isVisible={isDatePickerVisible}
