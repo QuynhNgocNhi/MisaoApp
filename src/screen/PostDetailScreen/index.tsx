@@ -105,7 +105,7 @@ const PostDetailScreen = ({ Props, route }) => {
     const [isFollow, setIsFollow] = useState<boolean>(true)
 
     const [postList, setPostList] = useState<any>([])
-    const fetchProductDetail = async () => {
+    const fetchPostDetail = async () => {
         setLoading(true)
         const response = await getPostDetailAPI(routeParams?.postId)
         if (response.__typename !== 'ErrorResponse') {
@@ -138,7 +138,7 @@ const PostDetailScreen = ({ Props, route }) => {
 
 
     useEffect(() => {
-        fetchProductDetail()
+        fetchPostDetail()
     }, [routeParams?.id])
 
 

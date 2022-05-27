@@ -17,12 +17,12 @@ import { getListMyBuyRequestAPI } from '../../services';
 const MyBuyRequest = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
-    const [productList, setProductList] = useState<any>([])
+    const [postList, setPostList] = useState<any>([])
     const fetchData = async () => {
         setLoading(true)
         const response = await getListMyBuyRequestAPI()
         if (response.__typename !== 'ErrorResponse') {
-            setProductList(response.data)
+            setPostList(response.data)
         }
         setLoading(false)
     }
@@ -43,17 +43,15 @@ const MyBuyRequest = () => {
 
             <SafeAreaView style={styles.screenContainer}>
                 <StatusBar translucent backgroundColor='transparent' />
-                <View>
-                    <ScrollView
-                        nestedScrollEnabled={false}
-                    >
-                        <FlatList
-                            contentContainerStyle={styles.ProductItemList}
-                            data={productList}
-                            numColumns={2}
-                            renderItem={({ item }) => <MyPostItem post={item} />}
-                        />
-                    </ScrollView>
+                <View style={styles.container}>
+
+                    <FlatList
+                        contentContainerStyle={styles.PostItemList}
+                        data={postList}
+
+                        renderItem={({ item }) => <MyPostItem post={item} />}
+                    />
+
                 </View>
 
             </SafeAreaView>
@@ -68,90 +66,15 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        width: '90%',
-        paddingTop: 20
-    },
-
-    middleContainer: {
-
+        width: '100%',
 
     },
-    topContent: {
-
-        height: 160,
-
-    },
-    banner: {
-
-        backgroundColor: color.themeBackground,
-        height: '50%',
-        alignItems: 'center',
-
-
-
-
-    },
-    imageContainer: {
-        width: '90%',
-        height: 150,
-        borderRadius: 20,
-        //set box shadow fo image
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 10,
-            height: 16,
-        },
-        shadowOpacity: 0.35,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    image: {
+    PostItemList: {
         flex: 1,
         width: '100%',
-        borderRadius: 20,
-
-    },
-    bottomContainer: {
-
-        width: '100%',
-
-    },
-    centerContent: {
-
-        backgroundColor: color.white,
-
-
-    },
-    hotDealContentainer: {
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: 10,
-        paddingHorizontal: 16,
-        paddingBottom: 12,
-        backgroundColor: color.white,
-    },
-    titleText: {
-        fontWeight: '600',
-        color: '#FF0000',
-
-    },
-    viewAllText: {
-        color: color.primaryColor,
-    },
-    hotDeal: {
-        width: '80%',
-        alignSelf: 'center',
-
-    },
-    CategoryListContainer: {
-        padding: 10,
-    },
-    ProductItemList: {
-
     }
+
+
 });
 
 export default MyBuyRequest

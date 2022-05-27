@@ -1,56 +1,48 @@
-//to do: display product's outOfStockDate
-import React, { useState, useEffect } from 'react';
+//to do: onpress change state button
+
+import React, { useState, Component } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-import { Button } from 'react-native-elements';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-
 import { Icon } from 'react-native-elements';
 
-import CategoryList from '../../component/CategoryItem';
-//import data
-import category from '../../assets/data/category';
-
 // import components
+import { Button } from 'react-native-elements';
 import ButtonNormal from '../../component/Button';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Header } from 'react-native-elements';
 import HeaderIconButton from '../../component/HeaderButton'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import LinkButton from '../../component/Button/LinkButton';
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
 
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 
+
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
-
-
-
 type RouteParams = {
     data: any
 }
-const EditProductScreen = (Props) => {
+
+
+const AddPostLastStep = (Props) => {
     const navigation = useNavigation<any>();
     const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const userInfo = useSelector(userSelector)
 
-    const [product, setProduct] = useState<any>({
+
+    const [post, setPost] = useState<any>({
         ...params?.data,
 
     })
-
-
-    console.log(product?.category_id);
-    const [day, month, year] = product?.out_of_stock_date.split('-')
+    const [day, month, year] = post?.limited_date.split('-')
     console.log(`${day}/${month}/${year}`);
+    console.log(`${day}/${month}`);
     const [date, setDate] = useState(new Date(`${month}/${day}/${year}`));
     console.log(date);
 
@@ -58,7 +50,6 @@ const EditProductScreen = (Props) => {
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
-
     };
 
     const hideDatePicker = () => {
@@ -77,16 +68,17 @@ const EditProductScreen = (Props) => {
             : '';
     };
     const onGoToPreview = () => {
-        if (product?.inventory_number && product?.unit && product?.price && product?.seller_name && product?.seller_phone && product?.seller_address) {
-            let productInfo = {
-                ...product,
-                out_of_stock_date: date
+        if (post?.seller_name && post?.seller_phone && post?.seller_address) {
+            let postInfo = {
+                ...post,
+                limited_date: date
             }
-            navigation.navigate("ProductAddedPreview", { data: productInfo })
+            navigation.navigate("PostAddedPreview", { data: postInfo })
         } else {
-            Alert.alert("", "Vui lòng điền đầy đủ thông tin của sản phẩm!")
+            Alert.alert("", "Vui lòng điền đầy đủ thông tin của tin mua!")
         }
     }
+
 
 
     return (
@@ -103,7 +95,7 @@ const EditProductScreen = (Props) => {
                             centerComponent={
                                 <Text style={
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>Sửa sản phẩm
+                                }>Sửa tin mua
                                 </Text>
                             }
                             leftComponent={
@@ -121,117 +113,12 @@ const EditProductScreen = (Props) => {
                         <View style={styles.container}>
 
 
-
-                            <View style={[styles.box, styles.productPriceContainer]}>
-                                <View style={styles.tittleContainer}>
-
-                                    <Icon name='bitcoin' type="material-community" size={28} color='#FDBD18' />
-                                    <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Giá bán</Heading6>
-                                </View>
-                                <View style={styles.productRequire}>
-                                    <Text style={styles.requireName}>Giá bán</Text>
-
-                                    <View style={styles.verticleLine}></View>
-
-                                    <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.price.toString()}
-                                        onChangeText={(value: any) => setProduct({ ...product, price: value })}
-                                        maxFontSizeMultiplier={1}
-                                        placeholder="Nhập giá bán"
-                                        placeholderTextColor={color.normalText}
-
-                                        // Inherit any props passed to it; e.g., multiline, numberOfLines below
-                                        multiline={true}
-                                        numberOfLines={1}
-                                        editable
-                                        maxLength={1000}></TextInput>
-                                </View>
-                                <View style={styles.productRequire}>
-                                    <Text style={styles.requireName}>Đơn vị</Text>
-
-                                    <View style={styles.verticleLine}></View>
-
-                                    <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.unit}
-                                        onChangeText={(value: any) => setProduct({ ...product, unit: value })}
-                                        maxFontSizeMultiplier={1}
-                                        placeholder="Nhập đơn vị (kg, chục, cái)"
-                                        placeholderTextColor={'#424242'}
-
-                                        // Inherit any props passed to it; e.g., multiline, numberOfLines below
-                                        multiline={true}
-                                        numberOfLines={1}
-                                        editable
-                                        maxLength={1000} ></TextInput>
-                                </View>
-                                <View style={styles.productRequire}>
-                                    <Text style={styles.requireName}>Hiện có</Text>
-
-                                    <View style={styles.verticleLine}></View>
-
-                                    <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.inventory_number.toString()}
-                                        onChangeText={(value: any) => setProduct({ ...product, inventory_number: value })}
-                                        maxFontSizeMultiplier={1}
-                                        placeholder="Nhập số lượng cần bán"
-                                        placeholderTextColor={'#424242'}
-
-                                        // Inherit any props passed to it; e.g., multiline, numberOfLines below
-                                        multiline={true}
-                                        numberOfLines={1}
-                                        editable
-                                        maxLength={1000}></TextInput>
-                                </View>
-                                <View style={styles.productRequire}>
-                                    <Text style={styles.requireName}>Giảm giá</Text>
-
-                                    <View style={styles.verticleLine}></View>
-
-                                    <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.discount.toString()}
-                                        onChangeText={(value: any) => setProduct({ ...product, discount: value })}
-                                        maxFontSizeMultiplier={1}
-                                        placeholder="5, 10, 15 %"
-                                        placeholderTextColor={'#424242'}
-
-                                        // Inherit any props passed to it; e.g., multiline, numberOfLines below
-                                        multiline={true}
-                                        numberOfLines={1}
-                                        editable
-                                        maxLength={1000}></TextInput>
-                                </View>
-
-                            </View>
-                            <View style={[styles.box, styles.productStatusContainer, { marginTop: 10 }]}>
-                                <View style={styles.tittleContainer}>
-
-                                    <FontAwesome name='hourglass-half' size={24} color='#5C8700' />
-                                    <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Tình trạng</Heading6>
-                                </View>
-                                <ButtonNormal
-                                    outlined={product.is_availabel === 0}
-                                    buttonStyle={styles.customButton}
-                                    onPress={() => setProduct({ ...product, is_availabel: 0 })}
-                                    title={'Đang có'.toUpperCase()}
-                                />
-                                <ButtonNormal
-                                    outlined={product.is_availabel === 1}
-                                    buttonStyle={styles.customButton}
-                                    onPress={() => setProduct({ ...product, is_availabel: 1 })}
-                                    title={'Sắp có'.toUpperCase()}
-                                />
-
-
-                            </View>
-
-                            <View style={[styles.box, styles.productDescriptionAddContainer, { marginTop: 10 }]}>
+                            <View style={[styles.box, styles.postDescriptionAddContainer]}>
                                 <View style={styles.tittleContainer}>
                                     <Icon name='calendar-month-outline' type="material-community" size={26} color='#5C8700' />
-                                    <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết hàng</Heading6>
-
+                                    <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết hạn tin mua</Heading6>
                                 </View>
-
-                                <View style={[styles.productOutOfStockDateContainer, styles.shadowStyle]}>
+                                <View style={[styles.postOutOfStockDateContainer, styles.shadowStyle]}>
 
                                     <Text onPress={showDatePicker} style={{ fontSize: 22, fontWeight: '500', color: 'black' }}>{getDate()}</Text>
                                     <DateTimePickerModal
@@ -256,7 +143,7 @@ const EditProductScreen = (Props) => {
                                 </View>
 
                             </View>
-                            <View style={[styles.box, styles.productCategoryAddContainer, { marginTop: 10 }]}>
+                            <View style={[styles.box, styles.postCategoryAddContainer, { marginTop: 10, flexGrow: 1 }]}>
                                 <View style={styles.tittleContainer}>
 
                                     <Ionicons name='location' size={26} color='#5C8700' />
@@ -265,27 +152,28 @@ const EditProductScreen = (Props) => {
                                 <View style={styles.ownerAddress}>
                                     <View style={styles.addressBox}>
                                         <TextInput
-                                            value={product?.seller_name}
-                                            placeholder="Tên người bán"
-                                            onChangeText={(value: any) => setProduct({ ...product, seller_name: value })}
+                                            value={post?.seller_name}
+                                            placeholder="Tên người mua"
+                                            onChangeText={(value: any) => setPost({ ...post, seller_name: value })}
+                                            style={{
+
+                                                fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
+                                                borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
+                                            }}
+                                        />
+                                        <TextInput
+                                            value={post?.seller_phone}
+                                            placeholder="SDT người mua"
+                                            onChangeText={(value: any) => setPost({ ...post, seller_phone: value })}
                                             style={{
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
                                                 borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
                                             }}
                                         />
                                         <TextInput
-                                            value={product?.seller_phone}
-                                            placeholder="SDT người bán"
-                                            onChangeText={(value: any) => setProduct({ ...product, seller_phone: value })}
-                                            style={{
-                                                fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
-                                                borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
-                                            }}
-                                        />
-                                        <TextInput
-                                            value={product?.seller_address}
-                                            placeholder="Địa chỉ người bán"
-                                            onChangeText={(value: any) => setProduct({ ...product, seller_address: value })}
+                                            value={post?.seller_address}
+                                            placeholder="Địa chỉ người mua"
+                                            onChangeText={(value: any) => setPost({ ...post, seller_address: value })}
                                             style={{
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
                                                 borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
@@ -298,23 +186,22 @@ const EditProductScreen = (Props) => {
                                 </View>
 
                             </View>
-                            <View style={[styles.contentContainer]}>
+                            <View style={styles.contentContainer}>
 
                                 <View style={styles.buttonsGroup}>
                                     <View style={styles.bottomContainer}>
-                                        <Text style={styles.tipsText}>Mẹo: Hãy nhập địa chỉ gửi nông sản của bạn để người mua dễ nhận biết.</Text>
+                                        <Text style={styles.tipsText}>Lưu ý: Địa chỉ của bạn sẽ xuất hiện trong bài đăng.</Text>
                                     </View>
                                     <ButtonNormal
                                         outlined
 
                                         buttonStyle={styles.customButtonAdd}
                                         onPress={onGoToPreview}
-                                        title={'Cập nhật sản phẩm'.toUpperCase()}
+                                        title={'Cập nhật tin mua'.toUpperCase()}
                                     />
 
                                 </View>
                             </View>
-
                         </View>
                     </ScrollView>
 
@@ -342,7 +229,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingBottom: 5
     },
-    productRequire: {
+    postRequire: {
 
 
         flexDirection: 'row',
@@ -368,12 +255,15 @@ const styles = StyleSheet.create({
         width: 1,
         backgroundColor: '#909090',
     },
-    productStatusContainer: {
+    postStatusContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
 
     },
-    productOutOfStockDateContainer: {
+    postOutOfStockDateContainerContainer: {
+        width: 100,
+    },
+    postOutOfStockDateContainer: {
         width: '100%',
         height: 60,
 
@@ -400,13 +290,12 @@ const styles = StyleSheet.create({
 
         elevation: 3,
     },
-
     datePickerStyle: {
-        width: '80%',
-        color: '#FFFFFF',
+        width: '40%',
 
+        backgroundColor: color.primaryColorLight,
     },
-    productNameAddBox: {
+    postNameAddBox: {
         alignItems: 'center',
 
 
@@ -487,17 +376,6 @@ const styles = StyleSheet.create({
         height: 40
 
     },
-    tagInActive: {
-        width: '30%',
-        borderRadius: 15,
-        height: 40,
-        borderColor: '#A0BCC2'
-    },
-    tagActive: {
-        width: '30%',
-        borderRadius: 15,
-        height: 40,
-    },
     customButtonAdd: {
         width: '60%',
         borderRadius: 100,
@@ -506,4 +384,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default EditProductScreen
+export default AddPostLastStep

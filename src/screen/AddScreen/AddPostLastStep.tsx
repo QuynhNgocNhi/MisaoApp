@@ -36,7 +36,7 @@ const AddPostLastStep = (Props) => {
     const userInfo = useSelector(userSelector)
 
     const [date, setDate] = useState(new Date());
-    const [product, setProduct] = useState<any>({
+    const [post, setPost] = useState<any>({
         ...params?.data,
         seller_name: userInfo?.name,
         seller_phone: userInfo?.phone,
@@ -68,12 +68,12 @@ const AddPostLastStep = (Props) => {
             : '';
     };
     const onGoToPreview = () => {
-        if (product?.seller_name && product?.seller_phone && product?.seller_address) {
-            let productInfo = {
-                ...product,
+        if (post?.seller_name && post?.seller_phone && post?.seller_address) {
+            let postInfo = {
+                ...post,
                 out_of_stock_date: date
             }
-            navigation.navigate("PostAddedPreview", { data: productInfo })
+            navigation.navigate("PostAddedPreview", { data: postInfo })
         } else {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của tin mua!")
         }
@@ -113,12 +113,12 @@ const AddPostLastStep = (Props) => {
                         <View style={styles.container}>
 
 
-                            <View style={[styles.box, styles.productDescriptionAddContainer]}>
+                            <View style={[styles.box, styles.postDescriptionAddContainer]}>
                                 <View style={styles.tittleContainer}>
                                     <Icon name='calendar-month-outline' type="material-community" size={26} color='#5C8700' />
                                     <Heading6 style={[styles.headingText, { paddingLeft: 10, paddingRight: 20 }]}>Ngày hết hạn tin mua</Heading6>
                                 </View>
-                                <View style={[styles.productOutOfStockDateContainer, styles.shadowStyle]}>
+                                <View style={[styles.postOutOfStockDateContainer, styles.shadowStyle]}>
 
                                     <Text style={{ fontSize: 22, fontWeight: '500', color: 'black' }}>{getDate()}</Text>
                                     <DateTimePickerModal
@@ -143,7 +143,7 @@ const AddPostLastStep = (Props) => {
                                 </View>
 
                             </View>
-                            <View style={[styles.box, styles.productCategoryAddContainer, { marginTop: 10, flexGrow: 1 }]}>
+                            <View style={[styles.box, styles.postCategoryAddContainer, { marginTop: 10, flexGrow: 1 }]}>
                                 <View style={styles.tittleContainer}>
 
                                     <Ionicons name='location' size={26} color='#5C8700' />
@@ -152,9 +152,9 @@ const AddPostLastStep = (Props) => {
                                 <View style={styles.ownerAddress}>
                                     <View style={styles.addressBox}>
                                         <TextInput
-                                            value={product?.seller_name}
+                                            value={post?.seller_name}
                                             placeholder="Tên người mua"
-                                            onChangeText={(value: any) => setProduct({ ...product, seller_name: value })}
+                                            onChangeText={(value: any) => setPost({ ...post, seller_name: value })}
                                             style={{
 
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
@@ -162,18 +162,18 @@ const AddPostLastStep = (Props) => {
                                             }}
                                         />
                                         <TextInput
-                                            value={product?.seller_phone}
+                                            value={post?.seller_phone}
                                             placeholder="SDT người mua"
-                                            onChangeText={(value: any) => setProduct({ ...product, seller_phone: value })}
+                                            onChangeText={(value: any) => setPost({ ...post, seller_phone: value })}
                                             style={{
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
                                                 borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
                                             }}
                                         />
                                         <TextInput
-                                            value={product?.seller_address}
+                                            value={post?.seller_address}
                                             placeholder="Địa chỉ người mua"
-                                            onChangeText={(value: any) => setProduct({ ...product, seller_address: value })}
+                                            onChangeText={(value: any) => setPost({ ...post, seller_address: value })}
                                             style={{
                                                 fontSize: 18, marginBottom: 5, paddingHorizontal: 5,
                                                 borderBottomWidth: 1, borderRadius: 4, borderColor: '#A0BCC2'
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingBottom: 5
     },
-    productRequire: {
+    postRequire: {
 
 
         flexDirection: 'row',
@@ -255,15 +255,15 @@ const styles = StyleSheet.create({
         width: 1,
         backgroundColor: '#909090',
     },
-    productStatusContainer: {
+    postStatusContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
 
     },
-    productOutOfStockDateContainerContainer: {
+    postOutOfStockDateContainerContainer: {
         width: 100,
     },
-    productOutOfStockDateContainer: {
+    postOutOfStockDateContainer: {
         width: '100%',
         height: 60,
 
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
 
         backgroundColor: color.primaryColorLight,
     },
-    productNameAddBox: {
+    postNameAddBox: {
         alignItems: 'center',
 
 
