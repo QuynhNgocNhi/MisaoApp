@@ -68,7 +68,7 @@ const AddProductScreen = () => {
     const getDate = () => {
 
         return date !== ''
-            ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+            ? `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
             : '';
     };
     const onGoToPreview = () => {

@@ -10,8 +10,7 @@ import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
-
-
+import moment from 'moment';
 
 //import image from '../../data/image'
 interface userItemProps {

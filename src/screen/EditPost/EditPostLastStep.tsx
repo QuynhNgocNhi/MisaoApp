@@ -1,6 +1,6 @@
 //to do: onpress change state button
 
-import React, { useState, Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
@@ -44,7 +44,7 @@ const AddPostLastStep = (Props) => {
     console.log(`${day}/${month}/${year}`);
     console.log(`${day}/${month}`);
     const [date, setDate] = useState(new Date(`${month}/${day}/${year}`));
-    console.log(date);
+    // console.log(date);
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -61,10 +61,12 @@ const AddPostLastStep = (Props) => {
         hideDatePicker();
 
     };
+    useEffect(() => {
+        console.log(date)
+    }, [date])
     const getDate = () => {
-
         return date !== ''
-            ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+            ? `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
             : '';
     };
     const onGoToPreview = () => {
@@ -72,7 +74,9 @@ const AddPostLastStep = (Props) => {
             let postInfo = {
                 ...post,
                 limited_date: date
+
             }
+
             navigation.navigate("PostAddedPreview", { data: postInfo })
         } else {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của tin mua!")
@@ -128,6 +132,7 @@ const AddPostLastStep = (Props) => {
                                         onConfirm={handleConfirm}
                                         onCancel={hideDatePicker}
                                         date={date}
+                                        locale="vi_GB"
                                         onChange={(value: any) => setDate(value)}
                                     />
                                     <Icon

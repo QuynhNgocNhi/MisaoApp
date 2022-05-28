@@ -92,7 +92,7 @@ const PostAddedPreviewScreen = ({ Props, route }: any) => {
     const categories = useSelector(masterDataSelector)
     const [loading, setLoading] = useState<boolean>(false)
     const dispatch = useDispatch()
-
+    console.log(data)
     const onAddPost = async () => {
         setLoading(true)
         const response = await addPostAPI(data)
@@ -116,7 +116,7 @@ const PostAddedPreviewScreen = ({ Props, route }: any) => {
         }
         setLoading(false)
     }
-    let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
+    let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth()}-${data.limited_date?.getFullYear()}`
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.screenContainer}>
@@ -194,7 +194,7 @@ const PostAddedPreviewScreen = ({ Props, route }: any) => {
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Ngày còn hạn</Text>
-                                        <Text style={styles.requireAnswer}>{out_of_stock_date}</Text>
+                                        <Text style={styles.requireAnswer}>{limited_date}</Text>
                                     </View>
 
 

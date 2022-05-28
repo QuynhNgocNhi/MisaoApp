@@ -410,8 +410,8 @@ export const addPostAPI = async (data: any): Promise<BaseResponse | ErrorRespons
         formData.append('seller_name', data?.seller_name)
         formData.append('description', data?.description)
         formData.append('confirm', true)
-        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
-        formData.append('limited_date', out_of_stock_date)
+        let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth()}-${data.limited_date?.getFullYear()}`
+        formData.append('limited_date', limited_date)
         if (data?.image_list) {
             data?.image_list.forEach((file: any) => {
                 formData.append('files[]', {
