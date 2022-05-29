@@ -189,7 +189,7 @@ const SearchScreen = () => {
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
                                     keyExtractor={(item, index) => index.toString()}
-                                    renderItem={({ item }) => <CategoryList category={item} />}
+                                    renderItem={({ item }) => <CategoryList category={item} tabId={1} />}
                                 />
 
                             </View>

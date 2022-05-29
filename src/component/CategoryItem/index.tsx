@@ -16,17 +16,20 @@ interface categoryItemProps {
         value: number,
         label: string,
         image: string,
-    }
+
+    },
+    tabId: number,
 }
 
 
-const CategoryItem = ({ category }: categoryItemProps) => {
-    const navigation = useNavigation();
-    const data = { categoryId: category.value, categoryName: category.label }
 
+const CategoryItem = ({ category, tabId }: categoryItemProps) => {
+    const navigation = useNavigation();
+    const data = { categoryId: category.value, categoryName: category.label, tabId: tabId }
+    console.log(data);
     return (
         <TouchableOpacity
-            onPress={() => { navigation.navigate('ProductSearchedByCategory', { data }); }}
+            onPress={() => { navigation.navigate('PostSearchedByCategory', { data }); }}
             style={styles.container}>
 
             <View style={styles.bottomContainer}>

@@ -159,13 +159,15 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         title={'Chỉnh sửa thông tin'}>
                                     </ButtonNormal>
                                     <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '600', flexDirection: 'column' }} numberOfLines={1}>
-                                        <Icon
+                                        {(userInfo.address) && (<Icon
 
                                             name='md-location-outline'
                                             type='ionicon'
                                             color={color.black}
                                             size={30}
-                                        /> {userInfo?.address}
+                                        />)
+                                        }{userInfo?.address}
+
                                     </Text>
                                 </View>
                             </View>
