@@ -58,6 +58,7 @@ const ProductItem = ({ product }: any) => {
     time: product.time,
     timeUnit: product.timeUnit,
   }
+  console.log(product);
   const [tempHasFavorite, setTempHasFavorite] = useState(product?.has_favorite)
   const onLikeProduct = async () => {
     const response = await likeProductAPI(product?.id)

@@ -91,6 +91,7 @@ type HomeProps = NativeStackScreenProps<RootStackParameterList, "Home">
 const ProductDetailScreen = ({ Props, route }: any) => {
     const navigation = useNavigation<any>();
     const routeParams = route?.params?.data;
+    console.log(routeParams?.productId);
     const [data, setData] = useState<any>()
     const [updating, setUpdating] = useState<boolean>(false)
     const userInfo = useSelector(userSelector)
@@ -99,10 +100,12 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const [loading, setLoading] = useState<boolean>(true)
     const [isFollow, setIsFollow] = useState<boolean>(true)
     const fetchProductDetail = async () => {
+
         setLoading(true)
-        const response = await getProductDetailAPI(routeParams?.id)
+        const response = await getProductDetailAPI(routeParams?.productId)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
+
             checkFollow(response.data)
         }
         setLoading(false)
@@ -349,7 +352,12 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                     </View>
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> {data?.order?.length ? data?.order?.length + 'lượt mua' : ''}</Text>
+                                        <Text
+                                            style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}>
+                                            <FontAwesome name='shopping-bag'
+                                                size={22}
+                                                color={color.disableText} />
+                                            {data?.order?.length ? (data?.order?.length) : '0'} người đang hỏi</Text>
                                         <Text style={{ fontSize: 18, padding: 10 }}>Báo xấu <FontAwesome name='exclamation-circle' size={22} color={color.disableText} /></Text>
                                     </View>
                                 </View>
