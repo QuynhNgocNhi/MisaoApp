@@ -149,7 +149,7 @@ const ProductSearchedByCategory = ({ route }) => {
                                             ListEmptyComponent={() => {
                                                 return (
                                                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                                        <Text>Không có sản phẩm để hiện thị.</Text>
+                                                        <Text style={{ fontSize: 18 }}>Không có sản phẩm để hiển thị.</Text>
                                                     </View>
                                                 )
                                             }}
@@ -159,6 +159,13 @@ const ProductSearchedByCategory = ({ route }) => {
                                         />)}
                                     {Tab == 2 &&
                                         (<FlatList
+                                            ListEmptyComponent={() => {
+                                                return (
+                                                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ fontSize: 18 }}>Không có tin mua để hiển thị.</Text>
+                                                    </View>
+                                                )
+                                            }}
                                             contentContainerStyle={styles.ProductItemList}
                                             data={postList}
 
