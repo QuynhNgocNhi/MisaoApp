@@ -13,7 +13,7 @@ const ChatScreen = () => {
   const route = useRoute<any>()
   const navigation = useNavigation()
   const [tab, setTab] = useState<any>('purchase')
-
+  console.log(tab);
   useLayoutEffect(() => {
     if (route?.params?.tab) {
       setTab(route?.params?.tab)

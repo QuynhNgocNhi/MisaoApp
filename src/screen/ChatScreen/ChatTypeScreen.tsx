@@ -5,9 +5,9 @@ import { BuyList } from './BuyList';
 
 import OtherList from './OtherList';
 import { SellList } from './SellList';
-const ChatTypeScreen = ({ chatTypeId, data } : any) => (
+const ChatTypeScreen = ({ chatTypeId, data }: any) => (
     <View style={styles.container}>
-        {chatTypeId === '1' ? (<SellList data={data}/>) : <BuyList data={data}/>}
+        {chatTypeId === '1' ? (<SellList data={data} />) : <BuyList data={data} />}
     </View>
 );
 

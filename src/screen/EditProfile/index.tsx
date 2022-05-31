@@ -40,10 +40,10 @@ const EditProfile = ({ route }: any) => {
 
     const userInfo = useSelector(userSelector);
     const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone)
-    const [address, setAddress] = useState<string>(userInfo?.address)
-    const [birthDate, setBirthDate] = useState<string>(userInfo?.birthDate)
-    const [gender, setGender] = useState<string>(userInfo?.gender)
-    const [identity, setIdentity] = useState<string>(userInfo?.identity_card_number)
+    const [address, setAddress] = useState<string>(userInfo?.address ?? "")
+    const [birthDate, setBirthDate] = useState<string>(userInfo?.birthDate ?? "")
+    const [gender, setGender] = useState<string>(userInfo?.gender ?? "")
+    const [identity, setIdentity] = useState<string>(userInfo?.identity_card_number ?? "")
     const [saveAvailableState, setSaveAvailableState] = React.useState(false);
     const [data, setData] = useState(userInfo)
     const navigation = useNavigation();
@@ -147,7 +147,7 @@ const EditProfile = ({ route }: any) => {
                                     placeholder="Địa chỉ của bạn"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={data?.address}
+                                    value={data?.address ?? ''}
                                     onChangeText={(value: any) => setData({ ...data, address: value })}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
@@ -158,7 +158,7 @@ const EditProfile = ({ route }: any) => {
                                     placeholder="Ngày sinh"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={data?.birthday}
+                                    value={data?.birthday ?? ''}
                                     onChangeText={(value: any) => setData({ ...data, birthday: value })}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
@@ -169,7 +169,7 @@ const EditProfile = ({ route }: any) => {
                                     placeholder="CMND/CCCD"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={data?.identity_card_number}
+                                    value={data?.identity_card_number ?? ''}
                                     onChangeText={(value: any) => setData({ ...data, identity_card_number: value })}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
