@@ -181,8 +181,8 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                     <View style={styles.unitPriceRow}>
 
                                         <Text style={styles.price}>{new Intl.NumberFormat().format(data?.price - data?.price * (data?.discount / 100))} đ</Text>
-                                        <Text style={styles.oldPrice}> {new Intl.NumberFormat().format(data?.price)} đ</Text>
-
+                                        {data.discount > 0 ? (<Text style={styles.oldPrice}> {new Intl.NumberFormat().format(data?.price)} đ</Text>
+                                        ) : null}
                                     </View>
                                     <View style={styles.Line}></View>
 
@@ -207,7 +207,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                     <Text style={styles.productStatus}>Chi tiết sản phẩm</Text>
                                     <View style={styles.productStatusItem}>
                                         <Text style={{ fontSize: 18 }}>Danh mục</Text>
-                                        <Text style={{ fontSize: 18 }}>{categories?.find((item: any) => item.value === data?.category.id)?.label}</Text>
+                                        <Text style={{ fontSize: 18 }}>{categories?.find((item: any) => item.value === data?.category_id)?.label}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 

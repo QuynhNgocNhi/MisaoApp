@@ -9,6 +9,13 @@ import PostItem from '../../component/PostItem';
 const MyProductList = ({ buyRequest }: any) => (
     <View style={styles.container}>
         <FlatList
+            ListEmptyComponent={() => {
+                return (
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 120 }}>
+                        <Text style={{ fontSize: 18 }}> Không tìm thấy tin mua liên quan để hiển thị.</Text>
+                    </View>
+                )
+            }}
             contentContainerStyle={styles.PostItemList}
 
             data={buyRequest}

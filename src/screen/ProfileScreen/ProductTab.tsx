@@ -6,6 +6,13 @@ const MyProductList = ({ products }: any) => (
     <View style={styles.container}>
         <FlatList
             // contentContainerStyle={styles.ProductItemList}
+            ListEmptyComponent={() => {
+                return (
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 120 }}>
+                        <Text style={{ fontSize: 18 }}> Không tìm thấy sản phẩm liên quan để hiển thị.</Text>
+                    </View>
+                )
+            }}
             data={products}
             numColumns={2}
             renderItem={({ item }) => <ProductItem product={item} />}
