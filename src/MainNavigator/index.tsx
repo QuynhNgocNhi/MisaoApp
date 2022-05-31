@@ -35,8 +35,8 @@ import EditPostLastStep from '../screen/EditPost/EditPostLastStep';
 import PostDetail from '../screen/PostDetailScreen';
 import MyProfileScreen from '../screen/ProfileScreen/MyProfileScreen';
 import ModalSearch from '../screen/Search';
-import PostSearchedByCategory from '../screen/Search/PostSearchedByCategory';
-import ProductSearchedByCategory from '../screen/Search/ProductSearchedByCategory';
+import SearchedByCategory from '../screen/Search/SearchedByCategory';
+import SearchedByKeyword from '../screen/Search/SearchedByKeyword';
 import HeaderIconButton from '../component/HeaderButton'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -64,8 +64,9 @@ export type RootStackParameterList = {
   SearchModal: any;
   Posts: any;
   PostsSaved: any;
-  PostSearchedByCategory: any;
-  ProductSearchedByCategory: any;
+  SearchedByCategory: any;
+  SearchedByKeyword: any;
+
   ProductsSaved: any;
   Notification: any;
   AddItem: any;
@@ -180,8 +181,8 @@ const MainNavigator = () => {
             component={Login} />
           <RootStack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
           <RootStack.Screen name="ChatRoomScreen" options={{ headerShown: false }} component={ChatRoomScreen} />
-          <RootStack.Screen name="PostSearchedByCategory" options={{ headerShown: false }} component={PostSearchedByCategory} />
-          <RootStack.Screen name="ProductSearchedByCategory" options={{ headerShown: false }} component={ProductSearchedByCategory} />
+          <RootStack.Screen name="SearchedByCategory" options={{ headerShown: false }} component={SearchedByCategory} />
+          <RootStack.Screen name="SearchedByKeyword" options={{ headerShown: false }} component={SearchedByKeyword} />
           <RootStack.Screen name="UserProfileScreen" options={{ headerShown: false }} component={UserProfileScreen} />
           <RootStack.Screen name="MyProfileScreen" options={{ headerShown: false }} component={MyProfileScreen} />
 

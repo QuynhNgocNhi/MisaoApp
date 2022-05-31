@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
 import CategoryItem from '../../component/CategoryItem';
-import PostItem from '../../component/PostItem';
+import ProductItem from '../../component/ProductItem';
 //import data
 import category from '../../assets/data/category';
-import post from '../../assets/data/post';
+import product from '../../assets/data/product';
 import { Icon } from 'react-native-elements';
 import Button from '../../component/Button';
 import LinkButton from '../../component/Button/LinkButton';
@@ -24,17 +24,66 @@ import layout from '../../theme/layout';
 import CustomSwitch from '../../component/CustomSwitch';
 import { Compare } from '@material-ui/icons';
 import AppStatusBar from '../../component/AppStatusBar';
-
+import PostItem from '../../component/PostItem';
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { getProductListAPI, getPostListAPI } from '../../services';
 
 
-const PostSearchedByCategory = ({ categoryId, route }) => {
+const ProductSearchedByCategory = ({ route }) => {
     const { data } = route.params;
+    console.log(data)
     const navigation = useNavigation();
+    const ProductByCategoryId = [...product].filter(p => p.categoryId === data.categoryId)
 
     const isFocused = useIsFocused();
+    const [productList, setProductList] = useState<any>([])
+
+    const [postList, setPostList] = useState<any>([])
+
+    const [loading, setLoading] = useState<boolean>(false)
+    const [updating, setUpadting] = useState<boolean>(false)
+
+    const fetchProduct = async () => {
+        setLoading(true)
+        const response = await getProductListAPI({
+            category_id: data?.categoryId
+        })
+        if (response.__typename !== 'ErrorResponse') {
+            setProductList(response.data)
+
+        }
+        setLoading(false)
+    }
+    const fetchData = async () => {
+        setLoading(true)
+        const responses = await getPostListAPI({
+            category_id: data?.categoryId
+        })
+        if (responses.__typename !== 'ErrorResponse') {
+            setPostList(responses.data)
+        }
+        setLoading(false)
+    }
+    const [Tab, setTab] = useState(data.tabId);
+    const onSelectSwitch = value => {
+        setTab(value);
+    };
+    useEffect(() => {
+        fetchProduct()
+        fetchData()
+        onSelectSwitch(data.tabId);
+    }, [])
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator animating />
+            </View>
+        )
+    }
+
 
     return (
         <SafeAreaProvider>
@@ -59,7 +108,6 @@ const PostSearchedByCategory = ({ categoryId, route }) => {
 
                                 <View style={styles.searchContentainer}>
                                     <View style={styles.titleContainer}>
-                                        <Heading6 style={[styles.titleText, { color: color.primaryText }]}>Danh mục </Heading6>
                                         <View style={styles.categoryNameContainer}>
 
                                             <Text style={styles.categoryName}>
@@ -69,7 +117,7 @@ const PostSearchedByCategory = ({ categoryId, route }) => {
                                                 onPress={() => navigation.goBack()}
                                                 name='cross'
                                                 type='entypo'
-                                                size={35}
+                                                size={30}
                                                 color={color.normalText}
                                             />
                                         </View>
@@ -85,28 +133,39 @@ const PostSearchedByCategory = ({ categoryId, route }) => {
 
                             <View style={styles.productListContainer}>
 
-                                <FlatList
-                                    contentContainerStyle={styles.postListContainer}
+                                <View style={styles.switchTabContainer}>
+                                    <CustomSwitch
+                                        selectionMode={data.tabId}
+                                        option1="Sản phẩm"
+                                        option2="Tin mua"
 
-                                    data={post}
+                                        onSelectSwitch={onSelectSwitch}
+                                    />
 
-                                    renderItem={({ item, index }) => {
-                                        return (
-                                            <View style={{ flex: 1 }}>
-                                                {
-                                                    item.categoryId === data.categoryId && (
-                                                        <PostItem post={item}
-                                                            contentContainerStyle={styles.PostItem}
-                                                            scrollEnabled={false}
-                                                        />
-                                                    )
-                                                }
-                                            </View>
-                                        )
-                                    }}
-                                />
+                                </View>
+                                <View style={styles.productListContainer}>
+                                    {Tab == 1 &&
+                                        (<FlatList
+                                            ListEmptyComponent={() => {
+                                                return (
+                                                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text>Không có sản phẩm để hiện thị.</Text>
+                                                    </View>
+                                                )
+                                            }}
+                                            data={productList}
+                                            numColumns={2}
+                                            renderItem={({ item }) => <ProductItem product={item} />}
+                                        />)}
+                                    {Tab == 2 &&
+                                        (<FlatList
+                                            contentContainerStyle={styles.ProductItemList}
+                                            data={postList}
 
+                                            renderItem={({ item }) => <PostItem post={item} />}
+                                        />)}
 
+                                </View>
                             </View>
                         </View>
                     </ScrollView>
@@ -129,7 +188,7 @@ const styles = StyleSheet.create({
     },
 
     middleContainer: {
-        padding: 10,
+
         backgroundColor: color.background,
     },
 
@@ -147,27 +206,22 @@ const styles = StyleSheet.create({
     },
 
     titleContainer: {
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        flexDirection: 'row',
+
         paddingTop: 10,
         paddingHorizontal: 16,
-        paddingBottom: 12,
+
         backgroundColor: color.white,
     },
-    titleText: {
-        fontWeight: '600',
-        color: '#FF0000',
-        paddingLeft: 10
 
-    },
 
 
 
     postListContainer: {
     },
     productListContainer: {
-        padding: 10,
+        width: '100%',
+
         backgroundColor: color.background,
 
     },
@@ -176,20 +230,31 @@ const styles = StyleSheet.create({
     },
     categoryName: {
         fontSize: 20,
+        fontWeight: '500',
         color: color.primaryText,
 
 
     },
     categoryNameContainer: {
-        marginTop: 10,
-        padding: 5,
-        borderWidth: 1,
-        borderRadius: 10,
+
         flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    switchTabContainer: {
+        flexDirection: 'row',
+        width: '85%',
+
+        alignSelf: 'center',
+        marginBottom: 30,
+        marginTop: 20,
         alignItems: 'center',
-    }
+        backgroundColor: color.underBackground,
+        borderRadius: 20
+
+
+    },
 
 
 });
 
-export default PostSearchedByCategory
+export default ProductSearchedByCategory

@@ -46,6 +46,8 @@ const SearchScreen = () => {
     const [keyword, setKeyword] = useState(null)
     const [historyList, setHistoryList] = useState<any>([])
 
+    const data = { keyword: keyword }
+
     const fetchProduct = async () => {
         const response = await getProductListAPI({
             keyword
@@ -66,15 +68,9 @@ const SearchScreen = () => {
     }
 
     const onSearch = async () => {
-        setUpadting(true)
-        const response = await getProductListAPI({
-            keyword
-        })
-        if (response.__typename !== 'ErrorResponse') {
-            setProductList(response.data)
-        }
-        setUpadting(false)
+        navigation.navigate('SearchedByKeyword', { data });
     }
+
 
     useEffect(() => {
         setLoading(true)
@@ -133,7 +129,7 @@ const SearchScreen = () => {
                     <View style={styles.middleContainer} >
 
                         <View style={styles.search} >
-                            <SearchBarItem keyword={keyword} setKeyword={setKeyword} onSearch={onSearchWithKeyword} />
+                            <SearchBarItem keyword={keyword} setKeyword={setKeyword} onSearch={onSearch} />
                         </View>
 
                     </View>
@@ -146,6 +142,7 @@ const SearchScreen = () => {
                                 <View style={styles.recentSearchItemStyle} >
 
                                     <FlatList
+                                        scrollEnabled={false}
                                         data={historyList}
                                         showsHorizontalScrollIndicator={false}
                                         alwaysBounceHorizontal={false}
@@ -189,7 +186,7 @@ const SearchScreen = () => {
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
                                     keyExtractor={(item, index) => index.toString()}
-                                    renderItem={({ item }) => <CategoryList category={item} />}
+                                    renderItem={({ item }) => <CategoryList category={item} tabId={1} />}
                                 />
 
                             </View>
@@ -251,6 +248,9 @@ const styles = StyleSheet.create({
         width: '80%',
         alignSelf: 'center',
         paddingBottom: 20,
+        maxHeight: 230,
+
+
 
     },
     CategoryListContainer: {
