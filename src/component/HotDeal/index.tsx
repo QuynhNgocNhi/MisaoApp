@@ -11,45 +11,50 @@ LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
 //10 latest product that have oldprice
 
 //import image from '../../data/image'
-interface ProductItemProps {
-    item: {
-        id: string,
-        name: string,
-        images: any,
-        price: number,
-        oldPrice?: number,
-        discount?: number,
-        //for optional props: oldPrice? 
-
-    }
-}
 
 
-const HotDealItem = ({ item }: ProductItemProps) => {
+
+const HotDealItem = ({ product }: any) => {
     const navigation = useNavigation<any>()
+    const data = {
+        productId: product.id,
+        productName: product.name,
+        productDescription: product.description,
+        productPrice: product.price,
+        oldPrice: product.oldPrice,
+        productImage: product.image,
+        productDiscount: product.discountPercentage,
+        productUnitPrice: product.unitPrice,
+        productAskTime: product.askedTimes,
+        userId: product.userId,
+        userName: product.userName,
+        userAvatar: product.userAvatar,
+        time: product.time,
+        timeUnit: product.timeUnit,
+    }
     return (
         <TouchableOpacity
-            onPress={() => { navigation.navigate('ProductDetail', { data: item }); }}
+            onPress={() => { navigation.navigate('ProductDetail', { data }); }}
             style={styles.container}>
 
             <View style={styles.bottomContainer}>
-                {item.images && item.images?.length > 0 && item.images[0].url && item.images[0].url_full ? (
+                {product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full ? (
                     <FastImage style={styles.image}
-                        source={{ uri: item.images && item.images?.length > 0 && item.images[0].url && item.images[0].url_full }} />
+                        source={{ uri: product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full }} />
                 ) : (
                     <></>
                 )}
                 <View style={styles.tittleContainer}>
-                    <Text style={styles.title} numberOfLines={1}>{item.name}</Text>
+                    <Text style={styles.title} numberOfLines={1}>{product.name}</Text>
                 </View>
 
 
 
-                <Text style={styles.price}>đ{new Intl.NumberFormat().format(item?.price)}
+                <Text style={styles.price}>đ{new Intl.NumberFormat().format(product?.price)}
 
                 </Text>
                 <View style={styles.discountLabelContainer}>
-                    <Text style={styles.label}>{`- ${item.discount}%`}</Text>
+                    <Text style={styles.label}>{`- ${product.discount}%`}</Text>
                 </View>
             </View>
         </TouchableOpacity>

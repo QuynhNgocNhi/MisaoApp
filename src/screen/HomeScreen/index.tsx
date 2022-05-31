@@ -120,7 +120,7 @@ const HomeScreen = () => {
                         <View>
                           {/* {
                             item.discountPercentage && ( */}
-                          <HotDealItem item={item}
+                          <HotDealItem product={item}
                             contentContainerStyle={styles.hotDealList}
                             scrollEnabled={false}
                           />
