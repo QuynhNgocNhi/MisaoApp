@@ -57,6 +57,7 @@ const ProductSearchedByCategory = ({ route }) => {
         setUpadting(false)
     }
 
+
     useEffect(() => {
         setLoading(true)
         /* fetchProduct() */
@@ -79,7 +80,7 @@ const ProductSearchedByCategory = ({ route }) => {
     const fetchData = async () => {
         setLoading(true)
         const responses = await getPostListAPI({
-            category_id: data?.categoryId
+            keyword
         })
         if (responses.__typename !== 'ErrorResponse') {
             setPostList(responses.data)
@@ -169,7 +170,7 @@ const ProductSearchedByCategory = ({ route }) => {
                                             ListEmptyComponent={() => {
                                                 return (
                                                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                                        <Text>Không có sản phẩm để hiện thị.</Text>
+                                                        <Text>Không tìm thấy sản phẩm liên quan để hiển thị.</Text>
                                                     </View>
                                                 )
                                             }}
@@ -179,6 +180,13 @@ const ProductSearchedByCategory = ({ route }) => {
                                         />)}
                                     {Tab == 2 &&
                                         (<FlatList
+                                            ListEmptyComponent={() => {
+                                                return (
+                                                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ fontSize: 18 }}> Không tìm thấy tin mua liên quan để hiển thị.</Text>
+                                                    </View>
+                                                )
+                                            }}
                                             contentContainerStyle={styles.ProductItemList}
                                             data={postList}
 
@@ -192,8 +200,8 @@ const ProductSearchedByCategory = ({ route }) => {
 
                 </View>
 
-            </SafeAreaView>
-        </SafeAreaProvider>
+            </SafeAreaView >
+        </SafeAreaProvider >
     );
 };
 const styles = StyleSheet.create({

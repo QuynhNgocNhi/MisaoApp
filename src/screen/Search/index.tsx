@@ -69,7 +69,10 @@ const SearchScreen = () => {
         navigation.navigate('SearchedByKeyword', { data });
     }
 
+    const onSearchWithKeyword = async (keyword: string) => {
 
+        navigation.navigate('SearchedByKeyword', { data: { keyword: keyword } });
+    }
     useEffect(() => {
         setLoading(true)
         fetchProduct()
@@ -80,17 +83,7 @@ const SearchScreen = () => {
 
 
 
-    const onSearchWithKeyword = async (keyword: string) => {
-        setUpadting(true)
-        const response = await getProductListAPI({
-            keyword
-        })
-        if (response.__typename !== 'ErrorResponse') {
-            setProductList(response.data)
-            fetchSearchHistory()
-        }
-        setUpadting(false)
-    }
+
 
     if (loading) {
         return (

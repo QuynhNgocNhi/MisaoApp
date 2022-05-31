@@ -94,7 +94,7 @@ const HomeScreen = () => {
                             </View>
                             <View style={styles.userAttributes}>
 
-                                <Heading6>{userInfo?.buyRequest?.length ?? 0}</Heading6>
+                                <Heading6>{userInfo?.buy_request?.length ?? 0}</Heading6>
                                 <Text style={{ fontSize: 16, }}> Tin mua</Text>
                             </View>
                             <View style={styles.userAttributes}>
@@ -157,7 +157,7 @@ const HomeScreen = () => {
                             />
                             <Text style={styles.buttonName}>Thông tin  cá nhân</Text>
                         </View>
-                        <View style={styles.buttonContainer}>
+                        {/*   <View style={styles.buttonContainer}>
 
                             <Icon
                                 raised
@@ -168,7 +168,7 @@ const HomeScreen = () => {
                                 onPress={() => navigation.goBack()}
                             />
                             <Text style={styles.buttonName}>Địa chỉ</Text>
-                        </View>
+                        </View> */}
                         <View style={styles.buttonContainer}>
 
                             <Icon
