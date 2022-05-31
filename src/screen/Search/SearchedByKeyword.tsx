@@ -57,6 +57,7 @@ const ProductSearchedByCategory = ({ route }) => {
         setUpadting(false)
     }
 
+
     useEffect(() => {
         setLoading(true)
         /* fetchProduct() */
