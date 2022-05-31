@@ -159,7 +159,7 @@ const HomeScreen = () => {
                             />
                             <Text style={styles.buttonName}>Thông tin  cá nhân</Text>
                         </View>
-                        <View style={styles.buttonContainer}>
+                        {/*   <View style={styles.buttonContainer}>
 
                             <Icon
                                 raised
@@ -170,7 +170,7 @@ const HomeScreen = () => {
                                 onPress={() => navigation.goBack()}
                             />
                             <Text style={styles.buttonName}>Địa chỉ</Text>
-                        </View>
+                        </View> */}
                         <View style={styles.buttonContainer}>
 
                             <Icon

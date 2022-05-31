@@ -33,8 +33,8 @@ interface userItemProps {
 const userItem = ({ chatRoom }: any) => {
     const navigation = useNavigation<any>();
     const user = useSelector(userSelector)
-    console.log({user});
-    
+    console.log({ user });
+
     return (
         <View style={styles.chatItemContainer}>
 
@@ -62,12 +62,12 @@ const userItem = ({ chatRoom }: any) => {
 
                 </View>
             </View>
-            {user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image : chatRoom?.buyer?.profile_image && (
+            {/* {user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image : chatRoom?.buyer?.profile_image && (
                 <View style={styles.productImageContainer}>
 
                     <Image onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom.id })} style={styles.productImage} source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }} />
                 </View>
-            )}
+            )} */}
 
 
 
