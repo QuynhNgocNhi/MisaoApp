@@ -29,7 +29,7 @@ const CategoryItem = ({ category, tabId }: categoryItemProps) => {
     console.log(data);
     return (
         <TouchableOpacity
-            onPress={() => { navigation.navigate('PostSearchedByCategory', { data }); }}
+            onPress={() => { navigation.navigate('SearchedByCategory', { data }); }}
             style={styles.container}>
 
             <View style={styles.bottomContainer}>
