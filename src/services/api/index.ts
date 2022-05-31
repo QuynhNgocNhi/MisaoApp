@@ -8,7 +8,7 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import "react-native-get-random-values";
 
-const BASE_URL = 'http://misao.one/api'
+const BASE_URL = 'http://103.110.86.45/api'
 const TIMEOUT = 10000;
 const DEBUG = true;
 
@@ -98,7 +98,7 @@ const handleServerError = (error: AxiosError): ErrorResponse => {
     const { response }: any = error;
 
     if (response && response.status >= 400) {
-        
+
         if (response.status >= 500) {
             Alert.alert(
                 "",
@@ -581,6 +581,15 @@ export const getListMyNotificationAPI = async (): Promise<ListResponse<any> | Er
 export const getListOrderAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
     try {
         const response = await get<ListResponse<any>>(`/order`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const getOtherUserProfile = async (id: any): Promise<UserInfo | ErrorResponse> => {
+    try {
+        const response = await get<UserInfo>(`/user/${id}`);
         return response.data.data
     } catch (error: any) {
         return handleServerError(error);

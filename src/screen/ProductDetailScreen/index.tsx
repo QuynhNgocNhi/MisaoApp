@@ -257,7 +257,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
+                                            <Text onPress={() => { navigation.navigate('UserProfileScreen', { id: data?.user?.id }); }}
                                                 style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
                                             {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data?.time} {data?.timeUnit} trước</Text> */}
                                         </View>
