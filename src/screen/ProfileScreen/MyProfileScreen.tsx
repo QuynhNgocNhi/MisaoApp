@@ -144,7 +144,17 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     <Text style={{ fontSize: 18, }}>{userInfo?.phone}</Text>
 
                                     <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>{userInfo?.description}</Text>
+                                    <Text style={{ position: 'absolute', top: 50, fontSize: 18, color: color.primaryColor, fontWeight: '600', }} numberOfLines={1}>
+                                        {(userInfo.address) && (<Icon
 
+                                            name='md-location-outline'
+                                            type='ionicon'
+                                            color={color.primaryColor}
+                                            size={30}
+                                        />)
+                                        }{userInfo?.address}
+
+                                    </Text>
 
                                 </View>
                                 <View style={styles.editProfileButtonContainer}>
@@ -156,19 +166,10 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         buttonStyle={styles.editProfileButton}
                                         title={'Chỉnh sửa thông tin'}>
                                     </ButtonNormal>
-                                    <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '600', flexDirection: 'column' }} numberOfLines={1}>
-                                        {(userInfo.address) && (<Icon
 
-                                            name='md-location-outline'
-                                            type='ionicon'
-                                            color={color.black}
-                                            size={30}
-                                        />)
-                                        }{userInfo?.address}
-
-                                    </Text>
                                 </View>
                             </View>
+
 
 
 
