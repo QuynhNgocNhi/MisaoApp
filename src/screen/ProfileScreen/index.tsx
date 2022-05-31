@@ -96,7 +96,7 @@ const HomeScreen = () => {
                             </View>
                             <View style={styles.userAttributes}>
 
-                                <Heading6>{userInfo?.buyRequest?.length ?? 0}</Heading6>
+                                <Heading6>{userInfo?.buy_request?.length ?? 0}</Heading6>
                                 <Text style={{ fontSize: 16, }}> Tin mua</Text>
                             </View>
                             <View style={styles.userAttributes}>
