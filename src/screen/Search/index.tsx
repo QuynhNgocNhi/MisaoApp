@@ -59,8 +59,6 @@ const SearchScreen = () => {
 
     const fetchSearchHistory = async () => {
         const response = await getHistorySearchAPI()
-        console.log({ response });
-
         if (response.__typename !== 'ErrorResponse') {
             setHistoryList(response.data)
         }

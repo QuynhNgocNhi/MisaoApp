@@ -27,8 +27,6 @@ let muti_headers: any = {
 }
 
 export const _setToken = (token: string) => {
-    console.log({ token });
-
     if (token) {
         headers.authorization = `Bearer ${token}`;
         muti_headers.authorization = `Bearer ${token}`;
@@ -568,5 +566,23 @@ export const updateProfileAPI = async (data: any, image: any): Promise<BaseRespo
     } catch (error: any) {
         return handleServerError(error);
 
+    }
+}
+
+export const getListMyNotificationAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/notification`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
+    }
+}
+
+export const getListOrderAPI = async (): Promise<ListResponse<any> | ErrorResponse> => {
+    try {
+        const response = await get<ListResponse<any>>(`/order`);
+        return response.data.data
+    } catch (error: any) {
+        return handleServerError(error);
     }
 }

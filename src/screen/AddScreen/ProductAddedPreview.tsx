@@ -108,8 +108,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const onAddProduct = async () => {
         setLoading(true)
         const response = await addProductAPI(data)
-        console.log({ response });
-
         if (response.__typename !== 'ErrorResponse') {
             dispatch(getUserInfo())
             Alert.alert("", "Đăng sản phẩm thành công!", [

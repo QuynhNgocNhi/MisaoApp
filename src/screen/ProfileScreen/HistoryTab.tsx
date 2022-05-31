@@ -5,17 +5,30 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ProductItem from '../../component/ProductItem';
 import products from '../../assets/data/product';
 import HistoryTimeStampItem from './HistoryTimeStampItem';
-const MyProductList = () => (
+import { G } from 'react-native-svg';
+import moment from 'moment';
+const MyProductList = ({ orders }: any) => {
+    console.log({ orders });
+    const groupBy = (_k: any, a: any) => a.reduce((r: any, { [_k]: k, ...p }) => ({
+        ...r, ...{
+            [k]: (
+                r[k] ? [...r[k], { ...p }] : [{ ...p }]
+            )
+        }
+    }), {});
+
+    let grouped = groupBy('updated_at', orders);
+    let keys = Object.keys(grouped);
+    return (
+        <ScrollView style={styles.container}>
+            {keys.map((key, index) => (
+                <HistoryTimeStampItem data={grouped[key]} key={index} date={moment(key).format('DD-MM-YYYY')} />
+            ))}
+        </ScrollView>
 
 
-    <ScrollView style={styles.container}>
-        <HistoryTimeStampItem date={'01-07-2021'} />
-        <HistoryTimeStampItem date={'01-06-2021'} />
-        <HistoryTimeStampItem date={'21-05-2021'} />
-    </ScrollView>
-
-
-);
+    );
+}
 
 
 

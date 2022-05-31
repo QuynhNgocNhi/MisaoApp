@@ -90,6 +90,7 @@ import layout from '../../theme/layout';
 
 import { useNavigation } from '@react-navigation/native';
 import Comment from '../../assets/data/comment';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 
 
@@ -126,7 +127,7 @@ const PostDetailScreen = ({ Props, route }) => {
         const response = await orderProductAPI({
             confirm: true,
             user_seller_id: data?.user?.id,
-            product_id: data?.id
+            buy_request_id: data?.id
         })
 
         if (response.__typename !== 'ErrorResponse') {
@@ -135,8 +136,6 @@ const PostDetailScreen = ({ Props, route }) => {
             })
         }
         setUpdating(false)
-
-
     }
 
 
@@ -167,8 +166,6 @@ const PostDetailScreen = ({ Props, route }) => {
     const checkFollow = (_data: any) => {
         let list = []
         list.push(userInfo?.following?.find(user => user?.following_id === userInfo?.id && user?.followed_id === _data?.user_id))
-        console.log({ list });
-
         if (!list[0]) {
             setIsFollow(false)
         } else {
@@ -369,18 +366,14 @@ const PostDetailScreen = ({ Props, route }) => {
                         </View>
                     </ScrollView>
                     <View style={[styles.box, styles.contentContainer]}>
-
-
                         <ButtonNormal
                             buttonStyle={styles.customButtonChatNow}
-                            onPress={() => { navigation.navigate('Login'); }}
+                            onPress={onOrderProduct}
                             title={'Hỏi Thăm'.toUpperCase()}
                         />
                     </View>
-
-
                 </View>
-
+                <LoadingOverlay loading={updating} />
             </SafeAreaView>
         </SafeAreaProvider >
     );

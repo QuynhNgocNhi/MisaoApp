@@ -149,8 +149,6 @@ const MainNavigator = () => {
   const dispatch = useDispatch()
   const token = useSelector(tokenSelector)
   const [loading, setLoading] = useState<boolean>(true)
-  console.log({ token });
-
   useEffect(() => {
     _setToken(token)
     if (token) {

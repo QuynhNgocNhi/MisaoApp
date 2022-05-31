@@ -34,8 +34,6 @@ const HomeScreen = () => {
     const isFocused = useIsFocused();
     const navigation = useNavigation<any>();
     const userInfo = useSelector(userSelector)
-    console.log({ userInfo });
-
     const dispatch = useDispatch()
     const onLogout = async () => {
         dispatch(logout())

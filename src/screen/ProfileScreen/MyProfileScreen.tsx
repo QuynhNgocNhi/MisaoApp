@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -22,60 +22,41 @@ import color from '../../theme/color';
 
 import { useNavigation } from '@react-navigation/native';
 
-import ChatTypeScreen from '../ChatScreen/ChatTypeScreen'
 
 import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
-
-
-interface productProps {
-
-    product: {
-        id: string,
-        title: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-        askedTimes: number,
-
-    }
-}
-interface UserProps {
-    user: {
-        id: string,
-        name: string,
-        avatar: string,
-
-
-    }
-
-}
-interface commentProps {
-    comment: {
-        id: string,
-        productId: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-    }
-
-}
-
+import { getListOrderAPI } from '../../services';
 const ProductDetailScreen = ({ Props, route }) => {
     const navigation = useNavigation();
 
     const userInfo = useSelector(userSelector)
     const [ProfileTab, setProfileTab] = useState(1);
+    const [loading, setLoading] = useState(false)
+    const [orders, setOrders] = useState<any>([])
     const onSelectSwitch = value => {
         setProfileTab(value);
     };
+
+    const fetchOrderList = async () => {
+        setLoading(true)
+        const response = await getListOrderAPI()
+        if (response.__typename !== 'ErrorResponse') {
+            setOrders(response.data)
+        }
+        setLoading(false)
+    }
+    useEffect(() => {
+        fetchOrderList()
+    }, [])
+
+    if (loading) {
+        return (
+            <View>
+                <ActivityIndicator animating size="large" />
+            </View>
+        )
+    }
 
     return (
         <SafeAreaProvider>
@@ -192,7 +173,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                         {ProfileTab == 2 &&
                             <PostTab buyRequest={userInfo?.buy_request} />}
                         {ProfileTab == 3 &&
-                            <HistoryTab />}
+                            <HistoryTab orders={orders}/>}
                     </View>
 
 

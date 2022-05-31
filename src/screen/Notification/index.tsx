@@ -1,23 +1,35 @@
-import React, { useRef } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
-import { Heading6 } from '../../component/Text';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomeHeader from '../../component/AnimatedHeader';
-import CategoryItem from '../../component/CategoryItem';
 import NotificationItem from '../../component/NotificationItem';
-//import data
-import category from '../../assets/data/category';
-import post from '../../assets/data/post';
-
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-// import color, layout, style
 import color from '../../theme/color';
-import layout from '../../theme/layout';
+import { getListMyNotificationAPI } from '../../services';
 
 
 const Notification = () => {
 
+    const [loading, setLoading] = useState(false)
+    const [data, setData] = useState<any>([])
+    const fetchData = async () => {
+        setLoading(true)
+        const response = await getListMyNotificationAPI()
+        if (response.__typename !== 'ErrorResponse') {
+            setData(response.data)
+        }
+
+        setLoading(false)
+    }
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator animating size="large" />
+            </View>
+        )
+    }
 
     return (
         <SafeAreaProvider>
@@ -26,26 +38,16 @@ const Notification = () => {
                 <StatusBar translucent backgroundColor='transparent' />
 
                 <View style={styles.container}>
-
-
-                    {/* Add the following AnimatedHeader */}
                     <ScrollView
                         nestedScrollEnabled={false}
                     >
-
-
-                        {/* Render Product Component */}
-                        {/* <ProductItem item = {products[0]}/> */}
                         <View style={styles.middleContainer}>
-
-
-
                         </View>
                         <View style={styles.bottomContainer}>
 
                             <FlatList
                                 contentContainerStyle={styles.ProductItemList}
-                                data={post}
+                                data={data}
 
                                 renderItem={({ item }) => <NotificationItem post={item} />}
                             />

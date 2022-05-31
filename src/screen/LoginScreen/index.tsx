@@ -31,7 +31,7 @@ const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
 
 const Login = ({ route }: any) => {
-  const [phone, setPhone] = useState<string>(route.params.phoneNumber ?? '')
+  const [phone, setPhone] = useState<string>(route.params?.phoneNumber ?? '')
   const [password, setPassword] = useState<string>()
   const dispatch = useDispatch()
   const navigation = useNavigation<any>();

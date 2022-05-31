@@ -41,8 +41,6 @@ export const BuyList = () => {
         )
     }
 
-    console.log({ data });
-
 
     return (
         <FlatList
