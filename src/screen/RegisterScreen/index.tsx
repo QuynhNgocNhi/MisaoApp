@@ -22,69 +22,46 @@ const PLACEHOLDER_TEXT_COLOR = color.Text;
 const INPUT_TEXT_COLOR = color.Text;
 const INPUT_BORDER_COLOR = color.borderColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
-import { register } from '../../services';
+import { register, registerAPI } from '../../services';
 import LoadingOverlay from '../../component/LoadingOverlay';
 
-const Register = ({ UserInfo }: any) => {
+const Register = ({ route }: any) => {
 
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState(route.params.phoneNumber);
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('')
     const [name, setName] = useState('');
     const [loading, setLoading] = useState<boolean>(false)
     const navigation = useNavigation();
     const onClickRegister = async () => {
 
         if (phoneNumber && password && name) {
-
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify({
-                "phone": phoneNumber,
-                "password": password,
-                "name": name,
-
-                "confirm": true
-            });
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-
-            fetch("http://misao.one/api/auth/register", requestOptions)
-                .then(response => response.json())
-                .then(json => {
-                    if (json.success == true) {
-                        Alert.alert("", "Đăng ký tài khoản thành công!",
-                            [
-
-                                { text: "Tiếp tục", onPress: () => navigation.navigate('Login', { phoneNumber: phoneNumber }) }
-                            ])
-
-
-                    }
-                    else {
-                        Alert.alert("", "Bạn đã đăng ký tài khoản với số điện thoại này!",
-                            [
-                                {
-                                    text: "Hủy",
-                                    onPress: () => navigation.goBack(),
-                                    style: "cancel"
-                                },
-                                { text: "Tiếp tục", onPress: () => navigation.navigate('Register') }
-                            ])
-                    }
+            if (password === confirmPassword) {
+                setLoading(true)
+                const data = {
+                    "phone": phoneNumber,
+                    "password": password,
+                    "name": name,
+                    "otp": route?.params?.otp,
+                    "confirm": true
                 }
-                )
-                .catch(error => console.log('error', error));
 
-            setLoading(false)
+                const response = await registerAPI(data)
+                if (response.__typename !== 'ErrorResponse') {
+                    Alert.alert("", "Đăng ký tài khoản thành công!",
+                        [
+
+                            { text: "Tiếp tục", onPress: () => navigation.navigate('Login', { phoneNumber: phoneNumber }) }
+                        ])
+                }
+                setLoading(false)
+            } else {
+                Alert.alert("", "Mật khẩu không khớp!")
+            }
+
 
         } else {
-            Alert.alert("", "Vui lòng nhập số điện thoại!")
+            Alert.alert("", "Vui lòng nhập đầy đủ thông tin bên dưới!")
         }
     }
 
@@ -124,6 +101,7 @@ const Register = ({ UserInfo }: any) => {
                                 borderColor={INPUT_BORDER_COLOR}
                                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 inputContainerStyle={styles.inputContainer}
+                                value={name}
                                 onChangeText={(val: any) => setName(val)}
 
                             />
@@ -131,6 +109,7 @@ const Register = ({ UserInfo }: any) => {
                         <View style={styles.inputGroup}>
 
                             <UnderlineTextInput
+                                editable={false}
                                 blurOnSubmit={false}
                                 keyboardType="email-address"
                                 placeholder="Số điện thoại của bạn"
@@ -140,6 +119,7 @@ const Register = ({ UserInfo }: any) => {
                                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 inputContainerStyle={styles.inputContainer}
                                 onChangeText={(val: any) => setPhoneNumber(val)}
+                                value={phoneNumber}
 
                             />
                         </View>
@@ -154,6 +134,7 @@ const Register = ({ UserInfo }: any) => {
                                 borderColor={INPUT_BORDER_COLOR}
                                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 inputContainerStyle={styles.inputContainer}
+                                value={password}
                                 onChangeText={(val: any) => setPassword(val)}
 
                             />
@@ -167,6 +148,8 @@ const Register = ({ UserInfo }: any) => {
                                 inputTextColor={INPUT_TEXT_COLOR}
                                 borderColor={INPUT_BORDER_COLOR}
                                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                                value={confirmPassword}
+                                onChangeText={(val: any) => setConfirmPassword(val)}
                             />
                         </View>
                         <View style={styles.buttonsGroup}>
@@ -208,7 +191,7 @@ const Register = ({ UserInfo }: any) => {
                     </TouchableWithoutFeedback>
                 </View>
             </View>
-
+        <LoadingOverlay loading={loading} />
         </SafeAreaView >
     );
 

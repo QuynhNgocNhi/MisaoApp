@@ -25,8 +25,6 @@ const ChatScreen = () => {
   }, [route?.params?.tab, navigation])
 
   return (
-    // <View>
-    //     {tab && (
     <Tab.Navigator
       style={{ marginTop: 20, backgroundColor: color.white }}
       screenOptions={{
@@ -50,8 +48,6 @@ const ChatScreen = () => {
           title: "Bán hàng",
         }} />
     </Tab.Navigator>
-    //     )}
-    // </View>
   )
 }
 export default ChatScreen

@@ -20,6 +20,7 @@ import LoadingOverlay from '../../component/LoadingOverlay';
 import { loadingLoginSelector } from '../../modules/auth/selectors';
 import { getUserInfo } from '../../modules/user/slice';
 import { getMasterData } from '../../modules/search/slice';
+import { sendOtpResetPasswordAPI } from '../../services';
 // SignIn Config
 const headerImg = require('../../image/LoginHeader.jpg')
 
@@ -35,6 +36,7 @@ const Login = ({ route }: any) => {
   const dispatch = useDispatch()
   const navigation = useNavigation<any>();
   const loading = useSelector(loadingLoginSelector)
+  const [updating, setUpdating] = useState(false)
 
   const onClickLogin = () => {
     if (phone && password) {
@@ -56,6 +58,15 @@ const Login = ({ route }: any) => {
     } else {
       Alert.alert("", "Vui lòng nhập mật khẩu của bạn!")
     }
+  }
+
+  const onResetPassword = async () => {
+    setUpdating(true)
+    const response: any = await sendOtpResetPasswordAPI(phone)
+    if (response.__typename !== 'ErrorResponse') {
+      navigation.navigate('EnterOTP', { typeOTP: 'forgetPassword', phoneNumber: route.params.phoneNumber, OTP: response.data.otp });
+    }
+    setUpdating(false)
   }
 
   return (
@@ -130,7 +141,7 @@ const Login = ({ route }: any) => {
               />
             </View>
             <LinkButton
-              onPress={() => { navigation.navigate('EnterOTP', { typeOTP: 'forgetPassword', phoneNumber: route.params.phoneNumber }); }}
+              onPress={onResetPassword}
               title="Quên mật khẩu"
               titleStyle={styles.forgotPasswordText}
             />
@@ -158,7 +169,7 @@ const Login = ({ route }: any) => {
           </TouchableWithoutFeedback>
         </View>
       </View>
-      <LoadingOverlay loading={loading} />
+      <LoadingOverlay loading={updating} />
     </SafeAreaView >
   );
 };

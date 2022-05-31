@@ -18,7 +18,7 @@ import { RootStackParameterList } from '../../MainNavigator';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-import { checkPhoneExistsAPI } from '../../services';
+import { checkPhoneExistsAPI, sendOtpRegisterAPI } from '../../services';
 import LoadingOverlay from '../../component/LoadingOverlay';
 
 // Welcome Config
@@ -36,8 +36,11 @@ const EnterPhoneNumber: React.FC<WelcomeProps> = () => {
         if (phoneNumber) {
             setLoading(true)
             const response = await checkPhoneExistsAPI(phoneNumber)
-            if (response.__typename == 'ErrorResponse') {
-                navigation.navigate('EnterOTP', { typeOTP: 'Register', phoneNumber: phoneNumber });
+            if (response.__typename === 'ErrorResponse') {
+                const otpResponse: any = await sendOtpRegisterAPI(phoneNumber)
+                if (otpResponse.__typename !== 'ErrorResponse') {
+                    navigation.navigate('EnterOTP', { typeOTP: 'Register', phoneNumber: phoneNumber, OTP: otpResponse.data.otp });
+                }
             } else {
                 Alert.alert("", "Bạn đã đăng ký tài khoản với số điện thoại này!",
                     [

@@ -53,6 +53,7 @@ import { getUserInfo } from '../modules/user/slice';
 import ChatScreen from '../screen/ChatScreen';
 import MyProducts from '../screen/MyProducts';
 import MyBuyRequest from '../screen/MyBuyRequest';
+import ChangePassword from '../screen/ChangePassword';
 
 // MainNavigatorA Config
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
@@ -137,6 +138,7 @@ export type RootStackParameterList = {
   EnterOTPRegister: {};
   MyProducts: {};
   MyBuyRequest: {};
+  ChangePassword: {}
 };
 
 const RootStack = createNativeStackNavigator<RootStackParameterList>();
@@ -247,6 +249,18 @@ const MainNavigator = () => {
             ),
           })}
             component={ForgetPassword} />
+          <RootStack.Screen name="ChangePassword" options={({ navigation }) => ({
+            title: 'Đổi mật khẩu',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <HeaderIconButton
+                onPress={() => navigation.goBack()}
+                name={BACK_ICON}
+                color={color.primaryColor}
+              />
+            ),
+          })}
+            component={ChangePassword} />
           <RootStack.Screen name="EditProfile" options={({ navigation }) => ({
             title: 'Chỉnh sửa thông tin',
             headerTitleAlign: 'center',

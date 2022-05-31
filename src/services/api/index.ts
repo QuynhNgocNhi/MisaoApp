@@ -8,7 +8,7 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import "react-native-get-random-values";
 
-const BASE_URL = 'http://misao.one/api'
+const BASE_URL = 'http://103.110.86.45/api'
 const TIMEOUT = 10000;
 const DEBUG = true;
 
@@ -100,52 +100,7 @@ const handleServerError = (error: AxiosError): ErrorResponse => {
     const { response }: any = error;
 
     if (response && response.status >= 400) {
-        // if (response && response.status === 403) {
-        //     Alert.alert(
-        //         "",
-        //         "運営がアカウントを有効にするまでお待ちください",
-        //         [
-        //             {
-        //                 text: "はい",
-        //                 style: "cancel",
-        //                 onPress: () => { }
-        //             }
-        //         ]
-        //     );
-        // }
-        // if (response && response.status === 413) {
-        //     Alert.alert(
-        //         "",
-        //         "アップロードした画像のサイズが大きすぎます。",
-        //         [
-        //             {
-        //                 text: "はい",
-        //                 style: "cancel",
-        //                 onPress: () => { }
-        //             }
-        //         ]
-        //     );
-        // }
-        // if (response.status === 400) {
-
-        //     Alert.alert(
-        //         "",
-        //         "ログインセッションの有効期限が切れました。もう一度ログインしてください。",
-        //         [
-        //             {
-        //                 text: "はい",
-        //                 style: "cancel",
-        //                 onPress: () => { }
-        //             }
-        //         ]
-        //     );
-        //     return {
-        //         message: response.data.message,
-        //         errors: response.data.errors || {},
-        //         status: response.status,
-        //         __typename: 'ErrorResponse'
-        //     };;
-        // }
+        
         if (response.status >= 500) {
             Alert.alert(
                 "",
@@ -272,6 +227,46 @@ export const getMe = async (): Promise<ObjectResponse<UserInfo> | ErrorResponse>
 export const checkPhoneExistsAPI = async (phone: string): Promise<BaseResponse | ErrorResponse> => {
     try {
         const response = await post<BaseResponse>('/auth/prepare-login', { phone });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
+export const sendOtpRegisterAPI = async (phone: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>('/auth/register/otp', { phone });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
+export const resetPasswordAPI = async (phone: string, password: string, otp: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>('/auth/reset-password', { phone, password, otp });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
+export const sendOtpResetPasswordAPI = async (phone: string): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>('/auth/reset-password/otp', { phone });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
+export const registerAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const response = await post<BaseResponse>('/auth/register', { ...data });
         return response.data;
     } catch (error: any) {
         return handleServerError(error);
@@ -538,5 +533,40 @@ export const getListBuyRequestFavoriteAPI = async (): Promise<ListResponse<any> 
         return response.data.data
     } catch (error: any) {
         return handleServerError(error);
+    }
+}
+
+export const changePasswordAPI = async (data: any): Promise<any | ErrorResponse> => {
+    try {
+        const response = await post<any>(`/me/change-password`, { ...data });
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+
+
+export const updateProfileAPI = async (data: any, image: any): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const formData = new FormData();
+        formData.append('identity_card_number', data?.identity_card_number)
+        formData.append('gender', data?.gender)
+        formData.append('birthday', data?.birthday)
+        formData.append('address', data?.address)
+        formData.append('name', data?.name)
+        formData.append('confirm', true)
+        if (image && image?.id === -1) {
+            formData.append('files[]', {
+                uri: image.url_full,
+                type: 'image/jpeg',
+                name: `${uuidv4()}.jpg`,
+            })
+        }
+        const response = await postFile<any>(`/me/update`, formData);
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
     }
 }

@@ -113,10 +113,8 @@ const ProductDetailScreen = ({ Props, route }) => {
                                             borderColor: 'grey',
                                             borderStyle: 'solid',
                                             borderWidth: 1,
-
                                         }}
-
-                                        source={require('../../assets/avatar/11.png')}
+                                        source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../assets/avatar/11.png')}
                                     />
 
                                     <View style={styles.followContainer}>

@@ -116,6 +116,9 @@ const PostDetailScreen = ({ Props, route }) => {
 
     const onFollowUser = async (userID: any) => {
         const response = await followUserAPI(userID)
+        if (response.__typename !== 'ErrorResponse') {
+            setIsFollow(!isFollow)
+        }
     }
 
     const onOrderProduct = async () => {
@@ -161,6 +164,17 @@ const PostDetailScreen = ({ Props, route }) => {
     useEffect(() => {
         fetchData()
     }, [])
+    const checkFollow = (_data: any) => {
+        let list = []
+        list.push(userInfo?.following?.find(user => user?.following_id === userInfo?.id && user?.followed_id === _data?.user_id))
+        console.log({ list });
+
+        if (!list[0]) {
+            setIsFollow(false)
+        } else {
+            setIsFollow(true)
+        }
+    }
 
     if (loading) {
         return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -206,34 +220,34 @@ const PostDetailScreen = ({ Props, route }) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
                                                 style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
-                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text> */}
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data?.time} {data?.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
                                     {userInfo?.id !== data?.user?.id ? (
                                         <TouchableOpacity
                                             onPress={() => onFollowUser(data?.user?.id)}
                                             style={styles.followContainer}>
-                                            <ButtonNormal outlined buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                            <ButtonNormal onPress={() => onFollowUser(data?.user?.id)} outlined buttonStyle={styles.followButton} title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
                                         </TouchableOpacity>
                                     ) : <View style={{ width: 10, height: 10 }} />}
 
                                 </View>
 
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
-                                    <Text style={styles.productName}>{data.name ?? ''}</Text>
+                                    <Text style={styles.productName}>{data?.name ?? ''}</Text>
 
 
 
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={styles.productDescription}>
-                                        {data.description ?? ''}
+                                        {data?.description ?? ''}
                                     </Text>
 
 
@@ -281,20 +295,20 @@ const PostDetailScreen = ({ Props, route }) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
                                                 style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
-                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text> */}
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data?.time} {data?.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
                                     {userInfo?.id !== data?.user?.id ? (
                                         <TouchableOpacity
                                             onPress={() => onFollowUser(data?.user?.id)}
                                             style={styles.followContainer}>
-                                            <ButtonNormal outlined buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                            <ButtonNormal onPress={() => onFollowUser(data?.user?.id)} outlined buttonStyle={styles.followButton} title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
                                         </TouchableOpacity>
                                     ) : <View style={{ width: 10, height: 10 }} />}
                                 </View>

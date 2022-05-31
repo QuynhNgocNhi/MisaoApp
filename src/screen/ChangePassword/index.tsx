@@ -17,7 +17,9 @@ import { Button } from 'react-native-elements';
 import LinkButton from '../../component/Button/LinkButton';
 import UnderlinePasswordInput from '../../component/InputPassword';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { resetPasswordAPI } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
+import { changePasswordAPI } from '../../services';
 import LoadingOverlay from '../../component/LoadingOverlay';
 
 
@@ -27,41 +29,39 @@ const INPUT_BORDER_COLOR = color.borderColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
 
-const NewPassword = ({ route }: any) => {
-    const [password1, setPassword1] = useState<string>()
-    const [password2, setPassword2] = useState<string>()
-
-    const [loading, setLoading] = useState(false)
-
-    const navigation = useNavigation();
+const ChangePassword = ({ route }: any) => {
+    const [currentPassword, setCurrentPassword] = useState<string>()
+    const [newPassword, setNewPassword] = useState<string>()
+    const [confirmNewPassword, setConfirmNewPassword] = useState<string>()
+    const [loading, setLoading] = useState<boolean>(false)
+    const navigation = useNavigation()
     const isFocused = useIsFocused();
 
-    const onChangePassword = async () => {
-        if (password1 && password2 && password1 === password2) {
-            setLoading(true)
-            const response = await resetPasswordAPI(route.params.phoneNumber, password1, route.params.OTP)
-            if (response.__typename !== 'ErrorResponse') {
-                Alert.alert("", "Đổi mật khẩu thành công!", [
-                    {
-                        text: "Tiếp tục", onPress: () => navigation.navigate('Login', {
-                            phoneNumber: route.params.phoneNumber ?? ''
-                        })
-                    }
-                ]);
+    const onCheckPassword = async () => {
+        if (currentPassword && newPassword && confirmNewPassword) {
+            if (newPassword === confirmNewPassword) {
+                setLoading(true)
+                const response = await changePasswordAPI({
+                    current_password: currentPassword,
+                    password: newPassword,
+                    password_confirmation: confirmNewPassword
+                })
+                if (response.__typename !== 'ErrorResponse') {
+                    Alert.alert("", "Đổi mật khẩu thành công!", [
+                        {
+                            text: 'OK',
+                            onPress: () => navigation.goBack()
+                        }
+                    ])
+                }
+                setLoading(false)
+            } else {
+                Alert.alert("", "Mật khẩu xác nhận không trùng khớp!")
             }
-            setLoading(false)
+        } else {
+            Alert.alert("", "Vui lòng điền đầy đủ các thông tin bên dưới.")
         }
-        else if (password1 && !password2) {
-            Alert.alert("", "Vui lòng nhập 2 lần mật khẩu mới của bạn!")
 
-        }
-        else if (password2 && !password1) {
-            Alert.alert("", "Vui lòng nhập 2 lần mật khẩu mới của bạn!")
-
-        }
-        else {
-            Alert.alert("", "Vui lòng nhập mật khẩu trùng khớp!")
-        }
     }
 
     return (
@@ -74,36 +74,59 @@ const NewPassword = ({ route }: any) => {
                         contentContainerStyle={styles.contentContainerStyle}>
                         <View style={styles.form}>
                             <View style={styles.inputGroup}>
+
                                 <UnderlinePasswordInput
                                     returnKeyType="done"
-                                    placeholder="Nhập mật khẩu mới của bạn"
+                                    placeholder="Nhập mật khẩu hiện tại của bạn"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={password1}
-                                    onChangeText={(value: any) => setPassword1(value)}
+                                    value={currentPassword}
+                                    onChangeText={(value: any) => setCurrentPassword(value)}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 />
                             </View>
                             <View style={styles.inputGroup}>
+
                                 <UnderlinePasswordInput
                                     returnKeyType="done"
-                                    placeholder="Nhập lại mật khẩu mới của bạn"
+                                    placeholder="Nhập mật khẩu  mới"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={password2}
-                                    onChangeText={(value: any) => setPassword2(value)}
+                                    value={newPassword}
+                                    onChangeText={(value: any) => setNewPassword(value)}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 />
                             </View>
+                            <View style={styles.inputGroup}>
+
+                                <UnderlinePasswordInput
+                                    returnKeyType="done"
+                                    placeholder="Nhập mật khẩu xác nhận"
+                                    placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+                                    inputTextColor={INPUT_TEXT_COLOR}
+                                    value={confirmNewPassword}
+                                    onChangeText={(value: any) => setConfirmNewPassword(value)}
+                                    borderColor={INPUT_BORDER_COLOR}
+                                    focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                                />
+                            </View>
+
                             <View style={styles.buttonsGroup}>
                                 <ButtonNormal
                                     buttonStyle={styles.customButton}
-                                    onPress={onChangePassword}
-                                    title={'Đổi mật khẩu'.toUpperCase()}
+                                    onPress={onCheckPassword}
+                                    title={'Xác nhận'.toUpperCase()}
                                 />
+
+
                             </View>
+                            {/* <LinkButton
+                                onPress={() => { navigation.navigate('EnterOTP', { typeOTP: 'forgetPassword', phoneNumber: phoneNumber }); }}
+                                title="Quên mật khẩu"
+                                titleStyle={styles.forgotPasswordText}
+                            /> */}
 
                         </View>
                     </KeyboardAwareScrollView>
@@ -142,4 +165,4 @@ const styles = StyleSheet.create({
 
 
 });
-export default NewPassword;
+export default ChangePassword;

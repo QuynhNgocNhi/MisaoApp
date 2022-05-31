@@ -76,7 +76,7 @@ import color from '../../theme/color';
 
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { deleteProductAPI, followUserAPI, getProductDetailAPI, orderProductAPI } from '../../services';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 import LoadingOverlay from '../../component/LoadingOverlay';
 
@@ -85,6 +85,7 @@ import { tokenSelector } from '../../modules/auth/selectors';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParameterList } from '../../MainNavigator';
+import { getUserInfo } from '../../modules/user/slice';
 type HomeProps = NativeStackScreenProps<RootStackParameterList, "Home">
 
 const ProductDetailScreen = ({ Props, route }: any) => {
@@ -99,15 +100,19 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const [isFollow, setIsFollow] = useState<boolean>(true)
     const fetchProductDetail = async () => {
         setLoading(true)
-        const response = await getProductDetailAPI(routeParams?.productId)
+        const response = await getProductDetailAPI(routeParams?.id)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
+            checkFollow(response.data)
         }
         setLoading(false)
     }
-
+    const dispatch = useDispatch()
     const onFollowUser = async (userID: any) => {
         const response = await followUserAPI(userID)
+        if (response.__typename !== 'ErrorResponse') {
+            setIsFollow(!isFollow)
+        }
     }
 
     const onOrderProduct = async () => {
@@ -172,6 +177,9 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const [productList, setProductList] = useState<any>([])
     const token = useSelector(tokenSelector)
 
+    console.log({ userInfo });
+
+
 
     const fetchData = async () => {
         if (!token) {
@@ -192,7 +200,17 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     }, [])
 
 
+    const checkFollow = (_data: any) => {
+        let list = []
+        list.push(userInfo?.following?.find(user => user?.following_id === userInfo?.id && user?.followed_id === _data?.user_id))
+        console.log({ list });
 
+        if (!list[0]) {
+            setIsFollow(false)
+        } else {
+            setIsFollow(true)
+        }
+    }
 
     if (loading) {
         return (
@@ -201,7 +219,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
             </View>
         )
     }
-
 
     return (
         <SafeAreaProvider>
@@ -216,7 +233,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                 <Text numberOfLines={1} style={
 
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>{data.name ?? ''}
+                                }>{data?.name ?? ''}
                                 </Text>
                             }
                             leftComponent={
@@ -243,26 +260,31 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
                                                 style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
-                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text> */}
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data?.time} {data?.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
                                     {userInfo?.id !== data?.user?.id ? (
                                         <TouchableOpacity
                                             onPress={() => onFollowUser(data?.user?.id)}
                                             style={styles.followContainer}>
-                                            <ButtonNormal outlined buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                            <ButtonNormal
+                                                onPress={() => onFollowUser(data?.user?.id)}
+                                                outlined buttonStyle={styles.followButton}
+                                                title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
                                         </TouchableOpacity>
                                     ) : <View style={{ width: 10, height: 10 }} />}
 
                                 </View>
+                                {console.log(userInfo?.following?.find(user => user.followed_id === userInfo?.id))
+                                }
                                 <View style={styles.productContainer}>
-                                    <Text style={styles.productName}>{data.name ?? ''}
+                                    <Text style={styles.productName}>{data?.name ?? ''}
                                     </Text>
                                     {data?.discount > 0 ? (
                                         <View style={styles.unitPriceRow}>
@@ -347,14 +369,11 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                                 borderStyle: 'solid',
                                                 borderWidth: 1,
                                             }}
-
-                                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
-
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
                                                 style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
-                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
                                     <View style={styles.followContainer}>
@@ -363,7 +382,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                             <TouchableOpacity
                                                 onPress={() => onFollowUser(data?.user?.id)}
                                                 style={styles.followContainer}>
-                                                <ButtonNormal outlined buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                                <ButtonNormal outlined buttonStyle={styles.followButton} title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
                                             </TouchableOpacity>
                                         ) : <View style={{ width: 10, height: 10 }} />}
                                     </View>

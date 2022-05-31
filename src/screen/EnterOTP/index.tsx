@@ -16,6 +16,8 @@ import {
 } from 'react-native-confirmation-code-field';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
+import { sendOtpRegisterAPI, sendOtpResetPasswordAPI } from '../../services';
+import LoadingOverlay from '../../component/LoadingOverlay';
 // enterOTP Config
 const headerImg = require('../../assets/image/receiveMessage.png')
 const CELL_COUNT = 6;
@@ -31,24 +33,41 @@ const EnterOTP = ({ route }: any) => {
     });
     const navigation = useNavigation();
     const isFocused = useIsFocused();
+    const [loading, setLoading] = useState(false)
+    const [otp, setOtp] = useState(route.params.OTP ?? '')
 
     const onCheckOTP = async () => {
-        if (value && route.params.typeOTP == "Register") {
 
-            Alert.alert("", value, [
-
-                { text: "Tiếp tục", onPress: () => navigation.navigate('Register', { phoneNumber: route.params.phoneNumber ?? '' }) }
-            ]);
-
-        } else if (value && route.params.typeOTP == "forgetPassword") {
-            Alert.alert("", value, [
-
-                { text: "Tiếp tục", onPress: () => navigation.navigate('NewPassword', { phoneNumber: route.params.phoneNumber ?? '' }) }
-            ]);
+        if (value && route.params.typeOTP == "Register" && value === otp) {
+            navigation.navigate('Register',
+                { phoneNumber: route.params.phoneNumber ?? '', OTP: value })
+        }
+        else if (value && route.params.typeOTP == "forgetPassword" && value === otp) {
+            navigation.navigate('NewPassword', {
+                phoneNumber: route.params.phoneNumber ?? '', OTP: value
+            })
         }
         else {
             Alert.alert("", "Vui lòng nhập mã OTP được gửi đến bạn!")
         }
+    }
+    const onSendOTPAgain = async () => {
+        setLoading(true)
+        if (route.params.typeOTP == "Register") {
+            const response: any = await sendOtpRegisterAPI(route.params.phoneNumber);
+            if (response.__typename !== 'ErrorResponse') {
+                setOtp(response.data.otp)
+                Alert.alert("", "Mã OTP đã được gửi đến bạn!")
+            }
+        } else {
+            const response: any = await sendOtpResetPasswordAPI(route.params.phoneNumber);
+            if (response.__typename !== 'ErrorResponse') {
+                setOtp(response.data.otp)
+                Alert.alert("", "Mã OTP đã được gửi đến bạn!")
+            }
+        }
+        setLoading(false)
+
     }
 
     return (
@@ -96,7 +115,7 @@ const EnterOTP = ({ route }: any) => {
                         <Text style={styles.textResendOTP}>Bạn chưa nhận được OTP?
                             <LinkButton
                                 titleStyle={styles.buttonResendOTP}
-                                onPress={onCheckOTP}
+                                onPress={onSendOTPAgain}
                                 title={' Gửi Lại OTP!'}
                             >
                             </LinkButton>
@@ -110,7 +129,7 @@ const EnterOTP = ({ route }: any) => {
                     </View>
 
                 </View>
-
+                <LoadingOverlay loading={loading} />
             </SafeAreaView>
         </SafeAreaProvider >
     );

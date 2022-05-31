@@ -33,9 +33,8 @@ interface userItemProps {
 const userItem = ({ chatRoom }: any) => {
     const navigation = useNavigation<any>();
     const user = useSelector(userSelector)
-
-
-
+    console.log({user});
+    
     return (
         <View style={styles.chatItemContainer}>
 
@@ -50,10 +49,8 @@ const userItem = ({ chatRoom }: any) => {
                 source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }}
             />
             <View style={[styles.userItem, { width: '90%', }]}>
-
                 <View style={styles.userNameContainer}>
                     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-
                         <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.name : chatRoom?.buyer?.name}</Text>
                         <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={styles.commentTime} numberOfLines={1}>{moment(chatRoom?.last_message?.updated_at).fromNow()}</Text>
 

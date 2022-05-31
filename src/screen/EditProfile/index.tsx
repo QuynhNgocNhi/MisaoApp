@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Item, StatusBar, SafeAreaView, Text, View, StyleSheet, Alert } from 'react-native';
+import { Item, StatusBar, SafeAreaView, Text, View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-
+import ImagePicker from 'react-native-image-crop-picker';
 
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
@@ -20,6 +20,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 import { isFulfilled } from '@reduxjs/toolkit';
+import FastImage from 'react-native-fast-image';
+import LoadingOverlay from '../../component/LoadingOverlay';
+import { updateProfileAPI } from '../../services';
+import { getUserInfo } from '../../modules/user/slice';
 
 
 const PLACEHOLDER_TEXT_COLOR = color.normalText;
@@ -35,42 +39,57 @@ let BUTTON_COLOR = BUTTON_COLOR_UNAVAILABLE;
 const EditProfile = ({ route }: any) => {
 
     const userInfo = useSelector(userSelector);
-    const [userName, setUserName] = useState<string>(userInfo?.name)
     const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone)
     const [address, setAddress] = useState<string>(userInfo?.address)
     const [birthDate, setBirthDate] = useState<string>(userInfo?.birthDate)
     const [gender, setGender] = useState<string>(userInfo?.gender)
     const [identity, setIdentity] = useState<string>(userInfo?.identity_card_number)
     const [saveAvailableState, setSaveAvailableState] = React.useState(false);
-
+    const [data, setData] = useState(userInfo)
     const navigation = useNavigation();
     const isFocused = useIsFocused();
-    const handleChange = () => {
-        if (identity) {
+    const [image, setImage] = useState(userInfo?.profile_image ? { id: 0, url_full: userInfo?.profile_image_url } : null)
+    const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
+    // const handleChange = () => {
+    //     if (identity) {
 
-            setSaveAvailableState(saveAvailableState => true);
-        }
-        else if (address) {
-            setSaveAvailableState(saveAvailableState => true);
+    //         setSaveAvailableState(saveAvailableState => true);
+    //     }
+    //     else if (address) {
+    //         setSaveAvailableState(saveAvailableState => true);
 
-        }
+    //     }
 
-        else if (birthDate) {
-            setSaveAvailableState(saveAvailableState => true);
+    //     else if (birthDate) {
+    //         setSaveAvailableState(saveAvailableState => true);
 
-        }
-        else {
-            setSaveAvailableState(saveAvailableState => false);
-        }
-
-
-
-    }
-    useEffect(() => {
-        handleChange();
-    }, [identity, address, birthDate])
+    //     }
+    //     else {
+    //         setSaveAvailableState(saveAvailableState => false);
+    //     }
+    // }
+    // useEffect(() => {
+    //     handleChange();
+    // }, [identity, address, birthDate])
     const onUpdateProfile = async () => {
-
+        setLoading(true)
+        const response = await updateProfileAPI(data, image)
+        if (response.__typename !== 'ErrorResponse') {
+            dispatch(getUserInfo())
+            Alert.alert("", "Cập nhật thông tin thành công")
+        }
+        setLoading(false)
+    }
+    const onPickImage = () => {
+        ImagePicker.openPicker({
+            mediaType: 'photo',
+        }).then(image => {
+            setImage({
+                id: -1,
+                url_full: image.path,
+            })
+        });
     }
 
     return (
@@ -83,6 +102,22 @@ const EditProfile = ({ route }: any) => {
                         contentContainerStyle={styles.contentContainerStyle}>
                         <View style={styles.form}>
                             <View style={styles.inputGroup}>
+                                <TouchableOpacity
+                                    onPress={onPickImage}
+                                    style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                    <FastImage
+                                        source={image ? { uri: image.url_full } : require('../../assets/avatar/11.png')}
+                                        style={{
+                                            width: 120,
+                                            height: 120,
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={onPickImage}
+                                >
+                                    <Text style={{ textAlign: 'center', fontWeight: 'bold', color: 'black' }}>Chọn ảnh đại diện</Text>
+                                </TouchableOpacity>
 
                                 <UnderlineTextInput
                                     inputStyle={styles.enableInputStyle}
@@ -90,35 +125,18 @@ const EditProfile = ({ route }: any) => {
                                     placeholder="Họ và tên của bạn"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={userName}
-                                    onChangeText={(value: any) => setUserName(value)}
+                                    value={data?.name}
+                                    onChangeText={(value: any) => setData({ ...data, name: value })}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 />
                                 <UnderlineTextInput
                                     editable={false}
                                     inputStyle={styles.disableInputStyle}
-
                                     placeholder="Số điện thoại của bạn"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
                                     value={phoneNumber}
-
-                                    borderColor={INPUT_BORDER_COLOR}
-                                    focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
-                                />
-
-
-                                <UnderlineTextInput
-
-                                    editable={false}
-                                    inputStyle={styles.disableInputStyle}
-
-                                    placeholder="Giới tính"
-                                    placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
-                                    inputTextColor={INPUT_TEXT_COLOR}
-                                    value={gender == "1" ? "Nữ" : "Nam"}
-
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 />
@@ -129,8 +147,8 @@ const EditProfile = ({ route }: any) => {
                                     placeholder="Địa chỉ của bạn"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={address}
-                                    onChangeText={(value: any) => setAddress(value)}
+                                    value={data?.address}
+                                    onChangeText={(value: any) => setData({ ...data, address: value })}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 />
@@ -140,8 +158,8 @@ const EditProfile = ({ route }: any) => {
                                     placeholder="Ngày sinh"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={birthDate}
-                                    onChangeText={(value: any) => setBirthDate(value)}
+                                    value={data?.birthday}
+                                    onChangeText={(value: any) => setData({ ...data, birthday: value })}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 />
@@ -151,10 +169,8 @@ const EditProfile = ({ route }: any) => {
                                     placeholder="CMND/CCCD"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
-                                    value={identity}
-                                    onChangeText={(value: any) => {
-                                        setIdentity(value);
-                                    }}
+                                    value={data?.identity_card_number}
+                                    onChangeText={(value: any) => setData({ ...data, identity_card_number: value })}
                                     borderColor={INPUT_BORDER_COLOR}
                                     focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                                 />
@@ -165,9 +181,7 @@ const EditProfile = ({ route }: any) => {
                                     buttonStyle={{
                                         width: '80%',
                                         borderRadius: 5,
-                                        backgroundColor:
-                                            (saveAvailableState === false) ? BUTTON_COLOR_UNAVAILABLE : BUTTON_COLOR_AVAILABLE
-
+                                        backgroundColor: BUTTON_COLOR_AVAILABLE
                                     }}
                                     onPress={onUpdateProfile}
                                     title={'Lưu thông tin'.toUpperCase()}
@@ -179,7 +193,7 @@ const EditProfile = ({ route }: any) => {
                         </View>
                     </KeyboardAwareScrollView>
                 </View>
-
+                <LoadingOverlay loading={loading} />
             </SafeAreaView>
         </SafeAreaProvider >
     );

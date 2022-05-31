@@ -236,7 +236,7 @@ const HomeScreen = () => {
                                 type='material-community'
                                 color='#000000'
                                 size={25}
-                                onPress={() => navigation.navigate("ForgetPassword")}
+                                onPress={() => navigation.navigate("ChangePassword")}
                             />
                             <Text style={styles.buttonName}>Đổi mật khẩu</Text>
                         </View>

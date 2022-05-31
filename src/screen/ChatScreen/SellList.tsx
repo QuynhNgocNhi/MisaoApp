@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/native';
 import React, { Component, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { getCharRoomAPI } from '../../services';
@@ -5,6 +6,7 @@ import UserItem from './UserItem';
 export const SellList = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const isFoucsed = useIsFocused()
     const fetchChatRoom = async () => {
         setLoading(true)
         const response = await getCharRoomAPI(2)
@@ -15,9 +17,9 @@ export const SellList = () => {
     }
     useEffect(() => {
         fetchChatRoom()
-    }, [])
+    }, [isFoucsed])
     const updateRoomChatList = async () => {
-        const response = await getCharRoomAPI(1)
+        const response = await getCharRoomAPI(2)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
         }
@@ -37,6 +39,8 @@ export const SellList = () => {
             </View>
         )
     }
+    console.log({data});
+    
 
 
     return (

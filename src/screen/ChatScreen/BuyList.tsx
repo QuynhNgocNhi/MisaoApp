@@ -3,10 +3,12 @@ import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { getCharRoomAPI } from '../../services';
 import UserItem from './UserItem';
 import color from '../../theme/color';
+import { useIsFocused } from '@react-navigation/native';
 
 export const BuyList = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const isFoucsed = useIsFocused()
     const fetchChatRoom = async () => {
         setLoading(true)
         const response = await getCharRoomAPI(1)
@@ -17,14 +19,13 @@ export const BuyList = () => {
     }
     useEffect(() => {
         fetchChatRoom()
-    }, [])
+    }, [isFoucsed])
     const updateRoomChatList = async () => {
         const response = await getCharRoomAPI(1)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
         }
     }
-
     useEffect(() => {
         const reloadInterval = setInterval(() => {
             updateRoomChatList()
@@ -58,15 +59,9 @@ export const BuyList = () => {
             }}
             renderItem={({ item, index }) => {
                 return (
-                    <View>
-
-                        <UserItem chatRoom={item}
-                        />
-
-                    </View>
+                    <UserItem chatRoom={item} />
                 )
             }}
-        /* renderItem={({ item }) =><UserItem  User={item} />} */
         />
     );
 }
