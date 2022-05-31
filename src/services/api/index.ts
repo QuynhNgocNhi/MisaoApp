@@ -8,7 +8,7 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import "react-native-get-random-values";
 
-const BASE_URL = 'http://103.110.86.45/api'
+const BASE_URL = 'http://misao.one/api'
 const TIMEOUT = 10000;
 const DEBUG = true;
 
