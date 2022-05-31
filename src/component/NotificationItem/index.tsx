@@ -7,7 +7,12 @@ import { Avatar } from 'react-native-elements';
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 import { useNavigation } from '@react-navigation/native';
-
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
+import FastImage from 'react-native-fast-image';
+import moment from 'moment';
+import 'moment/locale/vi'  // without this line it didn't work
+moment.locale('vi')
 
 //import image from '../../data/image'
 interface PostsProps {
@@ -23,6 +28,7 @@ interface PostsProps {
         time: number,
         timeUnit: string,
         askedTimes: number,
+        updated_at: string
 
     }
 }
@@ -30,23 +36,28 @@ interface PostsProps {
 const PostItem = ({ post }: PostsProps) => {
     const navigation = useNavigation();
     const data = { postId: post.id, title: post.title, content: post.content, userId: post.userId, userName: post.name }
-
+    const userInfo = useSelector(userSelector)
     return (
         <View>
             <View style={styles.root}>
                 <View style={styles.topContainer}>
 
-                    <View style={styles.userContainer}>
-                        <Avatar
-                            size="medium"
-                            rounded
-                            source={post.avatar}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <FastImage
+                            style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 40
+                            }}
+                            resizeMode={'cover'}
+                            source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../image/symbol.png')}
                         />
+                        <View style={{ marginLeft: 10 }}>
+                            <Text style={styles.content}>
+                                {post.title}
 
-                        <Text style={styles.content}><Text onPress={() => navigation.navigate('UserProfileScreen')}
-                            style={styles.userName} numberOfLines={2}>{post.name}
-
-                        </Text> {post.content}</Text>
+                            </Text><Text>{post.content}</Text>
+                        </View>
 
                     </View>
 
@@ -55,7 +66,7 @@ const PostItem = ({ post }: PostsProps) => {
                     <View style={styles.bottomContainer}>
 
 
-                        <Text numberOfLines={1} style={styles.postTime}><FontAwesome name={'clock-o'} size={22} /> {post.time} {post.timeUnit} trước
+                        <Text numberOfLines={1} style={styles.postTime}><FontAwesome name={'clock-o'} size={22} />{moment(post.updated_at).fromNow()}
                         </Text>
 
 
@@ -79,7 +90,7 @@ const styles = StyleSheet.create({
 
     topContainer:
     {
-        width: '90%',
+        width: '100%',
         flexDirection: 'column',
         alignItems: 'center',
         margin: 5,

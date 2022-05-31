@@ -43,8 +43,6 @@ const MyPostItem = ({ post }: any) => {
         const response = await likePostAPI(post?.id)
         setTempHasFavorite(tempHasFavorite === 0 ? 1 : 0)
     }
-    console.log({ post });
-
     return (
         <View>
             <View style={styles.root}>

@@ -10,9 +10,6 @@ import CommentItem from '../../component/CommentItem';
 import ProductItem from '../../component/ProductItem';
 import AddComment from '../../component/AddComment';
 
-//import data
-import comment from '../../assets/data/comment';
-import products from '../../assets/data/product';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 
@@ -95,12 +92,11 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const [updating, setUpdating] = useState<boolean>(false)
     const userInfo = useSelector(userSelector)
     const isFocused = useIsFocused()
-
     const [loading, setLoading] = useState<boolean>(true)
     const [isFollow, setIsFollow] = useState<boolean>(true)
     const fetchProductDetail = async () => {
         setLoading(true)
-        const response = await getProductDetailAPI(routeParams?.id)
+        const response = await getProductDetailAPI(routeParams?.productId)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
             checkFollow(response.data)
@@ -129,7 +125,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
             })
         }
         setUpdating(false)
-
 
     }
 
@@ -177,10 +172,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const [productList, setProductList] = useState<any>([])
     const token = useSelector(tokenSelector)
 
-    console.log({ userInfo });
-
-
-
     const fetchData = async () => {
         if (!token) {
             navigation.replace('')
@@ -203,7 +194,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const checkFollow = (_data: any) => {
         let list = []
         list.push(userInfo?.following?.find(user => user?.following_id === userInfo?.id && user?.followed_id === _data?.user_id))
-        console.log({ list });
 
         if (!list[0]) {
             setIsFollow(false)
@@ -281,8 +271,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                     ) : <View style={{ width: 10, height: 10 }} />}
 
                                 </View>
-                                {console.log(userInfo?.following?.find(user => user.followed_id === userInfo?.id))
-                                }
                                 <View style={styles.productContainer}>
                                     <Text style={styles.productName}>{data?.name ?? ''}
                                     </Text>

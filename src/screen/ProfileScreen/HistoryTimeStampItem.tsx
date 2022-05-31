@@ -16,8 +16,9 @@ import ProductHistoryItem from './ProductHistoryItem';
 import PostHistoryItem from './PostHistoryItem';
 
 
-const MyProductList = ({ date }) => {
+const MyProductList = ({ date, data }: any) => {
     /*  const PostSortedByDate = [...post].filter */
+    console.log({ data });
 
     return (
 
@@ -47,38 +48,14 @@ const MyProductList = ({ date }) => {
 
                     scrollEnabled={true}
 
-                    data={product}
+                    data={data}
                     renderItem={({ item, index }) => {
                         return (
                             <View>
-                                {
-                                    item.dateCreated == date && (
-                                        <ProductHistoryItem product={item}
+                                        <ProductHistoryItem item={item}
                                             contentContainerStyle={styles.myPostItem}
                                             scrollEnabled={false}
                                         />
-                                    )
-                                }
-                            </View>
-                        )
-                    }}
-                />
-                <FlatList
-
-                    scrollEnabled={true}
-
-                    data={post}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <View >
-                                {
-                                    item.dateCreated == date && (
-                                        <PostHistoryItem post={item}
-                                            contentContainerStyle={styles.myPostItem}
-                                            scrollEnabled={false}
-                                        />
-                                    )
-                                }
                             </View>
                         )
                     }}

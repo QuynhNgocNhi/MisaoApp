@@ -96,8 +96,6 @@ const PostAddedPreviewScreen = ({ Props, route }: any) => {
     const onAddPost = async () => {
         setLoading(true)
         const response = await addPostAPI(data)
-        console.log({ response });
-
         if (response.__typename !== 'ErrorResponse') {
             dispatch(getUserInfo())
             Alert.alert("", "Đăng tin mua thành công!", [

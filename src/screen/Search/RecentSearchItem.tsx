@@ -10,8 +10,6 @@ import { Icon } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import { masterDataSelector } from '../../modules/search/selectors';
 const RecentSearchItem = ({ item, onSearchWithKeyword }: any) => {
-    console.log({ item });
-
     const categories = useSelector(masterDataSelector)
 
 
