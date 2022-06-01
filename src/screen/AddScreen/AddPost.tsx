@@ -57,11 +57,11 @@ const AddPostScreen = () => {
 
     const onGoToStep2 = () => {
         if (data.name && data.description && data.category_id) {
-            let productInfo = {
+            let postInfo = {
                 ...data,
                 image_list: imageList
             }
-            navigation.navigate('AddPostLastStep', { data: productInfo });
+            navigation.navigate('AddPostLastStep', { data: postInfo });
         } else {
             Alert.alert("", "Vui lòng nhập đầy đủ thông tin cho tin mua.")
         }

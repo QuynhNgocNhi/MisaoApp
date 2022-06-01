@@ -114,7 +114,7 @@ const PostAddedPreviewScreen = ({ Props, route }: any) => {
         }
         setLoading(false)
     }
-    let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth()}-${data.limited_date?.getFullYear()}`
+    let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth() + 1}-${data.limited_date?.getFullYear()}`
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.screenContainer}>

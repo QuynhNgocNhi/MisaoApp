@@ -71,7 +71,7 @@ const AddPostLastStep = (Props) => {
         if (post?.seller_name && post?.seller_phone && post?.seller_address) {
             let postInfo = {
                 ...post,
-                out_of_stock_date: date
+                limited_date: date
             }
             navigation.navigate("PostAddedPreview", { data: postInfo })
         } else {
@@ -122,7 +122,7 @@ const AddPostLastStep = (Props) => {
 
                                     <Text style={{ fontSize: 22, fontWeight: '500', color: 'black' }}>{getDate()}</Text>
                                     <DateTimePickerModal
-                                        minimumDate={new Date(1950, 0, 1)}
+                                        minimumDate={new Date()}
                                         isVisible={isDatePickerVisible}
                                         mode="date"
                                         onConfirm={handleConfirm}

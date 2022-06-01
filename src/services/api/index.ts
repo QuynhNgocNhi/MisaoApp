@@ -363,7 +363,7 @@ export const addProductAPI = async (data: any): Promise<BaseResponse | ErrorResp
         formData.append('seller_name', data?.seller_name)
         formData.append('description', data?.description)
         formData.append('confirm', true)
-        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
+        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth() + 1}-${data.out_of_stock_date?.getFullYear()}`
         formData.append('out_of_stock_date', out_of_stock_date)
         if (data?.image_list) {
             data?.image_list.forEach((file: any) => {
@@ -398,7 +398,7 @@ export const editProductAPI = async (data: any): Promise<BaseResponse | ErrorRes
         formData.append('seller_name', data?.seller_name)
         formData.append('description', data?.description)
         formData.append('confirm', true)
-        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth()}-${data.out_of_stock_date?.getFullYear()}`
+        let out_of_stock_date = `${data.out_of_stock_date?.getDate()}-${data.out_of_stock_date?.getMonth() + 1}-${data.out_of_stock_date?.getFullYear()}`
         formData.append('out_of_stock_date', out_of_stock_date)
         if (data?.image_list) {
             data?.image_list.forEach((file: any) => {
@@ -431,14 +431,14 @@ export const addPostAPI = async (data: any): Promise<BaseResponse | ErrorRespons
         const formData = new FormData();
         formData.append('category_id', data?.category_id)
         formData.append('name', data?.name)
-        formData.append('is_active', data?.is_active)
+        //formData.append('is_active', data?.is_active)
 
         formData.append('seller_address', data?.seller_address)
         formData.append('seller_phone', data?.seller_phone)
         formData.append('seller_name', data?.seller_name)
         formData.append('description', data?.description)
         formData.append('confirm', true)
-        let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth()}-${data.limited_date?.getFullYear()}`
+        let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth() + 1}-${data.limited_date?.getFullYear()}`
         formData.append('limited_date', limited_date)
         if (data?.image_list) {
             data?.image_list.forEach((file: any) => {
@@ -469,7 +469,7 @@ export const editPostAPI = async (data: any): Promise<BaseResponse | ErrorRespon
         formData.append('seller_name', data?.seller_name)
         formData.append('description', data?.description)
         formData.append('confirm', true)
-        let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth()}-${data.limited_date?.getFullYear()}`
+        let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth() + 1}-${data.limited_date?.getFullYear()}`
         formData.append('limited_date', limited_date)
         /*  if (data?.image_list) {
              data?.image_list.forEach((file: any) => {
