@@ -77,8 +77,7 @@ const EditPostScreen = ({ Props, route }) => {
         if (data.name && data.description && data.category_id) {
             let productInfo = {
                 ...data,
-                image_list: imageList,
-                category_id: data.category_id
+
 
             }
             navigation.navigate('EditPostLastStep', { data: productInfo });
@@ -244,7 +243,7 @@ const EditPostScreen = ({ Props, route }) => {
                                                     <Text style={{
                                                         color: '#000',
                                                         fontSize: 16,
-                                                        fontWeight: data?.category.id === item.value ? 'bold' : 'normal',
+                                                        fontWeight: data?.category_id == item.value ? 'bold' : 'normal',
                                                         textAlign: 'center'
                                                     }}
 
