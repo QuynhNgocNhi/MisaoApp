@@ -77,7 +77,7 @@ const AddPostLastStep = (Props) => {
 
             }
 
-            navigation.navigate("PostAddedPreview", { data: postInfo })
+            navigation.navigate("PostEditPreview", { data: postInfo })
         } else {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của tin mua!")
         }

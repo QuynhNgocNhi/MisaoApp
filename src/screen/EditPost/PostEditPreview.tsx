@@ -76,7 +76,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 import { masterDataSelector } from '../../modules/search/selectors';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import { addPostAPI } from '../../services';
+import { editPostAPI } from '../../services';
 import { getUserInfo } from '../../modules/user/slice';
 
 
@@ -95,17 +95,17 @@ const PostAddedPreviewScreen = ({ Props, route }: any) => {
     console.log(data)
     const onAddPost = async () => {
         setLoading(true)
-        const response = await addPostAPI(data)
+        const response = await editPostAPI(data)
         if (response.__typename !== 'ErrorResponse') {
             dispatch(getUserInfo())
-            Alert.alert("", "Đăng tin mua thành công!", [
+            Alert.alert("", "Sửa tin mua thành công!", [
                 {
                     text: 'OK',
                     onPress: () => navigation.replace("HomeNavigation")
                 }
             ])
         } else {
-            Alert.alert("", "Đăng tin mua thất bại! Vui lòng thử lại sau.", [
+            Alert.alert("", "Sửa tin mua thất bại! Vui lòng thử lại sau.", [
                 {
                     text: 'OK',
                     onPress: () => { }
@@ -182,7 +182,7 @@ const PostAddedPreviewScreen = ({ Props, route }: any) => {
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Danh mục</Text>
-                                        <Text style={styles.requireAnswer}>{categories?.find((item: any) => item.value === data?.category_id)?.label}</Text>
+                                        <Text style={styles.requireAnswer}>{categories?.find((item: any) => item.value == data?.category_id)?.label}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 

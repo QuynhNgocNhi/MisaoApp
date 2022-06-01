@@ -431,8 +431,8 @@ export const addPostAPI = async (data: any): Promise<BaseResponse | ErrorRespons
         const formData = new FormData();
         formData.append('category_id', data?.category_id)
         formData.append('name', data?.name)
-        formData.append('is_availabel', data?.is_availabel)
-        formData.append('inventory_number', data?.inventory_number)
+        formData.append('is_active', data?.is_active)
+
         formData.append('seller_address', data?.seller_address)
         formData.append('seller_phone', data?.seller_phone)
         formData.append('seller_name', data?.seller_name)
@@ -450,6 +450,37 @@ export const addPostAPI = async (data: any): Promise<BaseResponse | ErrorRespons
             });
         }
         const response = await postFile<any>(`/buy-request-manager`, formData);
+
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
+export const editPostAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
+    try {
+        const formData = new FormData();
+        formData.append('category_id', data?.category_id)
+        formData.append('name', data?.name)
+        //formData.append('is_active', data?.is_active)
+
+        formData.append('seller_address', data?.seller_address)
+        formData.append('seller_phone', data?.seller_phone)
+        formData.append('seller_name', data?.seller_name)
+        formData.append('description', data?.description)
+        formData.append('confirm', true)
+        let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth()}-${data.limited_date?.getFullYear()}`
+        formData.append('limited_date', limited_date)
+        /*  if (data?.image_list) {
+             data?.image_list.forEach((file: any) => {
+                 formData.append('files[]', {
+                     uri: file.url_full,
+                     type: 'image/jpeg',
+                     name: `${uuidv4()}.jpg`,
+                 })
+             });
+         } */
+        const response = await postFile<any>(`/buy-request-manager/${data.id}`, formData);
 
         return response.data;
     } catch (error: any) {

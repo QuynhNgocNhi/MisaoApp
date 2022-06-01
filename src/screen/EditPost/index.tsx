@@ -77,7 +77,9 @@ const EditPostScreen = ({ Props, route }) => {
         if (data.name && data.description && data.category_id) {
             let productInfo = {
                 ...data,
-                image_list: imageList
+                image_list: imageList,
+                category_id: data.category_id
+
             }
             navigation.navigate('EditPostLastStep', { data: productInfo });
         } else {
