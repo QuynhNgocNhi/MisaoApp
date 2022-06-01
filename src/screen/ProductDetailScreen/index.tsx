@@ -196,7 +196,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
     const checkFollow = (_data: any) => {
         let list = []
-        list.push(userInfo?.following?.find(user => user?.following_id === userInfo?.id && user?.followed_id === _data?.user_id))
+        list.push(userInfo?.following?.find(user => user?.followed_id === _data?.user.id))
 
         if (!list[0]) {
             setIsFollow(false)

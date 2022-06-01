@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, Text, TouchableOpacity, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -25,16 +25,21 @@ import { useNavigation } from '@react-navigation/native';
 import ChatTypeScreen from '../ChatScreen/ChatTypeScreen'
 
 import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
-import { getOtherUserProfile } from '../../services';
+import { getOtherUserProfile, followUserAPI } from '../../services';
 import { UserInfo } from '../../services/type';
 import FastImage from 'react-native-fast-image';
-
+import { userSelector } from '../../modules/user/selectors';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const ProductDetailScreen = ({ Props, route }) => {
+
     const navigation = useNavigation();
     /*     const { data } = route.params;
      */
+    const userInfo = useSelector(userSelector)
+    const [isFollow, setIsFollow] = useState<boolean>(true)
+
     const [ProfileTab, setProfileTab] = useState(1);
     const [loading, setLoading] = useState(false)
     const [otherUserProfile, setOtherUserProfile] = useState<any>({})
@@ -48,6 +53,7 @@ const ProductDetailScreen = ({ Props, route }) => {
             const response = await getOtherUserProfile(route.params?.id)
             if (response.__typename !== 'ErrorResponse') {
                 setOtherUserProfile(response)
+                checkFollow(response)
             }
             setLoading(false)
         }
@@ -55,6 +61,7 @@ const ProductDetailScreen = ({ Props, route }) => {
 
     useEffect(() => {
         fetchData()
+        checkFollow(otherUserProfile)
     }, [route.params?.id])
 
 
@@ -66,6 +73,23 @@ const ProductDetailScreen = ({ Props, route }) => {
         )
     }
     console.log(otherUserProfile);
+    const onFollowUser = async (userID: any) => {
+        const response = await followUserAPI(userID)
+        if (response.__typename !== 'ErrorResponse') {
+            setIsFollow(!isFollow)
+        }
+    }
+
+    const checkFollow = (_data: any) => {
+        let list = []
+        list.push(userInfo?.following?.find(user => user?.followed_id === _data?.id))
+
+        if (!list[0]) {
+            setIsFollow(false)
+        } else {
+            setIsFollow(true)
+        }
+    }
 
 
     return (
@@ -135,9 +159,16 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 </View>
                                 <View style={styles.followProfileButtonContainer}>
 
-                                    <View style={styles.followButtonContainer}>
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
-                                    </View>
+                                    {userInfo?.id !== otherUserProfile.id ? (
+                                        <TouchableOpacity
+                                            onPress={() => onFollowUser(otherUserProfile.id)}
+                                            style={styles.followContainer}>
+                                            <ButtonNormal
+                                                onPress={() => onFollowUser(otherUserProfile.id)}
+                                                outlined buttonStyle={styles.followButton}
+                                                title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
+                                        </TouchableOpacity>
+                                    ) : <View style={{ width: 10, height: 10 }} />}
                                     <Text style={styles.addressBox} numberOfLines={1}>
                                         <Icon
 
