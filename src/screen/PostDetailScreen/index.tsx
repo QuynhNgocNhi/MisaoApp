@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, TouchableOpacity, SafeAreaView, ActivityIndicator, ScrollView, Platform, Image, TextInput } from 'react-native';
+import { View, StyleSheet, FlatList, Alert, Text, StatusBar, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ScrollView, Platform, Image, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -21,53 +21,11 @@ import { useIsFocused } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { masterDataSelector } from '../../modules/search/selectors';
 
-import { getPostListAPI, getPostDetailAPI, orderProductAPI, followUserAPI } from '../../services';
+import { getPostListAPI, deletePostAPI, getPostDetailAPI, orderProductAPI, followUserAPI } from '../../services';
 import { tokenSelector } from '../../modules/auth/selectors';
 
 import { userSelector } from '../../modules/user/selectors';
 
-
-
-interface productProps {
-
-    product: {
-        id: string,
-        title: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-        askedTimes: number,
-
-    }
-}
-interface UserProps {
-    user: {
-        id: string,
-        name: string,
-        avatar: string,
-
-
-    }
-
-}
-interface commentProps {
-    comment: {
-        id: string,
-        productId: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-
-
-    }
-
-}
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -178,6 +136,40 @@ const PostDetailScreen = ({ Props, route }) => {
             <ActivityIndicator animating />
         </View>)
     }
+    const onDeleteProduct = () => {
+        Alert.alert("", "Bạn chắc chắn muốn xóa tin mua này?", [
+            {
+                text: 'Hủy',
+                onPress: () => { },
+                style: 'cancel'
+            },
+            {
+                text: 'Xóa',
+                onPress: async () => {
+                    setUpdating(true)
+                    const response = await deletePostAPI(data?.id)
+                    if (response.__typename !== 'ErrorResponse') {
+                        Alert.alert("", "Xóa thành công", [
+                            {
+                                text: 'Ok',
+                                onPress: () => navigation.goBack(),
+                                style: 'cancel'
+                            }
+                        ])
+                    } else {
+                        Alert.alert("", "Xóa thất bại")
+                    }
+                    setUpdating(false)
+                },
+                style: 'cancel'
+            },
+        ])
+    }
+
+    const onEditProduct = () => {
+        navigation.navigate("EditPost", { data: { postId: data.id } });
+    }
+
 
     return (
         <SafeAreaProvider>
@@ -365,13 +357,39 @@ const PostDetailScreen = ({ Props, route }) => {
 
                         </View>
                     </ScrollView>
-                    <View style={[styles.box, styles.contentContainer]}>
-                        <ButtonNormal
-                            buttonStyle={styles.customButtonChatNow}
-                            onPress={onOrderProduct}
-                            title={'Hỏi Thăm'.toUpperCase()}
-                        />
-                    </View>
+                    {userInfo?.id !== data?.user?.id ? (
+                        <View style={[styles.box, styles.contentContainer]}>
+                            <ButtonNormal
+                                buttonStyle={styles.customButtonBackToHome}
+                                onPress={onOrderProduct}
+                                title={'Chốt'.toUpperCase()}
+                            />
+                        </View>
+                    ) : (
+                        <View style={{
+                            position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                            width: Dimensions.get('window').width, backgroundColor: color.background, padding: 10
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: color.normalButton, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2, marginRight: 20
+                                }}
+                                onPress={onEditProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Sửa</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: color.important, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2
+                                }}
+                                onPress={onDeleteProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Xóa</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
                 <LoadingOverlay loading={updating} />
             </SafeAreaView>

@@ -347,6 +347,15 @@ export const deleteProductAPI = async (id: any): Promise<any | ErrorResponse> =>
 
     }
 }
+export const deletePostAPI = async (id: any): Promise<any | ErrorResponse> => {
+    try {
+        const response = await post<any>(`/buy-request-manager/${id}/delete`, {});
+        return response.data;
+    } catch (error: any) {
+        return handleServerError(error);
+
+    }
+}
 
 export const addProductAPI = async (data: any): Promise<BaseResponse | ErrorResponse> => {
     try {
