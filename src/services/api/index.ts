@@ -340,7 +340,7 @@ export const orderProductAPI = async (data: any): Promise<any | ErrorResponse> =
 
 export const deleteProductAPI = async (id: any): Promise<any | ErrorResponse> => {
     try {
-        const response = await post<any>(`/product/${id}/delete`, {});
+        const response = await post<any>(`/product-manager/${id}/delete`, {});
         return response.data;
     } catch (error: any) {
         return handleServerError(error);

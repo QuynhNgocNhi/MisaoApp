@@ -142,11 +142,11 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                 text: 'Xóa sản phẩm',
                 onPress: async () => {
                     setUpdating(true)
-                    const response = await deleteProductAPI(routeParams?.productId)
+                    const response = await deleteProductAPI(data?.id)
                     if (response.__typename !== 'ErrorResponse') {
                         Alert.alert("", "Xóa thành công", [
                             {
-                                text: 'Hủy',
+                                text: 'Ok',
                                 onPress: () => navigation.goBack(),
                                 style: 'cancel'
                             }
