@@ -207,7 +207,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                     <Text style={styles.productStatus}>Chi tiết sản phẩm</Text>
                                     <View style={styles.productStatusItem}>
                                         <Text style={{ fontSize: 18 }}>Danh mục</Text>
-                                        <Text style={{ fontSize: 18 }}>{categories?.find((item: any) => item.value === data?.category_id)?.label}</Text>
+                                        <Text style={{ fontSize: 18 }}>{categories?.find((item: any) => item.value == data?.category_id)?.label}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 

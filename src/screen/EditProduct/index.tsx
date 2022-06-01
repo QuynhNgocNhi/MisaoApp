@@ -78,7 +78,9 @@ const EditProductScreen = ({ Props, route }: any) => {
         if (imageList?.length > 0 && data.name && data.description && data.category_id) {
             let productInfo = {
                 ...data,
-                image_list: imageList
+                image_list: imageList,
+                category_id: data.category_id
+
             }
             navigation.navigate('EditProductLastStep', { data: productInfo });
         } else {

@@ -90,6 +90,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const routeParams = route?.params?.data;
     console.log(routeParams?.productId);
     const [data, setData] = useState<any>()
+
     const [updating, setUpdating] = useState<boolean>(false)
     const userInfo = useSelector(userSelector)
     const isFocused = useIsFocused()
@@ -162,7 +163,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     }
 
     const onEditProduct = () => {
-        navigation.navigate("EditProduct", { data })
+        navigation.navigate("EditProduct", { data: { productId: data.id } });
     }
 
 
