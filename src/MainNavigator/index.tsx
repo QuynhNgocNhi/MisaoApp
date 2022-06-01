@@ -27,6 +27,8 @@ import AddProductLastStep from '../screen/AddScreen/AddProductLastStep';
 import AddPostLastStep from '../screen/AddScreen/AddPostLastStep';
 import PostAddedPreview from '../screen/AddScreen/PostAddedPreview';
 import ProductAddedPreview from '../screen/AddScreen/ProductAddedPreview';
+import PostEditPreview from '../screen/EditPost/PostEditPreview';
+import ProductEditPreview from '../screen/EditProduct/ProductEditPreview';
 import ProductDetail from '../screen/ProductDetailScreen';
 import EditProduct from '../screen/EditProduct';
 import EditProductLastStep from '../screen/EditProduct/EditProductLastStep';
@@ -84,10 +86,16 @@ export type RootStackParameterList = {
   ProductAddedPreview: {
     productId: string;
   };
+  ProductEditPreview: {
+    productId: string;
+  };
   AddPostLastStep: {
     productId: string;
   };
   PostAddedPreview: {
+    productId: string;
+  };
+  PostEditPreview: {
     productId: string;
   };
   ProductDetail: {
@@ -194,10 +202,14 @@ const MainNavigator = () => {
           <RootStack.Screen name="PostAddedPreview" options={{ headerShown: false }} component={PostAddedPreview} />
           <RootStack.Screen name="ProductDetail" options={{ headerShown: false }} component={ProductDetail} />
           <RootStack.Screen name="PostDetail" options={{ headerShown: false }} component={PostDetail} />
+
           <RootStack.Screen name="EditProduct" options={{ headerShown: false }} component={EditProduct} />
           <RootStack.Screen name="EditProductLastStep" options={{ headerShown: false }} component={EditProductLastStep} />
+          <RootStack.Screen name="ProductEditPreview" options={{ headerShown: false }} component={ProductEditPreview} />
+
           <RootStack.Screen name="EditPost" options={{ headerShown: false }} component={EditPost} />
           <RootStack.Screen name="EditPostLastStep" options={{ headerShown: false }} component={EditPostLastStep} />
+          <RootStack.Screen name="PostEditPreview" options={{ headerShown: false }} component={PostEditPreview} />
 
 
           <RootStack.Screen name="EnterPhoneNumber" options={({ navigation }) => ({

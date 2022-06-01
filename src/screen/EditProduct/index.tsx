@@ -126,7 +126,7 @@ const EditProductScreen = ({ Props, route }: any) => {
                                 <Button type="clear" onPress={onPickImage} icon={<Icon name={'image-plus'} size={62} color={color.borderColor} />} />
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {data?.images.map((image: any, index: number) => (
+                                {imageList.map((image: any, index: number) => (
                                     <View key={index} style={{
                                         borderWidth: 1,
                                         borderColor: '#A0BCC2',

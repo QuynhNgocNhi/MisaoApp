@@ -82,7 +82,7 @@ const EditProductScreen = (Props) => {
                 ...product,
                 out_of_stock_date: date
             }
-            navigation.navigate("ProductAddedPreview", { data: productInfo })
+            navigation.navigate("ProductEditPreview", { data: productInfo })
         } else {
             Alert.alert("", "Vui lòng điền đầy đủ thông tin của sản phẩm!")
         }
