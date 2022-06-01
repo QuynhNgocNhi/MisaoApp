@@ -33,11 +33,7 @@ const MyProductItem = ({ product }: any) => {
         time: product.time,
         timeUnit: product.timeUnit,
     }
-    const [tempHasFavorite, setTempHasFavorite] = useState(product?.has_favorite)
-    const onLikeProduct = async () => {
-        const response = await likeProductAPI(product?.id)
-        setTempHasFavorite(tempHasFavorite === 0 ? 1 : 0)
-    }
+
 
     return (
         <View style={styles.container} >
@@ -63,10 +59,10 @@ const MyProductItem = ({ product }: any) => {
                 </View>
                 <Text style={styles.askedTimes}> {product?.order?.length ? (product?.order?.length) : '0'} người đang hỏi</Text>
 
-                {product.discount && (<View style={styles.discountLabelContainer}>
+                {product.discount ? (<View style={styles.discountLabelContainer}>
                     <Text style={styles.label}>{`- ${product?.discount}%`}</Text>
 
-                </View>)}
+                </View>) : <></>}
                 {/* <TouchableOpacity
                     onPress={onLikeProduct}
                     style={styles.editContainer}>
