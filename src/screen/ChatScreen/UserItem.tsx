@@ -48,9 +48,9 @@ const userItem = ({ chatRoom }: any) => {
                 }}
                 source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }}
             />
-            <View style={[styles.userItem, { width: '90%', }]}>
+            <View style={[styles.userItem, { width: '90%', alignSelf: 'center', }]}>
                 <View style={styles.userNameContainer}>
-                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%', }}>
                         <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.name : chatRoom?.buyer?.name}</Text>
                         <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={styles.commentTime} numberOfLines={1}>{moment(chatRoom?.last_message?.updated_at).fromNow()}</Text>
 
@@ -79,24 +79,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '95%',
         paddingBottom: 10,
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
 
         alignItems: 'center',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        paddingLeft: 25
     },
 
     userItem: {
 
+        marginLeft: 15,
         padding: 10,
+        paddingLeft: 0,
         alignSelf: 'center',
+        borderBottomWidth: 0.2,
+        borderBottomColor: color.borderColor,
+
+
 
     },
     userNameContainer: {
 
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
 
-        alignItems: 'center',
     },
     userName: {
         fontWeight: '600',

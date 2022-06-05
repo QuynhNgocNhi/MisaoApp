@@ -133,6 +133,7 @@ export default function ChatRoomScreen() {
                     }
                 />
             </View>
+
             <FlatList
                 data={messageList}
                 keyExtractor={(item, index) => index.toString()}

@@ -44,7 +44,7 @@ export const BuyList = () => {
 
     return (
         <FlatList
-            style={{ backgroundColor: color.white }}
+            style={{ backgroundColor: color.white, paddingTop: 10 }}
             /* onEndReached={true} */
             data={data}
             keyExtractor={item => item.id}

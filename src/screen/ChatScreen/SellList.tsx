@@ -3,6 +3,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { getCharRoomAPI } from '../../services';
 import UserItem from './UserItem';
+import color from '../../theme/color';
 export const SellList = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -39,13 +40,13 @@ export const SellList = () => {
             </View>
         )
     }
-    console.log({data});
-    
+    console.log({ data });
+
 
 
     return (
         <FlatList
-            /* onEndReached={true} */
+            style={{ backgroundColor: color.white, paddingTop: 10 }}
             data={data}
             keyExtractor={item => item.id}
             ListEmptyComponent={() => {
