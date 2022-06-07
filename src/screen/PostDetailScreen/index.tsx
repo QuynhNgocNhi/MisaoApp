@@ -85,12 +85,13 @@ const PostDetailScreen = ({ Props, route }) => {
         const response = await orderProductAPI({
             confirm: true,
             user_seller_id: data?.user?.id,
-            buy_request_id: data?.id
+            buy_request_id: routeParams?.postId
         })
 
         if (response.__typename !== 'ErrorResponse') {
             navigation.navigate('ChatRoomScreen', {
-                id: response?.data?.chat_room?.id
+                id: response?.data?.chat_room?.id,
+                chatRoom: response?.data?.chat_room,
             })
         }
         setUpdating(false)

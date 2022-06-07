@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 import moment from 'moment';
+import FastImage from 'react-native-fast-image';
 
 //import image from '../../data/image'
 interface userItemProps {
@@ -33,32 +34,43 @@ interface userItemProps {
 const userItem = ({ chatRoom }: any) => {
     const navigation = useNavigation<any>();
     const user = useSelector(userSelector)
-    console.log({ user });
-
     return (
         <View style={styles.chatItemContainer}>
+            {chatRoom?.buy_request_id ? (
+                <Avatar
+                    size="medium"
+                    rounded
+                    containerStyle={{
+                        borderColor: 'grey',
+                        borderStyle: 'solid',
+                        borderWidth: 1,
+                    }}
+                    source={{ uri: chatRoom?.buy_request_id && chatRoom?.buy_request?.images && chatRoom?.buy_request?.images[0].url_full }}
+                />
+            ) : (
+                <Avatar
+                    size="medium"
+                    rounded
+                    containerStyle={{
+                        borderColor: 'grey',
+                        borderStyle: 'solid',
+                        borderWidth: 1,
+                    }}
+                    source={{ uri: chatRoom?.product_id && chatRoom?.product?.images && chatRoom?.product?.images[0].url_full }}
+                />
+            )}
 
-            <Avatar
-                size="medium"
-                rounded
-                containerStyle={{
-                    borderColor: 'grey',
-                    borderStyle: 'solid',
-                    borderWidth: 1,
-                }}
-                source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }}
-            />
             <View style={[styles.userItem, { width: '90%', alignSelf: 'center', }]}>
                 <View style={styles.userNameContainer}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%', }}>
-                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.name : chatRoom?.buyer?.name}</Text>
-                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={styles.commentTime} numberOfLines={1}>{moment(chatRoom?.last_message?.updated_at).fromNow()}</Text>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id, chatRoom: chatRoom })} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.name : chatRoom?.buyer?.name}</Text>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id, chatRoom: chatRoom })} style={styles.commentTime} numberOfLines={1}>{moment(chatRoom?.last_message?.updated_at).fromNow()}</Text>
 
                     </View>
 
                 </View>
                 <View style={styles.commentContentContainer}>
-                    <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id })} style={styles.commentContent} numberOfLines={1}>{chatRoom?.last_message?.content ?? 'Hãy bắt đầu trò chuyện'}</Text>
+                    <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id, chatRoom: chatRoom })} style={styles.commentContent} numberOfLines={1}>{chatRoom?.last_message?.content ?? 'Hãy bắt đầu trò chuyện'}</Text>
 
                 </View>
             </View>

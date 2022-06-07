@@ -7,7 +7,8 @@ import {
     SafeAreaView,
     ActivityIndicator,
     Platform,
-    Alert
+    Alert,
+    TouchableOpacity
 } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
@@ -24,8 +25,10 @@ import { getMessageListAPI, sendMessageFileAPI, sendMessageTextAPI } from "../..
 import { userSelector } from "../../modules/user/selectors";
 import { useSelector } from "react-redux";
 import ImagePicker from 'react-native-image-crop-picker';
+import FastImage from "react-native-fast-image";
 type RouteParams = {
-    id: any
+    id: any,
+    chatRoom: any
 }
 export default function ChatRoomScreen() {
     const navigation = useNavigation<any>();
@@ -36,6 +39,7 @@ export default function ChatRoomScreen() {
     const [tempImage, setTempImage] = useState<any>(null)
     const [isSending, setIsSending] = useState<boolean>(false)
     const userInfo = useSelector(userSelector)
+
 
     const fetchMessageList = async (lastId?: number) => {
         const response = await getMessageListAPI(params?.id, lastId)
@@ -132,6 +136,36 @@ export default function ChatRoomScreen() {
 
                     }
                 />
+                <View style={{ justifyContent: 'space-between', backgroundColor: '#FAFAFA', height: 60, width: '100%', flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <FastImage
+                            source={{ uri: params?.chatRoom?.buy_request_id ? params?.chatRoom?.buy_request?.images && params?.chatRoom?.buy_request?.images[0]?.url_full : (params?.chatRoom?.product?.images && params?.chatRoom?.product?.images[0]?.url_full) }}
+                            style={{
+                                width: 30,
+                                height: 30,
+                                borderRadius: 4,
+                                marginRight: 10
+                            }}
+                        />
+                        <Text style={{ fontWeight: 'bold', color: 'black' }}>
+                            {params?.chatRoom?.buy_request_id ? params?.chatRoom?.buy_request?.name : params?.chatRoom?.product?.name}
+                        </Text>
+                    </View>
+                    {console.log(params.chatRoom)}
+                    <TouchableOpacity style={{
+                        paddingVertical: 10, paddingHorizontal: 20,
+                        alignItems: 'center', justifyContent: 'center',
+                        backgroundColor: 'blue', borderRadius: 4
+                    }} onPress={() => {
+                        if (params?.chatRoom?.buy_request_id) {
+                            navigation.navigate('PostDetail', { data: { ...params.chatRoom.buy_request, postId: params.chatRoom.buy_request_id } });
+                        } else {
+                            navigation.navigate('ProductDetail', { data: { ...params.chatRoom.product, productId: params.chatRoom.product_id } });
+                        }
+                    }}>
+                        <Text style={{ color: 'white' }}>Xem chi tiết</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <FlatList
