@@ -7,7 +7,7 @@ import color from '../../theme/color';
 import layout from '../../theme/layout';
 import NumberFormat from 'react-number-format';
 import { Avatar } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 import moment from 'moment';
@@ -45,8 +45,7 @@ const userItem = ({ chatRoom }: any) => {
                         borderStyle: 'solid',
                         borderWidth: 1,
                     }}
-                    source={{ uri: chatRoom?.buy_request_id && chatRoom?.buy_request?.images && chatRoom?.buy_request?.images[0].url_full }}
-                />
+                    source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }} />
             ) : (
                 <Avatar
                     size="medium"
@@ -56,15 +55,16 @@ const userItem = ({ chatRoom }: any) => {
                         borderStyle: 'solid',
                         borderWidth: 1,
                     }}
-                    source={{ uri: chatRoom?.product_id && chatRoom?.product?.images && chatRoom?.product?.images[0].url_full }}
-                />
+                    source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }} />
             )}
 
-            <View style={[styles.userItem, { width: '90%', alignSelf: 'center', }]}>
+            <View style={[styles.userItem, { width: '80%', alignSelf: 'center', }]}>
                 <View style={styles.userNameContainer}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%', }}>
-                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id, chatRoom: chatRoom })} style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.name : chatRoom?.buyer?.name}</Text>
-                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id, chatRoom: chatRoom })} style={styles.commentTime} numberOfLines={1}>{moment(chatRoom?.last_message?.updated_at).fromNow()}</Text>
+                    <View style={{ flexDirection: 'row', }}>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id, chatRoom: chatRoom })}
+                            style={[styles.userName, { fontSize: 18 }]} numberOfLines={1}>{user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.name : chatRoom?.buyer?.name}</Text>
+                        <Text onPress={() => navigation.navigate('ChatRoomScreen', { id: chatRoom?.id, chatRoom: chatRoom })}
+                            style={styles.commentTime} numberOfLines={1}>{moment(chatRoom?.last_message?.updated_at).fromNow()}</Text>
 
                     </View>
 
@@ -74,6 +74,20 @@ const userItem = ({ chatRoom }: any) => {
 
                 </View>
             </View>
+
+            <FastImage
+                source={{ uri: chatRoom?.buy_request_id && chatRoom?.buy_request?.images && chatRoom?.buy_request?.images[0].url_full }}
+                style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 4,
+                    marginRight: 15,
+
+
+                }}
+            />
+
+
             {/* {user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image : chatRoom?.buyer?.profile_image && (
                 <View style={styles.productImageContainer}>
 
@@ -83,19 +97,19 @@ const userItem = ({ chatRoom }: any) => {
 
 
 
-        </View>
+        </View >
     )
 }
 const styles = StyleSheet.create({
     chatItemContainer: {
         flexDirection: 'row',
-        width: '95%',
-        paddingBottom: 10,
+        width: '85%',
+        paddingBottom: 15,
         justifyContent: 'center',
 
         alignItems: 'center',
         alignSelf: 'center',
-        paddingLeft: 25
+        paddingLeft: 15
     },
 
     userItem: {
