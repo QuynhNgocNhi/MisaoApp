@@ -98,7 +98,6 @@ const ProductDetailScreen = ({ Props, route }: any) => {
     const navigation = useNavigation<any>();
     const { params } = useRoute<RouteProp<Record<string, RouteParams>, string>>();
     const { data } = route.params;
-    console.log(data);
     const [date, setDate] = useState('09-10-2020');
     const userInfo = useSelector(userSelector)
     const categories = useSelector(masterDataSelector)

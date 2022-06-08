@@ -46,14 +46,8 @@ const EditProductScreen = (Props) => {
         ...params?.data,
 
     })
-
-
-    console.log(product?.category_id);
     const [day, month, year] = product?.out_of_stock_date.split('-')
-    console.log(`${day}/${month}/${year}`);
     const [date, setDate] = useState(new Date(`${month}/${day}/${year}`));
-    console.log(date);
-
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {

@@ -37,10 +37,13 @@ const EditPostScreen = ({ Props, route }) => {
     const categoriesList = useSelector(masterDataSelector)
     const [deleteItem, setDeleteItem] = useState<boolean>(false)
     const [data, setData] = useState<any>()
-    const [imageList, setImageList] = useState<any>([])
     const [postList, setPostList] = useState<any>([])
     const [loading, setLoading] = useState<boolean>(true)
     const routeParams = route?.params?.data;
+    const [imageList, setImageList] = useState<any>([])
+    const [temp, setTemp] = useState<any>([])
+    const [listIdOrigin, setListIdOrigin] = useState<any>([])
+
 
     const fetchPostDetail = async () => {
         setLoading(true)
@@ -48,6 +51,12 @@ const EditPostScreen = ({ Props, route }) => {
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
             setImageList(response.data.images)
+            let list: any = []
+            response.data.images?.map((image: any) => {
+                list.push(image.id)
+            })
+            setListIdOrigin(list)
+            setTemp(response.data.images)
         }
         setLoading(false)
     }
@@ -75,10 +84,22 @@ const EditPostScreen = ({ Props, route }) => {
 
     const onGoToStep2 = () => {
         if (data.name && data.description && data.category_id) {
+            let imageActive: any = []
+            let imageInActive: any = []
+            imageList.map((item: any) => {
+                if (item.id !== -1) {
+                    imageActive.push(item.id)
+                }
+            })
+            listIdOrigin?.map((item: any) => {
+                if (!imageActive.includes(item)) {
+                    imageInActive.push(item)
+                }
+            })
             let productInfo = {
                 ...data,
-
-
+                image_list: imageList,
+                image_list_in_active: imageInActive
             }
             navigation.navigate('EditPostLastStep', { data: productInfo });
         } else {

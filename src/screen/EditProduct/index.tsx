@@ -36,26 +36,31 @@ const EditProductScreen = ({ Props, route }: any) => {
     const [data, setData] = useState<any>()
     const [updating, setUpdating] = useState<boolean>(false)
     const [imageList, setImageList] = useState<any>([])
+    const [temp, setTemp] = useState<any>([])
     const isFocused = useIsFocused()
+    const [listIdOrigin, setListIdOrigin] = useState<any>([])
 
     const [loading, setLoading] = useState<boolean>(true)
-
     const fetchProductDetail = async () => {
         setLoading(true)
         const response = await getProductDetailAPI(routeParams?.productId)
         if (response.__typename !== 'ErrorResponse') {
             setData(response.data)
             setImageList(response.data.images)
+            let list: any = []
+            response.data.images?.map((image: any) => {
+                list.push(image.id)
+            })
+            setListIdOrigin(list)
+            setTemp(response.data.images)
 
         }
         setLoading(false)
     }
-
     useEffect(() => {
         fetchProductDetail()
 
     }, [routeParams?.productId, isFocused])
-
     const onPickImage = () => {
         ImagePicker.openPicker({
             mediaType: 'photo',
@@ -76,10 +81,23 @@ const EditProductScreen = ({ Props, route }: any) => {
 
     const onGoToStep2 = () => {
         if (imageList?.length > 0 && data.name && data.description && data.category_id) {
+            let imageActive: any = []
+            let imageInActive: any = []
+            imageList.map((item: any) => {
+                if (item.id !== -1) {
+                    imageActive.push(item.id)
+                }
+            })
+            listIdOrigin?.map((item: any) => {
+                if (!imageActive.includes(item)) {
+                    imageInActive.push(item)
+                }
+            })
+
             let productInfo = {
                 ...data,
-
-
+                image_list: imageList,
+                image_list_in_active: imageInActive
             }
             navigation.navigate('EditProductLastStep', { data: productInfo });
         } else {

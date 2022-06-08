@@ -376,13 +376,16 @@ export const addProductAPI = async (data: any): Promise<BaseResponse | ErrorResp
         formData.append('out_of_stock_date', out_of_stock_date)
         if (data?.image_list) {
             data?.image_list.forEach((file: any) => {
-                formData.append('files[]', {
-                    uri: file.url_full,
-                    type: 'image/jpeg',
-                    name: `${uuidv4()}.jpg`,
-                })
+                if (file.id === -1) {
+                    formData.append('files[]', {
+                        uri: file.url_full,
+                        type: 'image/jpeg',
+                        name: `${uuidv4()}.jpg`,
+                    })
+                }
             });
         }
+
         const response = await postFile<any>(`/product-manager`, formData);
 
         return response.data;
@@ -411,11 +414,18 @@ export const editProductAPI = async (data: any): Promise<BaseResponse | ErrorRes
         formData.append('out_of_stock_date', out_of_stock_date)
         if (data?.image_list) {
             data?.image_list.forEach((file: any) => {
-                formData.append('files[]', {
-                    uri: file.url_full,
-                    type: 'image/jpeg',
-                    name: `${uuidv4()}.jpg`,
-                })
+                if (file.id === -1) {
+                    formData.append('files[]', {
+                        uri: file.url_full,
+                        type: 'image/jpeg',
+                        name: `${uuidv4()}.jpg`,
+                    })
+                }
+            });
+        }
+        if (data?.image_list_in_active) {
+            data?.image_list_in_active.forEach((id: any) => {
+                formData.append('media_in_active[]', id)
             });
         }
         const response = await postFile<any>(`/product-manager/${data.id}`, formData);
@@ -480,15 +490,22 @@ export const editPostAPI = async (data: any): Promise<BaseResponse | ErrorRespon
         formData.append('confirm', true)
         let limited_date = `${data.limited_date?.getDate()}-${data.limited_date?.getMonth() + 1}-${data.limited_date?.getFullYear()}`
         formData.append('limited_date', limited_date)
-        /*  if (data?.image_list) {
-             data?.image_list.forEach((file: any) => {
-                 formData.append('files[]', {
-                     uri: file.url_full,
-                     type: 'image/jpeg',
-                     name: `${uuidv4()}.jpg`,
-                 })
-             });
-         } */
+        if (data?.image_list) {
+            data?.image_list.forEach((file: any) => {
+                if (file.id === -1) {
+                    formData.append('files[]', {
+                        uri: file.url_full,
+                        type: 'image/jpeg',
+                        name: `${uuidv4()}.jpg`,
+                    })
+                }
+            });
+        }
+        if (data?.image_list_in_active) {
+            data?.image_list_in_active.forEach((id: any) => {
+                formData.append('media_in_active[]', id)
+            });
+        }
         const response = await postFile<any>(`/buy-request-manager/${data.id}`, formData);
 
         return response.data;
