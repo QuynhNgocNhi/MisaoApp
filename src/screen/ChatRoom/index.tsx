@@ -136,35 +136,39 @@ export default function ChatRoomScreen() {
 
                     }
                 />
-                <View style={{ justifyContent: 'space-between', backgroundColor: '#FAFAFA', height: 60, width: '100%', flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center' }}>
+                <View style={{ justifyContent: 'space-between', backgroundColor: '#F4F4F4', height: 70, width: '100%', flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center' }}>
                     <View style={{ flexDirection: 'row' }}>
+                        {console.log(params)}
                         <FastImage
                             source={{ uri: params?.chatRoom?.buy_request_id ? params?.chatRoom?.buy_request?.images && params?.chatRoom?.buy_request?.images[0]?.url_full : (params?.chatRoom?.product?.images && params?.chatRoom?.product?.images[0]?.url_full) }}
                             style={{
-                                width: 30,
-                                height: 30,
+                                width: 50,
+                                height: 50,
                                 borderRadius: 4,
                                 marginRight: 10
+
                             }}
                         />
-                        <Text style={{ fontWeight: 'bold', color: 'black' }}>
+                        <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 18, width: '65%' }} numberOfLines={1}>
                             {params?.chatRoom?.buy_request_id ? params?.chatRoom?.buy_request?.name : params?.chatRoom?.product?.name}
                         </Text>
+                        {console.log(params.chatRoom)}
+                        <TouchableOpacity style={{
+                            height: 40,
+                            paddingVertical: 0, paddingHorizontal: 10,
+                            alignItems: 'center', justifyContent: 'center',
+                            alignSelf: 'center',
+                            backgroundColor: color.primaryColor, borderRadius: 4
+                        }} onPress={() => {
+                            if (params?.chatRoom?.buy_request_id) {
+                                navigation.navigate('PostDetail', { data: { ...params.chatRoom.buy_request, postId: params.chatRoom.buy_request_id } });
+                            } else {
+                                navigation.navigate('ProductDetail', { data: { ...params.chatRoom.product, productId: params.chatRoom.product_id } });
+                            }
+                        }}>
+                            <Text style={{ color: 'white', fontSize: 16, }}>Chi tiết</Text>
+                        </TouchableOpacity>
                     </View>
-                    {console.log(params.chatRoom)}
-                    <TouchableOpacity style={{
-                        paddingVertical: 10, paddingHorizontal: 20,
-                        alignItems: 'center', justifyContent: 'center',
-                        backgroundColor: 'blue', borderRadius: 4
-                    }} onPress={() => {
-                        if (params?.chatRoom?.buy_request_id) {
-                            navigation.navigate('PostDetail', { data: { ...params.chatRoom.buy_request, postId: params.chatRoom.buy_request_id } });
-                        } else {
-                            navigation.navigate('ProductDetail', { data: { ...params.chatRoom.product, productId: params.chatRoom.product_id } });
-                        }
-                    }}>
-                        <Text style={{ color: 'white' }}>Xem chi tiết</Text>
-                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -187,7 +191,7 @@ export default function ChatRoomScreen() {
                 onSendMessage={onSendMessage}
 
             />
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 
