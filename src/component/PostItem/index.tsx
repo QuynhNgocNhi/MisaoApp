@@ -36,7 +36,10 @@ interface PostsProps {
 
 const PostItem = ({ post }: any) => {
     const navigation = useNavigation();
-    const data = { postId: post.id, title: post.name, content: post.description, userId: post.userId, userName: post.userName }
+    const askedTimes = post?.order?.length;
+    const data = {
+        postId: post.id, title: post.name, content: post.description, userId: post.userId, userName: post.userName, askedTimes: askedTimes
+    }
 
     const [tempHasFavorite, setTempHasFavorite] = useState(post?.has_favorite)
     const onLikePost = async () => {
@@ -79,7 +82,7 @@ const PostItem = ({ post }: any) => {
 
                         </View>
                         <View style={styles.bottomContainer}>
-                            <Text numberOfLines={1} style={styles.askedTimes}>{post?.order?.length ? post?.order?.length + 'người quan tâm' : ''}
+                            <Text numberOfLines={1} style={styles.askedTimes}>{post?.order?.length ? post?.order?.length : '0'} người quan tâm
                             </Text>
                         </View>
                     </View>

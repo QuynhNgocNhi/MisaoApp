@@ -345,8 +345,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                                             style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}>
                                             <FontAwesome name='shopping-bag'
                                                 size={22}
-                                                color={color.disableText} />
-                                            {data?.order?.length ? (data?.order?.length) : '0'} người đang hỏi</Text>
+                                                color={color.disableText} /> {routeParams.askedTimes ? (routeParams.askedTimes) : '0'} người đang hỏi</Text>
                                         <Text style={{ fontSize: 18, padding: 10 }}>Báo xấu <FontAwesome name='exclamation-circle' size={22} color={color.disableText} /></Text>
                                     </View>
                                 </View>

@@ -42,8 +42,10 @@ interface ProductItemProps {
 
 const ProductItem = ({ product }: any) => {
   const navigation = useNavigation();
+  const askedTimes = product?.order?.length;
   const data = {
     productId: product.id,
+    askedTimes: askedTimes,
     productName: product.name,
     productDescription: product.description,
     productPrice: product.price,
