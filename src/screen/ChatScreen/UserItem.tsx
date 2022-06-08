@@ -36,27 +36,17 @@ const userItem = ({ chatRoom }: any) => {
     const user = useSelector(userSelector)
     return (
         <View style={styles.chatItemContainer}>
-            {chatRoom?.buy_request_id ? (
-                <Avatar
-                    size="medium"
-                    rounded
-                    containerStyle={{
-                        borderColor: 'grey',
-                        borderStyle: 'solid',
-                        borderWidth: 1,
-                    }}
-                    source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }} />
-            ) : (
-                <Avatar
-                    size="medium"
-                    rounded
-                    containerStyle={{
-                        borderColor: 'grey',
-                        borderStyle: 'solid',
-                        borderWidth: 1,
-                    }}
-                    source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }} />
-            )}
+
+            <Avatar
+                size="medium"
+                rounded
+                containerStyle={{
+                    borderColor: 'grey',
+                    borderStyle: 'solid',
+                    borderWidth: 1,
+                }}
+                source={{ uri: user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image_url : chatRoom?.buyer?.profile_image_url }} />
+
 
             <View style={[styles.userItem, { width: '80%', alignSelf: 'center', }]}>
                 <View style={styles.userNameContainer}>
@@ -74,9 +64,15 @@ const userItem = ({ chatRoom }: any) => {
 
                 </View>
             </View>
-
-            <FastImage
-                source={{ uri: chatRoom?.buy_request_id && chatRoom?.buy_request?.images && chatRoom?.buy_request?.images[0].url_full }}
+            {chatRoom?.buy_request_id ? (<FastImage
+                source={{ uri: chatRoom?.buy_request_id && chatRoom?.buy_request?.images && chatRoom?.buy_request?.images[0].url_full }} style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 4,
+                    marginRight: 15,
+                }}
+            />) : (<FastImage
+                source={{ uri: chatRoom?.product_id && chatRoom?.product?.images && chatRoom?.product?.images[0].url_full }}
                 style={{
                     width: 60,
                     height: 60,
@@ -85,7 +81,8 @@ const userItem = ({ chatRoom }: any) => {
 
 
                 }}
-            />
+            />)}
+
 
 
             {/* {user?.id === chatRoom?.buyer?.id ? chatRoom?.seller?.profile_image : chatRoom?.buyer?.profile_image && (

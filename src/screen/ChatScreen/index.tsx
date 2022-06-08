@@ -85,7 +85,7 @@ const ChatScreen = () => {
               name="purchase"
               component={BuyList}
               options={{
-                title: "của bạn",
+                title: "Từ bạn",
               }}
             />
             <Tab.Screen

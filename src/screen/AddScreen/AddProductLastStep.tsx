@@ -130,6 +130,7 @@ const AddProductScreen = () => {
 
                                     <TextInput style={{ fontSize: 18, padding: 10 }}
                                         value={product?.price}
+                                        keyboardType='phone-pad'
                                         onChangeText={(value: any) => setProduct({ ...product, price: value })}
                                         maxFontSizeMultiplier={1}
                                         placeholder="Nhập giá bán"
@@ -166,6 +167,7 @@ const AddProductScreen = () => {
 
                                     <TextInput style={{ fontSize: 18, padding: 10 }}
                                         value={product?.inventory_number}
+                                        keyboardType='phone-pad'
                                         onChangeText={(value: any) => setProduct({ ...product, inventory_number: value })}
                                         maxFontSizeMultiplier={1}
                                         placeholder="Nhập số lượng cần bán"
@@ -184,6 +186,7 @@ const AddProductScreen = () => {
 
                                     <TextInput style={{ fontSize: 18, padding: 10 }}
                                         value={product?.discount}
+                                        keyboardType='phone-pad'
                                         onChangeText={(value: any) => setProduct({ ...product, discount: value })}
                                         maxFontSizeMultiplier={1}
                                         placeholder="5, 10, 15 %"

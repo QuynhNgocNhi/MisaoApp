@@ -173,7 +173,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                         {ProfileTab == 2 &&
                             <PostTab buyRequest={userInfo?.buy_request} />}
                         {ProfileTab == 3 &&
-                            <HistoryTab orders={orders}/>}
+                            <HistoryTab products={userInfo?.product} buyRequest={userInfo?.buy_request} />}
                     </View>
 
 

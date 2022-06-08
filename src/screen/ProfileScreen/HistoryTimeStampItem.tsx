@@ -50,14 +50,20 @@ const MyProductList = ({ date, data }: any) => {
 
                     data={data}
                     renderItem={({ item, index }) => {
-                        return (
+                        return (data.limited_date ? (<View>
+                            <PostHistoryItem post={item}
+                                contentContainerStyle={styles.myPostItem}
+                                scrollEnabled={false}
+                            />
+                        </View>) : (
+
                             <View>
-                                        <ProductHistoryItem item={item}
-                                            contentContainerStyle={styles.myPostItem}
-                                            scrollEnabled={false}
-                                        />
+                                <ProductHistoryItem product={item}
+                                    contentContainerStyle={styles.myPostItem}
+                                    scrollEnabled={false}
+                                />
                             </View>
-                        )
+                        ))
                     }}
                 />
             </View>

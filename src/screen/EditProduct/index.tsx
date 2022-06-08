@@ -233,23 +233,22 @@ const EditProductScreen = ({ Props, route }: any) => {
                                         <TouchableOpacity
                                             onPress={() => setData({ ...data, category_id: item.value })}
                                             style={{
-                                                margin: 5,
-                                                width: 120,
+
+                                                width: 100,
                                             }}>
 
                                             <View style={{
-                                                width: 120,
-                                                alignItems: 'center'
+
                                             }}>
                                                 <FastImage resizeMode={FastImage.resizeMode.cover}
                                                     style={{
                                                         height: 70,
-                                                        width: 120,
+                                                        width: 70,
                                                         borderRadius: 5
                                                     }}
                                                     source={{ uri: item.image }} />
                                                 <View style={{
-                                                    paddingTop: 12,
+
                                                 }}>
                                                     <Text style={{
                                                         color: '#000',

@@ -30,8 +30,8 @@ interface productProps {
         availability: number,
     }
 }
-const ProductHistoryItem = ({ item }: productProps) => {
-    const { product } = item
+const ProductHistoryItem = ({ product }: productProps) => {
+
 
     const navigation = useNavigation();
     const data = {

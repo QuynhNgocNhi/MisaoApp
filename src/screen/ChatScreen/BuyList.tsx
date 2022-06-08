@@ -40,7 +40,7 @@ export const BuyList = () => {
             </View>
         )
     }
-
+    console.log({ data });
 
     return (
         <FlatList

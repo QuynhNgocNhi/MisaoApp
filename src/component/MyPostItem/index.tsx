@@ -72,7 +72,7 @@ const MyPostItem = ({ post }: any) => {
 
                         </View>
                         <View style={styles.bottomContainer}>
-                            <Text numberOfLines={1} style={styles.askedTimes}>{post?.order?.length ? post?.order?.length + 'người quan tâm' : ''}
+                            <Text numberOfLines={1} style={styles.askedTimes}>{post?.order?.length ? post?.order?.length + ' người quan tâm' : ''}
                             </Text>
                         </View>
                         <View style={styles.editContainer}>

@@ -46,8 +46,15 @@ const EditProductScreen = (Props) => {
         ...params?.data,
 
     })
-    const [day, month, year] = product?.out_of_stock_date.split('-')
-    const [date, setDate] = useState(new Date(`${month}/${day}/${year}`));
+    const [date, setDate] = useState(new Date());
+    //const [day, month, year] = product?.out_of_stock_date != null ? product?.out_of_stock_date.split('-') : (new Date());
+    const old_out_of_stock_date = () => {
+        if (product?.out_of_stock_date != null) {
+            const [day, month, year] = product?.out_of_stock_date.split('-');
+            setDate(new Date(`${month}/${day}/${year}`));
+        }
+        else setDate(new Date());
+    }
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
@@ -164,7 +171,7 @@ const EditProductScreen = (Props) => {
                                     <View style={styles.verticleLine}></View>
 
                                     <TextInput style={{ fontSize: 18, padding: 10 }}
-                                        value={product?.inventory_number.toString()}
+                                        value={product?.inventory_number}
                                         onChangeText={(value: any) => setProduct({ ...product, inventory_number: value })}
                                         maxFontSizeMultiplier={1}
                                         placeholder="Nhập số lượng cần bán"
@@ -269,6 +276,7 @@ const EditProductScreen = (Props) => {
                                         />
                                         <TextInput
                                             value={product?.seller_phone}
+                                            keyboardType='phone-pad'
                                             placeholder="SDT người bán"
                                             onChangeText={(value: any) => setProduct({ ...product, seller_phone: value })}
                                             style={{

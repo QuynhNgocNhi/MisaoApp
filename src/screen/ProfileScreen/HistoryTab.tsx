@@ -7,8 +7,10 @@ import products from '../../assets/data/product';
 import HistoryTimeStampItem from './HistoryTimeStampItem';
 import { G } from 'react-native-svg';
 import moment from 'moment';
-const MyProductList = ({ orders }: any) => {
-    console.log({ orders });
+const MyProductList = ({ products, buyRequest }: any) => {
+    // console.log({ products });
+    console.log({ buyRequest });
+    const data = products.concat(buyRequest);
     const groupBy = (_k: any, a: any) => a.reduce((r: any, { [_k]: k, ...p }) => ({
         ...r, ...{
             [k]: (
@@ -17,7 +19,7 @@ const MyProductList = ({ orders }: any) => {
         }
     }), {});
 
-    let grouped = groupBy('updated_at', orders);
+    let grouped = groupBy('updated_at', buyRequest);
     let keys = Object.keys(grouped);
     return (
         <ScrollView style={styles.container}>

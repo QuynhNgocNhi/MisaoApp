@@ -40,7 +40,7 @@ const AddPostLastStep = (Props) => {
         ...params?.data,
 
     })
-    const [day, month, year] = post?.limited_date.split('-')
+    const [day, month, year] = post?.limited_date != null ? post?.limited_date.split('-') : (new Date());
     console.log(`${day}/${month}/${year}`);
     console.log(`${day}/${month}`);
     const [date, setDate] = useState(new Date(`${month}/${day}/${year}`));

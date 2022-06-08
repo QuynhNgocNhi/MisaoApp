@@ -166,6 +166,7 @@ const EditProfile = ({ route }: any) => {
                                 <UnderlineTextInput
                                     inputStyle={styles.enableInputStyle}
                                     returnKeyType="done"
+                                    keyboardType='phone-pad'
                                     placeholder="CMND/CCCD"
                                     placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                                     inputTextColor={INPUT_TEXT_COLOR}
