@@ -15,6 +15,11 @@
 - Nam Tran Trung: Backend(PHP, MySQL, Larevel)
 - An Phuoc Ngo: Document
 - Extra help from Anonymouses for API, Redux, Fixbug
+
+## Design(Figma)
+
+[Documentation](https://www.figma.com/community/file/1124629862935021983?fuid=1083664351246739449)
+
 ## Documentation
 
 [Documentation](https://drive.google.com/file/d/1dgkwhcILIVtmllGpYMPynGHUbQH-JSfO/view?usp=sharing)
