@@ -16,9 +16,9 @@
 - An Phuoc Ngo: Document
 - Extra help from Anonymouses for API, Redux, Fixbug
 
-## Design(Figma)
+## Design
 
-[Documentation](https://www.figma.com/community/file/1124629862935021983?fuid=1083664351246739449)
+[Figma](https://www.figma.com/community/file/1124629862935021983?fuid=1083664351246739449)
 
 ## Demo screens
 ![Logo](./src//assets//image/misao.gif)
