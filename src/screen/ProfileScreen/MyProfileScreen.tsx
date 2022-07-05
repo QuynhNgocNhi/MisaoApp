@@ -1,7 +1,9 @@
 //to do: onpress change state button
 
+
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator } from 'react-native';
+
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -30,13 +32,16 @@ import { getListOrderAPI } from '../../services';
 const ProductDetailScreen = ({ Props, route }) => {
     const navigation = useNavigation();
 
+
     const userInfo = useSelector(userSelector)
+
     const [ProfileTab, setProfileTab] = useState(1);
     const [loading, setLoading] = useState(false)
     const [orders, setOrders] = useState<any>([])
     const onSelectSwitch = value => {
         setProfileTab(value);
     };
+
 
     const fetchOrderList = async () => {
         setLoading(true)
@@ -57,6 +62,7 @@ const ProductDetailScreen = ({ Props, route }) => {
             </View>
         )
     }
+
 
     return (
         <SafeAreaProvider>
@@ -80,11 +86,13 @@ const ProductDetailScreen = ({ Props, route }) => {
                             }
                         />
                     </View>
+                    {isLoading ? <Text>Loading...</Text> : (
 
-                    <View style={styles.container}>
-                        <View style={[styles.box,]}>
+                        <View style={styles.container}>
+                            <View style={[styles.box,]}>
 
-                            <View style={[styles.userContainer]}>
+                                <View style={[styles.userContainer]}>
+
 
                                 <View style={styles.userNameContainer}>
                                     <Avatar
@@ -98,9 +106,11 @@ const ProductDetailScreen = ({ Props, route }) => {
                                         source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../assets/avatar/11.png')}
                                     />
 
-                                    <View style={styles.followContainer}>
 
-                                        <View style={styles.userAttributes}>
+                                        <View style={styles.followContainer}>
+
+                                            <View style={styles.userAttributes}>
+
 
                                             <Heading6>{userInfo?.following?.length}</Heading6>
                                             <Text style={styles.userAttributesText}> đang theo</Text>
@@ -109,17 +119,17 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                             <Heading6>{userInfo?.followed?.length}</Heading6>
                                             <Text style={styles.userAttributesText}> người theo</Text>
+
                                         </View>
 
                                     </View>
 
+
                                 </View>
+                                <View style={styles.userContainer}>
 
+                                    <View style={[styles.userInfomationContainer]}>
 
-                            </View>
-                            <View style={styles.userContainer}>
-
-                                <View style={[styles.userInfomationContainer]}>
 
                                     <Text style={styles.userName} numberOfLines={1}>{userInfo?.name}</Text>
                                     <Text style={{ fontSize: 18, }}>{userInfo?.phone}</Text>
@@ -127,6 +137,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>{userInfo?.description}</Text>
                                     <Text style={{ position: 'absolute', top: 50, fontSize: 18, color: color.primaryColor, fontWeight: '600', }} numberOfLines={1}>
                                         {(userInfo.address) && (<Icon
+
 
                                             name='md-location-outline'
                                             type='ionicon'
@@ -137,7 +148,29 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                     </Text>
 
+                                    </View>
+                                    <View style={styles.editProfileButtonContainer}>
+
+                                        <ButtonNormal
+                                            outlined
+                                            borderColor={color.linkButton}
+                                            titleColor={color.linkButton}
+                                            onPress={() => { navigation.navigate('Login'); }}
+                                            buttonStyle={styles.editProfileButton}
+                                            title={'Chỉnh sửa thông tin'}>
+                                        </ButtonNormal>
+                                        <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '600', flexDirection: 'column' }} numberOfLines={1}>
+                                            <Icon
+
+                                                name='md-location-outline'
+                                                type='ionicon'
+                                                color={color.black}
+                                                size={30}
+                                            /> Đà Lạt
+                                        </Text>
+                                    </View>
                                 </View>
+
                                 <View style={styles.editProfileButtonContainer}>
                                     <ButtonNormal
                                         outlined
@@ -156,18 +189,29 @@ const ProductDetailScreen = ({ Props, route }) => {
 
 
 
-                        </View>
 
-                        <View style={styles.switchTabContainer}>
-                            <CustomSwitch
-                                selectionMode={1}
-                                option1="Sản phẩm"
-                                option2="Tin Mua"
-                                option3="Lịch sử"
-                                onSelectSwitch={onSelectSwitch}
-                            />
 
                         </View>
+
+
+                            <View style={styles.switchTabContainer}>
+                                <CustomSwitch
+                                    selectionMode={1}
+                                    option1="Sản phẩm"
+                                    option2="Tin Mua"
+                                    option3="Lịch sử"
+                                    onSelectSwitch={onSelectSwitch}
+                                />
+
+                            </View>
+                            {ProfileTab == 1 &&
+                                <ProductTab />}
+                            {ProfileTab == 2 &&
+                                <PostTab />}
+                            {ProfileTab == 3 &&
+                                <HistoryTab />}
+                        </View>
+
                         {ProfileTab == 1 &&
                             <ProductTab products={userInfo?.product} />}
                         {ProfileTab == 2 &&
@@ -175,6 +219,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                         {ProfileTab == 3 &&
                             <HistoryTab products={userInfo?.product} buyRequest={userInfo?.buy_request} />}
                     </View>
+
 
 
 

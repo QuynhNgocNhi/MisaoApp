@@ -1,28 +1,19 @@
+
 import React, { useRef } from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import { Avatar } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
-//import data
-import category from '../../assets/data/category';
-import post from '../../assets/data/post';
 
-import LinkButton from '../../component/Button/LinkButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-/* to ignore the warning message: 'VirtualizedLists should never be nested inside plain ScrollViews 
-with the same orientation because it can break windowing and other functionality - use another 
-VirtualizedList-backed container instead.' */
-import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
-import layout from '../../theme/layout';
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
-import ButtonNormal from '../../component/Button';
 import { useNavigation } from '@react-navigation/native';
 import { clearUserInfo } from '../../modules/user/slice';
 import { logout } from '../../modules/auth/slice';
@@ -30,8 +21,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../modules/user/selectors';
 
 
-const HomeScreen = () => {
+const Profile = ({ route }) => {
+
     const isFocused = useIsFocused();
+
     const navigation = useNavigation<any>();
     const userInfo = useSelector(userSelector)
     const dispatch = useDispatch()
@@ -41,6 +34,7 @@ const HomeScreen = () => {
         navigation.replace('Welcome')
         Alert.alert("", "Đăng xuất thành công!")
     }
+
     return (
         <SafeAreaProvider>
 
@@ -68,6 +62,7 @@ const HomeScreen = () => {
 
                                     <Text style={styles.userName} numberOfLines={1}>{userInfo?.name ?? ''}</Text>
                                     <Text style={{ fontSize: 18, marginLeft: 10 }}>{userInfo?.phone}</Text>
+
                                 </View>
 
                             </View>
@@ -357,4 +352,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default HomeScreen
+export default Profile

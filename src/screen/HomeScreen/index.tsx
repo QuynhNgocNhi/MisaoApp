@@ -34,10 +34,12 @@ import { tokenSelector } from '../../modules/auth/selectors';
 
 
 
+
 const HomeScreen = () => {
   const tabId = useState(2);
   console.log(tabId);
   const navigation = useNavigation<any>();
+
   const isFocused = useIsFocused();
   const statusbar = () => { return <StatusBar /> }
 
@@ -97,7 +99,7 @@ const HomeScreen = () => {
               <View style={styles.centerContent}>
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText]}>Giá sốc hôm nay <FontAwesome name={'bolt'} color={'#FF0000'} size={22} /></Heading6>
+                    <Heading6 style={[styles.titleText]}>{data} Giá sốc hôm nay <FontAwesome name={'bolt'} color={'#FF0000'} size={22} /></Heading6>
 
                     <LinkButton
                       title="Xem thêm"

@@ -33,6 +33,7 @@ const EnterOTP = ({ route }: any) => {
     });
     const navigation = useNavigation();
     const isFocused = useIsFocused();
+
     const [loading, setLoading] = useState(false)
     const [otp, setOtp] = useState(route.params.OTP ?? '')
 
@@ -68,6 +69,7 @@ const EnterOTP = ({ route }: any) => {
         }
         setLoading(false)
 
+
     }
 
     return (
@@ -84,7 +86,9 @@ const EnterOTP = ({ route }: any) => {
                     </View>
                     <View>
 
+
                         <Image source={headerImg} style={styles.imageReceiveMessage}>
+
 
                         </Image>
                     </View>

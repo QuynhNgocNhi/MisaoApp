@@ -56,7 +56,7 @@ const App = () => {
     </Provider>
   );
 };
-{/* <RegisterScreen />
+{/* <RegisterScreen />  
 <SearchBox />
 <LoginScreen/>
 <RegisterSuccessfulScreen/>

@@ -30,8 +30,11 @@ type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
 // Welcome
 const Welcome: React.FC<WelcomeProps> = () => {
   const navigationRef = useNavigationContainerRef();
+
   const navigation = useNavigation<any>();
+
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [statusChecked, setStatusChecked] = useState('');
   const data = { phoneNumber: phoneNumber };
   const [loading, setLoading] = useState<boolean>(false)
   const onCheckPhoneExists = async () => {
@@ -80,7 +83,7 @@ const Welcome: React.FC<WelcomeProps> = () => {
 
             <View style={styles.center}>
 
-              <View style={styles.buttonsGroup}>
+              <View style={[styles.buttonsGroup, { marginBottom: 5 }]}>
                 <UnderlineTextInput
                   inputContainerStyle={styles.inputContainer}
 
@@ -88,8 +91,10 @@ const Welcome: React.FC<WelcomeProps> = () => {
                   keyboardType="phone-pad"
                   placeholder="Số điện thoại"
                   onChangeText={(val: any) => setPhoneNumber(val)}
+
                 />
               </View>
+              <Text style={styles.statusChecked}>{statusChecked}</Text>
 
               <View style={styles.buttonsGroup}>
                 <Button
@@ -147,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headingText: {
-    paddingTop: 15,
+    paddingTop: 10,
 
   },
   center: {
@@ -172,6 +177,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '80%',
+  },
+  statusChecked: {
+    color: color.important,
+    paddingBottom: 10
   }
 });
 

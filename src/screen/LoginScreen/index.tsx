@@ -1,3 +1,4 @@
+
 import React, { Component, useState } from 'react';
 import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView, Alert } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
@@ -28,6 +29,7 @@ const PLACEHOLDER_TEXT_COLOR = color.Text;
 const INPUT_TEXT_COLOR = color.Text;
 const INPUT_BORDER_COLOR = color.borderColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
+
 
 
 const Login = ({ route }: any) => {
@@ -69,6 +71,7 @@ const Login = ({ route }: any) => {
     setUpdating(false)
   }
 
+
   return (
     <SafeAreaView style={styles.screenContainer}>
       <StatusBar translucent backgroundColor='transparent' />
@@ -107,17 +110,22 @@ const Login = ({ route }: any) => {
         <KeyboardAwareScrollView
           contentContainerStyle={styles.contentContainerStyle}>
           <View style={styles.form}>
+            <Text style={styles.statusChecked}>{statusChecked}</Text>
+
             <View style={styles.inputGroup}>
 
               <UnderlineTextInput
                 blurOnSubmit={false}
+
                 keyboardType="email-address"
                 value={route.params.phoneNumber}
+
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                 inputContainerStyle={styles.inputContainer}
+                onChangeText={(val: string) => setPhoneNumber(val)}
               />
             </View>
             <View style={styles.inputGroup}>
@@ -131,12 +139,15 @@ const Login = ({ route }: any) => {
                 onChangeText={(value: any) => setPassword(value)}
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                onChangeText={(val: string) => setPassword(val)}
+
               />
             </View>
             <View style={styles.buttonsGroup}>
               <ButtonNormal
                 buttonStyle={styles.customButton}
                 onPress={onClickLogin}
+
                 title={'Đăng nhập'.toUpperCase()}
               />
             </View>
@@ -268,6 +279,10 @@ const styles = StyleSheet.create({
     color: color.black,
     textDecorationLine: 'underline',
   },
+  statusChecked: {
+    color: color.important,
+    paddingBottom: 10
+  }
 });
 
 export default Login;
