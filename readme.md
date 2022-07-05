@@ -20,6 +20,9 @@
 
 [Documentation](https://www.figma.com/community/file/1124629862935021983?fuid=1083664351246739449)
 
+## Demo screens
+![Logo](./src//assets//image/misao.gif)
+
 ## Documentation
 
 [Documentation](https://drive.google.com/file/d/1dgkwhcILIVtmllGpYMPynGHUbQH-JSfO/view?usp=sharing)
