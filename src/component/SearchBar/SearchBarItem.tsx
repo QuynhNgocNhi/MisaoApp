@@ -5,21 +5,11 @@ import color from '../../theme/color';
 import layout from '../../theme/layout';
 
 
-export default class App extends React.Component {
-    state = {
-        search: '',
-
-    };
-    updateSearch = (search) => {
-        this.setState({ search });
-    };
-
-    render() {
-        const { search } = this.state;
-
+export const SearchBarItem = ({keyword, setKeyword, onSearch} : any) =>  {
+    
         return (
             <SearchBar
-
+                onSubmitEditing={onSearch}
                 searchIcon={{
                     name: 'search',
                     type: 'feather',
@@ -27,8 +17,8 @@ export default class App extends React.Component {
                     size: 30
                 }}
                 placeholder="Tìm kiếm sản phẩm, tin mua,..."
-                onChangeText={this.updateSearch}
-                value={search}
+                onChangeText={(value : any) => setKeyword(value)}
+                value={keyword}
                 rounded
                 containerStyle={{
                     backgroundColor: 'transparent',
@@ -40,5 +30,4 @@ export default class App extends React.Component {
                 leftIconContainerStyle={{ backgroundColor: color.underBackground }}
             />
         );
-    }
 }

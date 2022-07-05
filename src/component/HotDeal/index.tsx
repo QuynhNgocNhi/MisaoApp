@@ -1,55 +1,63 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox } from 'react-native'
+import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox, Touchable, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Heading6 } from '../../component/Text';
-// import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-
-
+import FastImage from 'react-native-fast-image';
+import 'intl';
+import 'intl/locale-data/jsonp/en';
+import { useNavigation } from '@react-navigation/native';
+LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
 
 //10 latest product that have oldprice
 
 //import image from '../../data/image'
-interface ProductItemProps {
-    item: {
-        id: string,
-        name: string,
-        image: string,
-        price: number,
-        oldPrice?: number,
-        discountPercentage?: number,
-        //for optional props: oldPrice? 
 
+
+
+const HotDealItem = ({ product }: any) => {
+    const navigation = useNavigation<any>()
+    const data = {
+        productId: product.id,
+        productName: product.name,
+        productDescription: product.description,
+        productPrice: product.price,
+        oldPrice: product.oldPrice,
+        productImage: product.image,
+        productDiscount: product.discountPercentage,
+        productUnitPrice: product.unitPrice,
+        productAskTime: product.askedTimes,
+        userId: product.userId,
+        userName: product.userName,
+        userAvatar: product.userAvatar,
+        time: product.time,
+        timeUnit: product.timeUnit,
     }
-}
-
-
-const HotDealItem = ({ item }: ProductItemProps) => {
-    useEffect(() => {
-
-        LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-    }, [])
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            onPress={() => { navigation.navigate('ProductDetail', { data }); }}
+            style={styles.container}>
 
             <View style={styles.bottomContainer}>
-
-                <Image style={styles.image} source={item.image} />
+                {product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full ? (
+                    <FastImage style={styles.image}
+                        source={{ uri: product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full }} />
+                ) : (
+                    <></>
+                )}
                 <View style={styles.tittleContainer}>
-                    <Text style={styles.title} numberOfLines={1}>{item.name}</Text>
+                    <Text style={styles.title} numberOfLines={1}>{product.name}</Text>
                 </View>
 
 
 
-                <Text style={styles.price}>đ{item.price}
+                <Text style={styles.price}>đ{new Intl.NumberFormat().format(product?.price)}
 
                 </Text>
                 <View style={styles.discountLabelContainer}>
-                    <Text style={styles.label}>{`- ${item.discountPercentage}%`}</Text>
+                    <Text style={styles.label}>{`- ${product.discount}%`}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
 
     )
 }
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
     image: {
 
         width: '100%',
-        height: 80,
+        height: 70,
         resizeMode: 'cover',
         borderWidth: 1,
         borderColor: '#FF0000',

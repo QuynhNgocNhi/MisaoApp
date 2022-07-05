@@ -1,18 +1,22 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
-import { Heading6 } from '../../component/Text';
 import ProductItem from '../../component/ProductItem';
-import products from '../../assets/data/product';
 
-const MyProductList = () => (
+const MyProductList = ({ products }: any) => (
     <View style={styles.container}>
         <FlatList
-            contentContainerStyle={styles.ProductItemList}
+            // contentContainerStyle={styles.ProductItemList}
+            ListEmptyComponent={() => {
+                return (
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 120 }}>
+                        <Text style={{ fontSize: 18 }}> Không tìm thấy sản phẩm liên quan để hiển thị.</Text>
+                    </View>
+                )
+            }}
             data={products}
             numColumns={2}
             renderItem={({ item }) => <ProductItem product={item} />}
         />
-
 
     </View>
 );

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
+
+import React, { useRef } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -13,39 +15,25 @@ import color from '../../theme/color';
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { clearUserInfo } from '../../modules/user/slice';
+import { logout } from '../../modules/auth/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
 
 
 const Profile = ({ route }) => {
 
     const isFocused = useIsFocused();
-    const navigation = useNavigation();
-    //const data = { name: 'Sóc kute', userName: 'pizza03' }
 
-    const dataUserToken = 'route.params.user';
-    const access_token = ("Bearer".concat(dataUserToken));
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
-    //console.log(data);
-    useEffect(() => {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", access_token);
-
-        var raw = "";
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch('http://misao.one/api/me')
-            .then((response) => response.json())
-            .then((json) => setData(json))
-            .catch((error) => console.error(error))
-            .finally(() => setLoading(false));
-    }, []);
-
+    const navigation = useNavigation<any>();
+    const userInfo = useSelector(userSelector)
+    const dispatch = useDispatch()
+    const onLogout = async () => {
+        dispatch(logout())
+        dispatch(clearUserInfo())
+        navigation.replace('Welcome')
+        Alert.alert("", "Đăng xuất thành công!")
+    }
 
     return (
         <SafeAreaProvider>
@@ -68,12 +56,13 @@ const Profile = ({ route }) => {
                                         borderWidth: 1,
                                     }}
 
-                                    source={require('../../assets/avatar/11.png')}
+                                    source={userInfo?.profile_image ? { uri: userInfo?.profile_image_url } : require('../../assets/avatar/11.png')}
                                 />
-                                <View style={{ alignItems: 'center' }}>
+                                <View style={{ marginRight: 5 }}>
 
-                                    <Text style={styles.userName} numberOfLines={1}>Nguyễn lỵ</Text>
-                                    <Text style={{ fontSize: 18, }}>@{data}</Text>
+                                    <Text style={styles.userName} numberOfLines={1}>{userInfo?.name ?? ''}</Text>
+                                    <Text style={{ fontSize: 18, marginLeft: 10 }}>{userInfo?.phone}</Text>
+
                                 </View>
 
                             </View>
@@ -86,7 +75,7 @@ const Profile = ({ route }) => {
                                     type='material-community'
                                     color='#000000'
                                     size={45}
-                                    onPress={() => navigation.navigate('MyProfileScreen', { data })}
+                                    onPress={() => navigation.navigate('MyProfileScreen')}
                                 />
                             </View>
 
@@ -95,22 +84,22 @@ const Profile = ({ route }) => {
                         <View style={styles.userInfomationCounters}>
                             <View style={styles.userAttributes}>
 
-                                <Heading6>4</Heading6>
+                                <Heading6>{userInfo?.product?.length ?? 0}</Heading6>
                                 <Text style={{ fontSize: 16, }}> Món đang bán</Text>
                             </View>
                             <View style={styles.userAttributes}>
 
-                                <Heading6>5</Heading6>
+                                <Heading6>{userInfo?.buy_request?.length ?? 0}</Heading6>
                                 <Text style={{ fontSize: 16, }}> Tin mua</Text>
                             </View>
                             <View style={styles.userAttributes}>
 
-                                <Heading6>54</Heading6>
-                                <Text style={{ fontSize: 16, }}> đang theo</Text>
+                                <Heading6>{userInfo?.following?.length ?? 0}</Heading6>
+                                <Text style={{ fontSize: 16, }}> đang theo dõi</Text>
                             </View>
                             <View style={styles.userAttributes}>
 
-                                <Heading6>5</Heading6>
+                                <Heading6>{userInfo?.followed?.length ?? 0}</Heading6>
                                 <Text style={{ fontSize: 16, }}> đang hóng</Text>
                             </View>
                         </View>
@@ -128,7 +117,7 @@ const Profile = ({ route }) => {
                                 type='ionicon'
                                 color='#000000'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("MyProducts")}
                             />
                             <Text style={styles.buttonName}>Sản phẩm</Text>
                         </View>
@@ -140,7 +129,7 @@ const Profile = ({ route }) => {
                                 type='material-community'
                                 color='#FFB22D'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("MyBuyRequest")}
                             />
                             <Text style={styles.buttonName}>Tin mua</Text>
                         </View>
@@ -159,11 +148,11 @@ const Profile = ({ route }) => {
                                 type='font-awesome'
                                 color='#7339ab'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("EditProfile")}
                             />
                             <Text style={styles.buttonName}>Thông tin  cá nhân</Text>
                         </View>
-                        <View style={styles.buttonContainer}>
+                        {/*   <View style={styles.buttonContainer}>
 
                             <Icon
                                 raised
@@ -174,7 +163,7 @@ const Profile = ({ route }) => {
                                 onPress={() => navigation.goBack()}
                             />
                             <Text style={styles.buttonName}>Địa chỉ</Text>
-                        </View>
+                        </View> */}
                         <View style={styles.buttonContainer}>
 
                             <Icon
@@ -240,7 +229,7 @@ const Profile = ({ route }) => {
                                 type='material-community'
                                 color='#000000'
                                 size={25}
-                                onPress={() => navigation.goBack()}
+                                onPress={() => navigation.navigate("ChangePassword")}
                             />
                             <Text style={styles.buttonName}>Đổi mật khẩu</Text>
                         </View>
@@ -252,7 +241,7 @@ const Profile = ({ route }) => {
                                 type='material-community'
                                 color='#EA4239'
                                 size={25}
-                                onPress={() => { navigation.navigate('Login'); }}
+                                onPress={onLogout}
                             />
                             <Text style={styles.buttonName}>Đăng xuất</Text>
                         </View>

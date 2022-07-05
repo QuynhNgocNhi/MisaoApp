@@ -1,12 +1,9 @@
-import React, { useRef } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomeHeader from '../../component/AnimatedHeader';
-import CategoryItem from '../../component/CategoryItem';
 import ProductItem from '../../component/ProductItem';
 //import data
-import category from '../../assets/data/category';
 import products from '../../assets/data/product';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -14,44 +11,49 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
+import { getListProductFavoriteAPI } from '../../services';
 
 
 const ProductsSaved = () => {
 
+    const [loading, setLoading] = useState<boolean>(false)
+    const [productList, setProductList] = useState<any>([])
+    const fetchData = async () => {
+        setLoading(true)
+        const response = await getListProductFavoriteAPI()
+        if (response.__typename !== 'ErrorResponse') {
+            setProductList(response.data)
+        }
+        setLoading(false)
+    }
 
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
+
+    if (loading) {
+        return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator animating />
+        </View>)
+    }
     return (
         <SafeAreaProvider>
 
             <SafeAreaView style={styles.screenContainer}>
                 <StatusBar translucent backgroundColor='transparent' />
-
-                <View style={styles.container}>
-
-
-                    {/* Add the following AnimatedHeader */}
+                <View>
                     <ScrollView
                         nestedScrollEnabled={false}
                     >
-
-
-                        {/* Render Product Component */}
-                        {/* <ProductItem item = {products[0]}/> */}
-                        <View style={styles.middleContainer}>
-
-
-
-                        </View>
-                        <View style={styles.bottomContainer}>
-
-                            <FlatList
-                                contentContainerStyle={styles.ProductItemList}
-                                data={products}
-                                numColumns={2}
-                                renderItem={({ item }) => <ProductItem product={item} />}
-                            />
-                        </View>
+                        <FlatList
+                            contentContainerStyle={styles.ProductItemList}
+                            data={productList}
+                            numColumns={2}
+                            renderItem={({ item }) => <ProductItem product={item} />}
+                        />
                     </ScrollView>
-
                 </View>
 
             </SafeAreaView>
@@ -61,7 +63,7 @@ const ProductsSaved = () => {
 const styles = StyleSheet.create({
     screenContainer: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'flex-start',
         backgroundColor: color.background,
     },
     container: {

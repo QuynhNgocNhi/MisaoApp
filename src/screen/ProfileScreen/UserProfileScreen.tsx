@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, TouchableOpacity, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -25,17 +25,72 @@ import { useNavigation } from '@react-navigation/native';
 import ChatTypeScreen from '../ChatScreen/ChatTypeScreen'
 
 import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
-
+import { getOtherUserProfile, followUserAPI } from '../../services';
+import { UserInfo } from '../../services/type';
+import FastImage from 'react-native-fast-image';
+import { userSelector } from '../../modules/user/selectors';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const ProductDetailScreen = ({ Props, route }) => {
+
     const navigation = useNavigation();
     /*     const { data } = route.params;
      */
+    const userInfo = useSelector(userSelector)
+    const [isFollow, setIsFollow] = useState<boolean>(true)
+
     const [ProfileTab, setProfileTab] = useState(1);
+    const [loading, setLoading] = useState(false)
+    const [otherUserProfile, setOtherUserProfile] = useState<any>({})
     const onSelectSwitch = value => {
         setProfileTab(value);
     };
+
+    const fetchData = async () => {
+        if (route.params?.id) {
+            setLoading(true)
+            const response = await getOtherUserProfile(route.params?.id)
+            if (response.__typename !== 'ErrorResponse') {
+                setOtherUserProfile(response)
+                checkFollow(response)
+            }
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+        checkFollow(otherUserProfile)
+    }, [route.params?.id])
+
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator animating size="large" />
+            </View>
+        )
+    }
+    console.log(otherUserProfile);
+    const onFollowUser = async (userID: any) => {
+        const response = await followUserAPI(userID)
+        if (response.__typename !== 'ErrorResponse') {
+            setIsFollow(!isFollow)
+        }
+    }
+
+    const checkFollow = (_data: any) => {
+        let list = []
+        list.push(userInfo?.following?.find(user => user?.followed_id === _data?.id))
+
+        if (!list[0]) {
+            setIsFollow(false)
+        } else {
+            setIsFollow(true)
+        }
+    }
+
 
     return (
         <SafeAreaProvider>
@@ -66,28 +121,25 @@ const ProductDetailScreen = ({ Props, route }) => {
                             <View style={[styles.userContainer]}>
 
                                 <View style={styles.userNameContainer}>
-                                    <Avatar
-                                        size="large"
-                                        rounded
-                                        containerStyle={{
-                                            borderColor: 'grey',
-                                            borderStyle: 'solid',
-                                            borderWidth: 1,
+                                    <FastImage
+                                        style={{
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 80,
                                         }}
-
-                                        source={require('../../assets/avatar/11.png')}
+                                        resizeMode={FastImage.resizeMode.cover}
+                                        source={otherUserProfile?.profile_image ? { uri: otherUserProfile.profile_image_url } : require('../../assets/avatar/11.png')}
                                     />
-
                                     <View style={styles.followContainer}>
 
                                         <View style={styles.userAttributes}>
 
-                                            <Heading6>4</Heading6>
+                                            <Heading6>{otherUserProfile?.following?.length ?? 0}</Heading6>
                                             <Text style={styles.userAttributesText}> đang theo</Text>
                                         </View>
                                         <View style={styles.userAttributes}>
 
-                                            <Heading6>5</Heading6>
+                                            <Heading6>{otherUserProfile?.followed?.length ?? 0}</Heading6>
                                             <Text style={styles.userAttributesText}> người theo</Text>
                                         </View>
 
@@ -101,19 +153,22 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                 <View style={[styles.userInfomationContainer]}>
 
-                                    <Text style={styles.userName} numberOfLines={1}>Mén Nguyễn</Text>
-                                    <Text style={{ fontSize: 18, }}>@Sockute</Text>
-
+                                    <Text style={styles.userName} numberOfLines={1}>{otherUserProfile?.name ?? ''}</Text>
+                                    <Text style={{ fontSize: 18, }}>{otherUserProfile?.phone ?? ''}</Text>
                                     <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>Bán hoài không nghỉ</Text>
-
-
                                 </View>
                                 <View style={styles.followProfileButtonContainer}>
 
-                                    <View style={styles.followButtonContainer}>
-
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
-                                    </View>
+                                    {userInfo?.id !== otherUserProfile.id ? (
+                                        <TouchableOpacity
+                                            onPress={() => onFollowUser(otherUserProfile.id)}
+                                            style={styles.followContainer}>
+                                            <ButtonNormal
+                                                onPress={() => onFollowUser(otherUserProfile.id)}
+                                                outlined buttonStyle={styles.followButton}
+                                                title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
+                                        </TouchableOpacity>
+                                    ) : <View style={{ width: 10, height: 10 }} />}
                                     <Text style={styles.addressBox} numberOfLines={1}>
                                         <Icon
 
@@ -121,7 +176,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                             type='ionicon'
                                             color={color.black}
                                             size={30}
-                                        /> Đà Lạt
+                                        /> {otherUserProfile?.address ?? ''}
                                     </Text>
                                 </View>
                             </View>
@@ -137,17 +192,17 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 selectionMode={1}
                                 option1="Sản phẩm"
                                 option2="Tin Mua"
-                                option3="Lịch sử"
+                                // option3="Lịch sử"
                                 onSelectSwitch={onSelectSwitch}
                             />
 
                         </View>
                         {ProfileTab == 1 &&
-                            <ProductTab />}
+                            <ProductTab products={otherUserProfile?.product} />}
                         {ProfileTab == 2 &&
-                            <PostTab />}
-                        {ProfileTab == 3 &&
-                            <HistoryTab />}
+                            <PostTab buyRequest={otherUserProfile?.buy_request} />}
+                        {/* {ProfileTab == 3 &&
+                            <HistoryTab />} */}
                     </View>
 
 

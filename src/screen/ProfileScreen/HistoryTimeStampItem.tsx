@@ -7,7 +7,7 @@ import { Icon } from 'react-native-elements';
 // import color, layout, style
 import color from '../../theme/color';
 
-import MyPostItem from './MyPostItem';
+import MyPostItem from '../../component/MyPostItem';
 //import data
 import category from '../../assets/data/category';
 import post from '../../assets/data/post';
@@ -16,8 +16,9 @@ import ProductHistoryItem from './ProductHistoryItem';
 import PostHistoryItem from './PostHistoryItem';
 
 
-const MyProductList = ({ date }) => {
+const MyProductList = ({ date, data }: any) => {
     /*  const PostSortedByDate = [...post].filter */
+    console.log({ data });
 
     return (
 
@@ -47,40 +48,22 @@ const MyProductList = ({ date }) => {
 
                     scrollEnabled={true}
 
-                    data={product}
+                    data={data}
                     renderItem={({ item, index }) => {
-                        return (
+                        return (data.limited_date ? (<View>
+                            <PostHistoryItem post={item}
+                                contentContainerStyle={styles.myPostItem}
+                                scrollEnabled={false}
+                            />
+                        </View>) : (
+
                             <View>
-                                {
-                                    item.dateCreated == date && (
-                                        <ProductHistoryItem product={item}
-                                            contentContainerStyle={styles.myPostItem}
-                                            scrollEnabled={false}
-                                        />
-                                    )
-                                }
+                                <ProductHistoryItem product={item}
+                                    contentContainerStyle={styles.myPostItem}
+                                    scrollEnabled={false}
+                                />
                             </View>
-                        )
-                    }}
-                />
-                <FlatList
-
-                    scrollEnabled={true}
-
-                    data={post}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <View >
-                                {
-                                    item.dateCreated == date && (
-                                        <PostHistoryItem post={item}
-                                            contentContainerStyle={styles.myPostItem}
-                                            scrollEnabled={false}
-                                        />
-                                    )
-                                }
-                            </View>
-                        )
+                        ))
                     }}
                 />
             </View>

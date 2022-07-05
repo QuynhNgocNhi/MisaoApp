@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, ActivityIndicator, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -10,10 +10,8 @@ import CommentItem from '../../component/CommentItem';
 import ProductItem from '../../component/ProductItem';
 import AddComment from '../../component/AddComment';
 
-//import data
-import comment from '../../assets/data/comment';
-import products from '../../assets/data/product';
-
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 
 
 
@@ -73,19 +71,148 @@ const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevr
 // import color, layout, style
 import color from '../../theme/color';
 
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { deleteProductAPI, followUserAPI, getProductDetailAPI, orderProductAPI } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../modules/user/selectors';
+import LoadingOverlay from '../../component/LoadingOverlay';
+
+import { getHotProductListAPI, getProductListAPI } from '../../services';
+import { tokenSelector } from '../../modules/auth/selectors';
+
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParameterList } from '../../MainNavigator';
+import { getUserInfo } from '../../modules/user/slice';
+type HomeProps = NativeStackScreenProps<RootStackParameterList, "Home">
+
+const ProductDetailScreen = ({ Props, route }: any) => {
+    const navigation = useNavigation<any>();
+    const routeParams = route?.params?.data;
+    console.log(routeParams?.productId);
+    const [data, setData] = useState<any>()
+
+    const [updating, setUpdating] = useState<boolean>(false)
+    const userInfo = useSelector(userSelector)
+    const isFocused = useIsFocused()
+    const [loading, setLoading] = useState<boolean>(true)
+    const [isFollow, setIsFollow] = useState<boolean>(true)
+    const fetchProductDetail = async () => {
+
+        setLoading(true)
+        const response = await getProductDetailAPI(routeParams?.productId)
+        if (response.__typename !== 'ErrorResponse') {
+            setData(response.data)
+
+            checkFollow(response.data)
+        }
+        setLoading(false)
+    }
+    const dispatch = useDispatch()
+    const onFollowUser = async (userID: any) => {
+        const response = await followUserAPI(userID)
+        if (response.__typename !== 'ErrorResponse') {
+            setIsFollow(!isFollow)
+        }
+    }
+
+    const onOrderProduct = async () => {
+        setUpdating(true)
+        const response = await orderProductAPI({
+            confirm: true,
+            user_seller_id: data?.user?.id,
+            product_id: data?.id
+        })
+
+        if (response.__typename !== 'ErrorResponse') {
+            navigation.navigate('ChatRoomScreen', {
+                id: response?.data?.chat_room?.id
+            })
+        }
+        setUpdating(false)
+
+    }
+
+    const onDeleteProduct = () => {
+        Alert.alert("", "Bạn chắc chắn muốn xóa sản phẩm này?", [
+            {
+                text: 'Hủy',
+                onPress: () => { },
+                style: 'cancel'
+            },
+            {
+                text: 'Xóa sản phẩm',
+                onPress: async () => {
+                    setUpdating(true)
+                    const response = await deleteProductAPI(data?.id)
+                    if (response.__typename !== 'ErrorResponse') {
+                        Alert.alert("", "Xóa thành công", [
+                            {
+                                text: 'Ok',
+                                onPress: () => navigation.goBack(),
+                                style: 'cancel'
+                            }
+                        ])
+                    } else {
+                        Alert.alert("", "Xóa thất bại")
+                    }
+                    setUpdating(false)
+                },
+                style: 'cancel'
+            },
+        ])
+    }
+
+    const onEditProduct = () => {
+        navigation.navigate("EditProduct", { data: { productId: data.id } });
+    }
+
+
+    useEffect(() => {
+        fetchProductDetail()
+    }, [routeParams?.productId, isFocused])
 
 
 
-const ProductDetailScreen = ({ Props, route }) => {
-    const navigation = useNavigation();
-    const { data } = route.params;
-    const [date, setDate] = useState('09-10-2020');
+    const [productList, setProductList] = useState<any>([])
+    const token = useSelector(tokenSelector)
 
-    const stateName = 'Nguyễn Văn A'
-    const statePhone = '097773777'
-    const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
+    const fetchData = async () => {
+        if (!token) {
+            navigation.replace('')
+        }
+        setLoading(true)
+        const productResponse = await getProductListAPI()
+        const response = await getHotProductListAPI()
+        if (response.__typename !== 'ErrorResponse' && productResponse.__typename !== 'ErrorResponse') {
 
+            setProductList(response.data)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
+    const checkFollow = (_data: any) => {
+        let list = []
+        list.push(userInfo?.following?.find(user => user?.followed_id === _data?.user.id))
+
+        if (!list[0]) {
+            setIsFollow(false)
+        } else {
+            setIsFollow(true)
+        }
+    }
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator animating />
+            </View>
+        )
+    }
 
     return (
         <SafeAreaProvider>
@@ -100,7 +227,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 <Text numberOfLines={1} style={
 
                                     { fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }
-                                }>{data.productName}
+                                }>{data?.name ?? ''}
                                 </Text>
                             }
                             leftComponent={
@@ -116,7 +243,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                         <View style={styles.container}>
                             <View style={[styles.box, styles.productDetailContainer]}>
 
-                                <View style={[styles.userContainer, styles.box, { paddingTop: 0 }]}>
+                                <View style={[styles.userContainer, { paddingBottom: 10 }]}>
 
                                     <View style={styles.userNameContainer}>
                                         <Avatar
@@ -127,30 +254,42 @@ const ProductDetailScreen = ({ Props, route }) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={require('../../image/symbol.png')}
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
-                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
+                                            <Text onPress={() => { navigation.navigate('UserProfileScreen', { id: data?.user?.id }); }}
+                                                style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data?.time} {data?.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
-                                    <View style={styles.followContainer}>
+                                    {userInfo?.id !== data?.user?.id ? (
+                                        <TouchableOpacity
+                                            onPress={() => onFollowUser(data?.user?.id)}
+                                            style={styles.followContainer}>
+                                            <ButtonNormal
+                                                onPress={() => onFollowUser(data?.user?.id)}
+                                                outlined buttonStyle={styles.followButton}
+                                                title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
+                                        </TouchableOpacity>
+                                    ) : <View style={{ width: 10, height: 10 }} />}
 
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
-                                    </View>
                                 </View>
                                 <View style={styles.productContainer}>
-                                    <Text style={styles.productName}>{data.productName}
+                                    <Text style={styles.productName}>{data?.name ?? ''}
                                     </Text>
+                                    {data?.discount > 0 ? (
+                                        <View style={styles.unitPriceRow}>
+                                            <Text style={styles.price}>{new Intl.NumberFormat().format(data?.price - data?.price * (data?.discount / 100))} đ</Text>
+                                            <Text style={styles.oldPrice}> {new Intl.NumberFormat().format(data?.price)} đ</Text>
 
-                                    <View style={styles.unitPriceRow}>
+                                        </View>
+                                    ) : (
+                                        <View style={styles.unitPriceRow}>
+                                            <Text style={styles.price}>{new Intl.NumberFormat().format(data?.price)} đ</Text>
+                                        </View>
+                                    )}
 
-                                        <Text style={styles.price}>{data.productPrice} đ</Text>
-                                        <Text style={styles.oldPrice}> {data.oldPrice} đ</Text>
-
-                                    </View>
                                     <View style={styles.Line}></View>
 
 
@@ -158,14 +297,12 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
                                     <Text style={styles.productStatus}>Tình trạng</Text>
 
-                                    <ButtonNormal buttonStyle={styles.statusButton} outlined title={'Còn hàng'}></ButtonNormal>
-
-
+                                    <ButtonNormal buttonStyle={styles.statusButton} outlined title={data?.is_availabel === 0 ? 'Còn hàng' : 'Hết hàng'}></ButtonNormal>
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={[styles.productStatus, { marginBottom: 20 }]}>Mô tả sản phẩm</Text>
                                     <Text style={styles.productDescription}>
-                                        {data.productDescription}
+                                        {data?.description}
                                     </Text>
 
 
@@ -175,17 +312,17 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Danh mục</Text>
-                                        <Text style={{ fontSize: 18 }}>Trái cây</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.category?.name}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Nơi bán</Text>
-                                        <Text style={{ fontSize: 18 }}>Tiền Giang</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.seller_address}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={{ fontSize: 18 }}>Số lượng</Text>
-                                        <Text style={{ fontSize: 18 }}>50 kg</Text>
+                                        <Text style={{ fontSize: 18 }}>{data?.inventory_number ?? '-'} {data?.unit ?? ''}</Text>
                                     </View>
 
 
@@ -197,14 +334,18 @@ const ProductDetailScreen = ({ Props, route }) => {
                                     <Text style={[styles.productStatus, { alignSelf: 'flex-start' }]}>Ảnh sản phẩm</Text>
 
                                     <View style={styles.productImage}>
+                                        {data?.images?.map((image: any, index: number) => (
+                                            <Image style={styles.image} key={index} source={{ uri: image?.url_full ?? '' }} />
 
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-1.jpg')} />
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-2.jpg')} />
-                                        <Image style={styles.image} source={require('../../assets/productImage/mango-3.jpg')} />
+                                        ))}
                                     </View>
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> {data.productAskTime} người đang hỏi</Text>
+                                        <Text
+                                            style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}>
+                                            <FontAwesome name='shopping-bag'
+                                                size={22}
+                                                color={color.disableText} /> {routeParams.askedTimes ? (routeParams.askedTimes) : '0'} người đang hỏi</Text>
                                         <Text style={{ fontSize: 18, padding: 10 }}>Báo xấu <FontAwesome name='exclamation-circle' size={22} color={color.disableText} /></Text>
                                     </View>
                                 </View>
@@ -224,25 +365,28 @@ const ProductDetailScreen = ({ Props, route }) => {
                                                 borderStyle: 'solid',
                                                 borderWidth: 1,
                                             }}
-
-                                            source={require('../../assets/avatar/11.png')}
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
-
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
-                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>{data.time} {data.timeUnit} trước</Text>
+                                                style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
                                         </View>
                                     </View>
                                     <View style={styles.followContainer}>
 
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
+                                        {userInfo?.id !== data?.user?.id ? (
+                                            <TouchableOpacity
+                                                onPress={() => onFollowUser(data?.user?.id)}
+                                                style={styles.followContainer}>
+                                                <ButtonNormal outlined buttonStyle={styles.followButton} title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
+                                            </TouchableOpacity>
+                                        ) : <View style={{ width: 10, height: 10 }} />}
                                     </View>
 
                                 </View>
                                 <View style={[styles.userInfomationContainer]}>
-                                    <Text style={{ fontSize: 18, }}>@Sockute</Text>
-                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>Bán hoài không nghỉ</Text>
+                                    <Text style={{ fontSize: 18, }}>{data?.user?.phone}</Text>
+                                    <Text style={{ fontSize: 18, color: color.primaryText, }} numberOfLines={1}>{data?.user?.description}</Text>
 
 
                                 </View>
@@ -256,7 +400,7 @@ const ProductDetailScreen = ({ Props, route }) => {
 
 
                             </View>
-                            <View style={[styles.box, styles.commentContainer, { marginTop: 10 }]}>
+                            {/* <View style={[styles.box, styles.commentContainer, { marginTop: 10 }]}>
                                 <View style={styles.commentCountContainer}>
 
                                     <FontAwesome name='comment-o' size={24} color={color.borderColor} />
@@ -276,7 +420,7 @@ const ProductDetailScreen = ({ Props, route }) => {
                                 </View>
 
 
-                            </View>
+                            </View> */}
                             <View style={[styles.upSellProduct, { marginTop: 10 }]}>
                                 <View style={styles.bottomContainer}>
 
@@ -285,7 +429,7 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                                     <FlatList
                                         contentContainerStyle={styles.ProductItemList}
-                                        data={products}
+                                        data={productList}
                                         numColumns={2}
                                         renderItem={({ item }) => <ProductItem product={item} />}
                                     />
@@ -295,21 +439,43 @@ const ProductDetailScreen = ({ Props, route }) => {
 
                         </View>
                     </ScrollView>
-                    <View style={[styles.box, styles.contentContainer]}>
-
-
-                        <ButtonNormal
-
-                            buttonStyle={styles.customButtonBackToHome}
-                            onPress={() => { navigation.navigate('Login'); }}
-                            title={'Chốt'.toUpperCase()}
-                        />
-                    </View>
-
-
+                    {userInfo?.id !== data?.user?.id ? (
+                        <View style={[styles.box, styles.contentContainer]}>
+                            <ButtonNormal
+                                buttonStyle={styles.customButtonBackToHome}
+                                onPress={onOrderProduct}
+                                title={'Chốt'.toUpperCase()}
+                            />
+                        </View>
+                    ) : (
+                        <View style={{
+                            position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                            width: Dimensions.get('window').width, backgroundColor: color.background, padding: 10
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: color.normalButton, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2, marginRight: 20
+                                }}
+                                onPress={onEditProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Sửa</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: color.important, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2
+                                }}
+                                onPress={onDeleteProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Xóa</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
 
             </SafeAreaView>
+            <LoadingOverlay loading={updating} />
         </SafeAreaProvider >
     );
 };
@@ -328,12 +494,14 @@ const styles = StyleSheet.create({
     },
     userContainer: {
         flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
 
 
     },
     userNameContainer: {
 
-        width: '90%',
+
         flexDirection: 'row',
         justifyContent: 'flex-start',
 

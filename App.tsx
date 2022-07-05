@@ -15,7 +15,7 @@
  */
 import SearchBox from './src/component/SearchBox';
 
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 
 import {
   SafeAreaView,
@@ -30,17 +30,11 @@ import {
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
-//import Icon from 'react-native-vector-icons/FontAwesome';
-import HomeScreen from './src/screen/HomeScreen';
-import LoginScreen from './src/screen/LoginScreen';
-import RegisterScreen from './src/screen/RegisterScreen';
-import RegisterSuccessfulScreen from './src/screen/RegisterSuccessfulScreen';
-import WelcomeScreen from './src/screen/Welcome';
-import Posts from './src/screen/PostsScreen';
 import MainNavigator from './src/MainNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import AppStatusBar from './src/component/AppStatusBar';
-
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from './src/redux/configStore';
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -48,10 +42,18 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+
   return (
-    <SafeAreaProvider style={backgroundStyle}>
-      <MainNavigator />
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null} >
+        <Suspense fallback={<View />}>
+          <SafeAreaProvider style={backgroundStyle}>
+            <MainNavigator />
+          </SafeAreaProvider>
+
+        </Suspense>
+      </PersistGate>
+    </Provider>
   );
 };
 {/* <RegisterScreen />  

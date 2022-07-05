@@ -30,7 +30,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
 const AddScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const isFocused = useIsFocused();
 
 
@@ -89,12 +89,9 @@ const AddScreen = () => {
               />
             </View>
           </View>
-          <View style={styles.bottomContainer}>
+          <View style={[styles.bottomContainer, { marginBottom: 100 }]}>
             <Text style={styles.tipsText}>Mẹo: Bạn có thể bán sản phẩm sắp có để tăng cơ hội được đặt trước.</Text>
           </View>
-
-
-
         </View>
 
       </SafeAreaView>

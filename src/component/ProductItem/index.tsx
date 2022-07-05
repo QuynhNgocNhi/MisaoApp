@@ -1,5 +1,5 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox } from 'react-native'
-import React, { useEffect } from 'react';
+import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Heading6 } from '../../component/Text';
 // import color, layout, style
@@ -7,8 +7,11 @@ import color from '../../theme/color';
 import layout from '../../theme/layout';
 import NumberFormat from 'react-number-format';
 import { useNavigation } from '@react-navigation/native';
-
-
+import 'intl';
+import 'intl/locale-data/jsonp/en';
+import FastImage from 'react-native-fast-image';
+import { likeProductAPI } from '../../services';
+LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
 //import image from '../../data/image'
 interface ProductItemProps {
   product: {
@@ -28,6 +31,8 @@ interface ProductItemProps {
     timeUnit: string,
     dateCreated: string,
     availability: number,
+    discount: number,
+    images: any
 
     //for optional props: oldPrice? 
 
@@ -35,14 +40,12 @@ interface ProductItemProps {
 }
 
 
-const ProductItem = ({ product }: ProductItemProps) => {
-  useEffect(() => {
-
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
-  }, [])
+const ProductItem = ({ product }: any) => {
   const navigation = useNavigation();
+  const askedTimes = product?.order?.length;
   const data = {
     productId: product.id,
+    askedTimes: askedTimes,
     productName: product.name,
     productDescription: product.description,
     productPrice: product.price,
@@ -56,36 +59,47 @@ const ProductItem = ({ product }: ProductItemProps) => {
     userAvatar: product.userAvatar,
     time: product.time,
     timeUnit: product.timeUnit,
-
   }
+  const [tempHasFavorite, setTempHasFavorite] = useState(product?.has_favorite)
+  const onLikeProduct = async () => {
+    const response = await likeProductAPI(product?.id)
+    setTempHasFavorite(tempHasFavorite === 0 ? 1 : 0)
+  }
+
   return (
     <View style={styles.container} >
-
       <View style={styles.bottomContainer}>
-
-        <Image style={styles.image} source={product.image} />
+        {product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full ? (
+          <FastImage style={styles.image}
+            source={{ uri: product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full }} />
+        ) : (
+          <></>
+        )}
         <View style={styles.tittleContainer}>
-          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }} style={styles.title} numberOfLines={2}>{product.name}</Text>
+          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }}
+            style={styles.title} numberOfLines={2}>{product?.name}</Text>
         </View>
 
 
         <View style={styles.unitPriceRow}>
 
-          <Text style={styles.price}>đ{product.price}
-            {product.oldPrice && (<Text style={styles.oldPrice}> ${product.oldPrice}</Text>)}
+          <Text style={styles.price}>đ{new Intl.NumberFormat().format(product?.price)}
+            {/* {product.oldPrice && (<Text style={styles.oldPrice}> ${product.oldPrice}</Text>)} */}
 
           </Text>
-          <Text style={styles.unitPrice}> {product.unitPrice} </Text>
+          <Text style={styles.unitPrice}> {product?.unit} </Text>
         </View>
-        <Text style={styles.askedTimes}> {product.askedTimes} người đang hỏi </Text>
+        <Text style={styles.askedTimes}> {product?.order?.length ? (product?.order?.length) : '0'} người đang hỏi</Text>
 
-        {product.discountPercentage && (<View style={styles.discountLabelContainer}>
-          <Text style={styles.label}>{`- ${product.discountPercentage}%`}</Text>
+        {product.discount ? (<View style={styles.discountLabelContainer}>
+          <Text style={styles.label}>{`- ${product?.discount}%`}</Text>
 
-        </View>)}
-        <View style={styles.wishlistContainer}>
-          <FontAwesome style={styles.wishlist} name={"heart-o"} color={'#FF0000'} size={24} />
-        </View>
+        </View>) : <></>}
+        <TouchableOpacity
+          onPress={onLikeProduct}
+          style={styles.wishlistContainer}>
+          <FontAwesome style={styles.wishlist} name={tempHasFavorite === 0 ? "heart-o" : 'heart'} color={'#FF0000'} size={24} />
+        </TouchableOpacity>
       </View>
     </View>
 
@@ -145,6 +159,7 @@ const styles = StyleSheet.create({
   },
   price: {
     marginBottom: 5,
+    marginLeft: 5,
     color: '#FF0000',
     fontSize: 16,
     fontWeight: 'bold',
@@ -174,14 +189,6 @@ const styles = StyleSheet.create({
   },
   wishlist: {
     opacity: 0.5,
-  },
-  price: {
-    marginLeft: 10,
-
-    color: '#000',
-    fontSize: 18,
-    fontWeight: 'bold',
-
   },
   oldPrice: {
 
