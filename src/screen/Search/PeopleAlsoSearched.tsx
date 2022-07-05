@@ -1,4 +1,4 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet } from 'react-native'
+import { Image, View, Text, ImagePropTypes, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Avatar } from 'react-native-elements';
@@ -7,6 +7,7 @@ import { Avatar } from 'react-native-elements';
 import color from '../../theme/color';
 import layout from '../../theme/layout';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 
 interface productProps {
@@ -30,8 +31,8 @@ interface productProps {
         availability: number,
     }
 }
-const PeopleAlsoSearched = ({ product }: productProps) => {
-    const navigation = useNavigation();
+const PeopleAlsoSearched = ({ product }: any) => {
+    const navigation = useNavigation<any>();
     const data = {
         productId: product.id,
         productName: product.name,
@@ -47,16 +48,17 @@ const PeopleAlsoSearched = ({ product }: productProps) => {
         userAvatar: product.userAvatar,
         time: product.time,
         timeUnit: product.timeUnit,
-
     }
     return (
-        <View>
+        <TouchableOpacity
+            onPress={() => { navigation.navigate('ProductDetail', { data: product }); }}
+        >
             <View style={styles.root}>
                 <View style={styles.topContainer}>
 
                     <View style={styles.imageContainer}>
 
-                        <Image style={styles.productImage} source={product.image} />
+                        <FastImage style={styles.productImage} source={{ uri: product.images && product.images?.length > 0 && product?.images[0].url && product.images[0].url_full }} />
                     </View>
 
                     <View style={styles.middleContainer}>
@@ -70,7 +72,7 @@ const PeopleAlsoSearched = ({ product }: productProps) => {
 
 
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 const styles = StyleSheet.create({

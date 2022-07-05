@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput, TouchableOpacity, Touchable, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from 'react-native-elements';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import CategoryItem from '../../component/CategoryItem';
 //import data
@@ -22,15 +23,49 @@ const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevr
 // import color, layout, style
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-
+import CategoryList from '../../component/CategoryItem';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { masterDataSelector } from '../../modules/search/selectors';
+import FastImage from 'react-native-fast-image';
 
 
 
+const AddPostScreen = () => {
+    const navigation = useNavigation<any>();
+    const categoriesList = useSelector(masterDataSelector)
+    const [deleteItem, setDeleteItem] = useState<boolean>(false)
+    const [data, setData] = useState<any>()
+    const [imageList, setImageList] = useState<any>([])
+    const onPickImage = () => {
+        ImagePicker.openPicker({
+            mediaType: 'photo',
+        }).then(image => {
+            setImageList([...imageList, {
+                id: -1,
+                url_full: image.path,
+            }])
 
-const AddProductScreen = () => {
-    const navigation = useNavigation();
+        });
+    }
+    const onRemoveImage = (item: any) => {
+        let list = imageList
+        list.splice(list.indexOf(item), 1);
+        setImageList(list)
+        setDeleteItem(!deleteItem);
+    }
 
+    const onGoToStep2 = () => {
+        if (data.name && data.description && data.category_id) {
+            let postInfo = {
+                ...data,
+                image_list: imageList
+            }
+            navigation.navigate('AddPostLastStep', { data: postInfo });
+        } else {
+            Alert.alert("", "Vui lòng nhập đầy đủ thông tin cho tin mua.")
+        }
+    }
 
     return (
         <SafeAreaProvider>
@@ -68,9 +103,35 @@ const AddProductScreen = () => {
                                 <Icon name='image-multiple-outline' size={28} color='#5C8700' />
                                 <Heading6 style={[styles.headingText, { paddingLeft: 10 }]}>Ảnh sản phẩm cần mua (nếu có)</Heading6>
                             </View>
-                            <View style={styles.imageAddBox}>
-                                <Button type="clear" onPress={() => navigation.push('AddProduct')} icon={<Icon name={'image-plus'} size={62} color={color.borderColor} />} />
+                            <TouchableOpacity onPress={onPickImage} style={styles.imageAddBox}>
+                                <Button type="clear" onPress={onPickImage} icon={<Icon name={'image-plus'} size={62} color={color.borderColor} />} />
+                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                {imageList?.map((image: any, index: number) => (
+                                    <View key={index} style={{
+                                        borderWidth: 1,
+                                        borderColor: '#A0BCC2',
+                                        marginTop: 10, marginLeft: 20
+                                    }}>
+                                        <TouchableOpacity
+                                            onPress={() => onRemoveImage(image)}
+                                            style={{ position: 'absolute', zIndex: 9999, right: 5, top: 5 }}>
+                                            <FontAwesome name='close' size={15} color='red' />
+                                        </TouchableOpacity>
+                                        <FastImage
+
+                                            source={{ uri: image.url_full }}
+                                            style={{
+                                                width: 100,
+                                                height: 100,
+                                                marginRight: 5
+                                            }}
+                                            resizeMode='contain'
+                                        />
+                                    </View>
+                                ))}
                             </View>
+
                         </View>
 
                         <View style={[styles.box, styles.productNameAddContainer, { marginTop: 10 }]}>
@@ -82,10 +143,11 @@ const AddProductScreen = () => {
                             <View style={styles.productNameAddBox}>
                                 <TextInput
                                     style={{ fontSize: 20, padding: 10 }}
-
+                                    value={data?.name}
                                     maxFontSizeMultiplier={5}
                                     placeholder="Cần mua 50kg sầu riêng Ri6 tại... "
                                     placeholderTextColor={'#424242'}
+                                    onChangeText={(value: any) => setData({ ...data, name: value })}
 
                                     // Inherit any props passed to it; e.g., multiline, numberOfLines below
                                     multiline={true}
@@ -105,10 +167,11 @@ const AddProductScreen = () => {
                             <View style={styles.productDescriptionAddBox}>
                                 <TextInput
                                     style={{ fontSize: 20, padding: 10 }}
-
+                                    value={data?.description}
                                     maxFontSizeMultiplier={5}
                                     placeholder="Một đoạn văn miêu tả đầy đủ sẽ giúp người bán dễ liên lạc với bạn hơn. "
                                     placeholderTextColor={'#424242'}
+                                    onChangeText={(value: any) => setData({ ...data, description: value })}
 
                                     // Inherit any props passed to it; e.g., multiline, numberOfLines below
                                     multiline={true}
@@ -128,11 +191,48 @@ const AddProductScreen = () => {
                             <View style={styles.productCategoryAddBox}>
                                 <FlatList
                                     horizontal
-                                    data={category}
+                                    data={categoriesList}
                                     showsHorizontalScrollIndicator={false}
                                     alwaysBounceHorizontal={false}
-                                    keyExtractor={item => item.id}
-                                    renderItem={({ item }) => <CategoryItem category={item} />}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item }) => (
+                                        <TouchableOpacity
+                                            onPress={() => setData({ ...data, category_id: item.value })}
+                                            style={{
+
+                                                width: 100,
+                                            }}>
+
+                                            <View style={{
+
+                                                alignItems: 'center',
+                                            }}>
+                                                <FastImage resizeMode={FastImage.resizeMode.cover}
+                                                    style={{
+                                                        height: 70,
+                                                        width: 70,
+                                                        borderRadius: 5,
+
+
+                                                    }}
+                                                    source={{ uri: item.image }}
+
+                                                />
+                                                <View style={{
+
+                                                }}>
+                                                    <Text style={{
+                                                        color: '#000',
+                                                        fontSize: 16,
+                                                        fontWeight: data?.category_id === item.value ? 'bold' : 'normal',
+                                                        textAlign: 'center'
+                                                    }}
+
+                                                        numberOfLines={3}>{item.label}</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )}
                                 />
                             </View>
 
@@ -146,7 +246,8 @@ const AddProductScreen = () => {
                                 <ButtonNormal
                                     outlined
                                     buttonStyle={styles.customButton}
-                                    onPress={() => { navigation.navigate('AddPostLastStep'); }}
+                                    onPress={onGoToStep2}
+
                                     title={'Tiếp tục'.toUpperCase()}
                                 />
 
@@ -269,4 +370,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default AddProductScreen
+export default AddPostScreen

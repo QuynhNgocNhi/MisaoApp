@@ -7,7 +7,7 @@ import { Icon } from 'react-native-elements';
 // import color, layout, style
 import color from '../../theme/color';
 
-import MyPostItem from './MyPostItem';
+import MyPostItem from '../../component/MyPostItem';
 //import data
 import category from '../../assets/data/category';
 import post from '../../assets/data/post';

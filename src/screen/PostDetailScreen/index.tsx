@@ -1,7 +1,7 @@
 //to do: onpress change state button
 
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, FlatList, Alert, Text, StatusBar, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ScrollView, Platform, Image, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -17,53 +17,18 @@ import PostItem from '../../component/PostItem';
 //import data
 import comment from '../../assets/data/comment';
 
+import { useIsFocused } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { masterDataSelector } from '../../modules/search/selectors';
 
+import { getPostListAPI, deletePostAPI, getPostDetailAPI, orderProductAPI, followUserAPI } from '../../services';
+import { tokenSelector } from '../../modules/auth/selectors';
 
+import { userSelector } from '../../modules/user/selectors';
 
-
-interface productProps {
-
-    product: {
-        id: string,
-        title: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-        askedTimes: number,
-
-    }
-}
-interface UserProps {
-    user: {
-        id: string,
-        name: string,
-        avatar: string,
-
-
-    }
-
-}
-interface commentProps {
-    comment: {
-        id: string,
-        productId: string,
-        content: string,
-        userId: string,
-        name: string,
-        avatar: string,
-        time: number,
-        timeUnit: string,
-
-
-    }
-
-}
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CategoryList from '../../component/CategoryList';
+
 //import data
 import category from '../../assets/data/category';
 
@@ -83,17 +48,128 @@ import layout from '../../theme/layout';
 
 import { useNavigation } from '@react-navigation/native';
 import Comment from '../../assets/data/comment';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 
 
 const PostDetailScreen = ({ Props, route }) => {
-    const navigation = useNavigation();
-    const { data } = route.params;
+    const navigation = useNavigation<any>();
+    const routeParams = route?.params?.data;
     const [date, setDate] = useState('09-10-2020');
+    const [data, setData] = useState<any>()
+    const [updating, setUpdating] = useState<boolean>(false)
+    const userInfo = useSelector(userSelector)
 
-    const stateName = 'Nguyễn Văn A'
-    const statePhone = '097773777'
-    const stateAddress = '107, ấp 7, xã Ngã Bãy, huyện Châu Thành, tỉnh An Giang'
+    const [loading, setLoading] = useState<boolean>(true)
+    const [isFollow, setIsFollow] = useState<boolean>(true)
+
+    const [postList, setPostList] = useState<any>([])
+    const fetchPostDetail = async () => {
+        setLoading(true)
+        const response = await getPostDetailAPI(routeParams?.postId)
+        if (response.__typename !== 'ErrorResponse') {
+            setData(response.data)
+        }
+        setLoading(false)
+    }
+
+    const onFollowUser = async (userID: any) => {
+        const response = await followUserAPI(userID)
+        if (response.__typename !== 'ErrorResponse') {
+            setIsFollow(!isFollow)
+        }
+    }
+
+    const onOrderProduct = async () => {
+        setUpdating(true)
+        const response = await orderProductAPI({
+            confirm: true,
+            user_seller_id: data?.user?.id,
+            buy_request_id: routeParams?.postId
+        })
+
+        if (response.__typename !== 'ErrorResponse') {
+            navigation.navigate('ChatRoomScreen', {
+                id: response?.data?.chat_room?.id,
+                chatRoom: response?.data?.chat_room,
+            })
+        }
+        setUpdating(false)
+    }
+
+
+    useEffect(() => {
+        fetchPostDetail()
+    }, [routeParams?.id])
+
+
+
+    const token = useSelector(tokenSelector)
+    const fetchData = async () => {
+        if (!token) {
+            navigation.replace('')
+        }
+        setLoading(true)
+        const postResponse = await getPostListAPI()
+
+        if (postResponse.__typename !== 'ErrorResponse') {
+
+            setPostList(postResponse.data)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+    const checkFollow = (_data: any) => {
+        let list = []
+        list.push(userInfo?.following?.find(user => user?.following_id === userInfo?.id && user?.followed_id === _data?.user_id))
+        if (!list[0]) {
+            setIsFollow(false)
+        } else {
+            setIsFollow(true)
+        }
+    }
+
+    if (loading) {
+        return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator animating />
+        </View>)
+    }
+    const onDeleteProduct = () => {
+        Alert.alert("", "Bạn chắc chắn muốn xóa tin mua này?", [
+            {
+                text: 'Hủy',
+                onPress: () => { },
+                style: 'cancel'
+            },
+            {
+                text: 'Xóa',
+                onPress: async () => {
+                    setUpdating(true)
+                    const response = await deletePostAPI(data?.id)
+                    if (response.__typename !== 'ErrorResponse') {
+                        Alert.alert("", "Xóa thành công", [
+                            {
+                                text: 'Ok',
+                                onPress: () => navigation.goBack(),
+                                style: 'cancel'
+                            }
+                        ])
+                    } else {
+                        Alert.alert("", "Xóa thất bại")
+                    }
+                    setUpdating(false)
+                },
+                style: 'cancel'
+            },
+        ])
+    }
+
+    const onEditProduct = () => {
+        navigation.navigate("EditPost", { data: { postId: data.id } });
+    }
 
 
     return (
@@ -123,7 +199,7 @@ const PostDetailScreen = ({ Props, route }) => {
                     <ScrollView>
                         <View style={styles.container}>
                             <View style={[styles.box, styles.productDetailContainer]}>
-                                <View style={[styles.userContainer, styles.box, { paddingTop: 0 }]}>
+                                <View style={[styles.userContainer, { paddingTop: 0 }]}>
 
                                     <View style={styles.userNameContainer}>
                                         <Avatar
@@ -134,30 +210,34 @@ const PostDetailScreen = ({ Props, route }) => {
                                             }}
                                             size="medium"
                                             rounded
-                                            source={require('../../image/symbol.png')}
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
-                                            <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
-                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
+                                            <Text onPress={() => { navigation.navigate('UserProfileScreen', { id: data?.user?.id }); }}
+                                                style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data?.time} {data?.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
-                                    <View style={styles.followContainer}>
+                                    {userInfo?.id !== data?.user?.id ? (
+                                        <TouchableOpacity
+                                            onPress={() => onFollowUser(data?.user?.id)}
+                                            style={styles.followContainer}>
+                                            <ButtonNormal onPress={() => onFollowUser(data?.user?.id)} outlined buttonStyle={styles.followButton} title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
+                                        </TouchableOpacity>
+                                    ) : <View style={{ width: 10, height: 10 }} />}
 
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
-                                    </View>
                                 </View>
 
                                 <View style={[styles.productContainer, styles.productStatusContainer]}>
-                                    <Text style={styles.productName}>{data.title}</Text>
+                                    <Text style={styles.productName}>{data?.name ?? ''}</Text>
 
 
 
                                 </View>
                                 <View style={[styles.productContainer, styles.productDescriptionContainer]}>
                                     <Text style={styles.productDescription}>
-                                        {data.content}
+                                        {data?.description ?? ''}
                                     </Text>
 
 
@@ -167,22 +247,24 @@ const PostDetailScreen = ({ Props, route }) => {
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Danh mục</Text>
-                                        <Text style={styles.requireAnswer}>Trái cây</Text>
+                                        <Text style={styles.requireAnswer}>{data?.category?.name}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Giao tới</Text>
-                                        <Text style={styles.requireAnswer}>Tiền Giang</Text>
+                                        <Text style={styles.requireAnswer}>{data?.seller_address}</Text>
                                     </View>
                                     <View style={styles.productStatusItem}>
 
                                         <Text style={styles.requireName}>Ngày còn hạn</Text>
-                                        <Text style={styles.requireAnswer}>21/10/2022</Text>
+                                        <Text style={styles.requireAnswer}>{data?.limited_date}</Text>
                                     </View>
 
                                     <View style={styles.productStatusItem}>
 
-                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}><FontAwesome name='shopping-bag' size={22} color={color.disableText} /> 20 người đang hỏi</Text>
+                                        <Text style={{ fontSize: 18, color: color.normalText, borderRadius: 10, borderWidth: 1, borderColor: color.borderColor, padding: 10 }}>
+                                            <FontAwesome name='shopping-bag' size={22} color={color.disableText} /> {routeParams?.askedTimes ? (routeParams?.askedTimes) : '0'} người quan tâm
+                                        </Text>
                                         <Text style={{ fontSize: 18, padding: 10 }}>Báo xấu <FontAwesome name='exclamation-circle' size={22} color={color.disableText} /></Text>
                                     </View>
 
@@ -198,28 +280,29 @@ const PostDetailScreen = ({ Props, route }) => {
 
                                     <View style={styles.userNameContainer}>
                                         <Avatar
-                                            size="medium"
-                                            rounded
                                             containerStyle={{
                                                 borderColor: 'grey',
                                                 borderStyle: 'solid',
                                                 borderWidth: 1,
                                             }}
-
-                                            source={require('../../assets/avatar/11.png')}
+                                            size="medium"
+                                            rounded
+                                            source={data?.user?.profile_image ? { uri: data?.user?.profile_image_url } : require('../../image/symbol.png')}
                                         />
                                         <View style={{ alignItems: 'center' }}>
 
                                             <Text onPress={() => { navigation.navigate('UserProfileScreen'); }}
-                                                style={styles.userName} numberOfLines={1}>{data.userName}</Text>
-                                            <Text style={styles.activeLastTime} numberOfLines={1}>2 phút trước</Text>
+                                                style={styles.userName} numberOfLines={1}>{data?.user?.name}</Text>
+                                            {/* <Text style={styles.activeLastTime} numberOfLines={1}>{data?.time} {data?.timeUnit} trước</Text> */}
                                         </View>
                                     </View>
-                                    <View style={styles.followContainer}>
-
-                                        <ButtonNormal outlined onPress={() => { navigation.navigate('Login'); }} buttonStyle={styles.followButton} title={'Hóng'}></ButtonNormal>
-                                    </View>
-
+                                    {userInfo?.id !== data?.user?.id ? (
+                                        <TouchableOpacity
+                                            onPress={() => onFollowUser(data?.user?.id)}
+                                            style={styles.followContainer}>
+                                            <ButtonNormal onPress={() => onFollowUser(data?.user?.id)} outlined buttonStyle={styles.followButton} title={isFollow ? 'Đã hóng' : 'Hóng'}></ButtonNormal>
+                                        </TouchableOpacity>
+                                    ) : <View style={{ width: 10, height: 10 }} />}
                                 </View>
                                 <View style={[styles.userInfomationContainer]}>
                                     <Text style={{ fontSize: 18, }}>@Sockute</Text>
@@ -267,7 +350,7 @@ const PostDetailScreen = ({ Props, route }) => {
                                     <FlatList
                                         contentContainerStyle={styles.postListContainer}
 
-                                        data={post}
+                                        data={postList}
 
                                         renderItem={({ item }) => <PostItem post={item} />}
                                     />
@@ -277,19 +360,41 @@ const PostDetailScreen = ({ Props, route }) => {
 
                         </View>
                     </ScrollView>
-                    <View style={[styles.box, styles.contentContainer]}>
-
-
-                        <ButtonNormal
-                            buttonStyle={styles.customButtonChatNow}
-                            onPress={() => { navigation.navigate('Login'); }}
-                            title={'Hỏi Thăm'.toUpperCase()}
-                        />
-                    </View>
-
-
+                    {userInfo?.id !== data?.user?.id ? (
+                        <View style={[styles.box, styles.contentContainer]}>
+                            <ButtonNormal
+                                buttonStyle={styles.customButtonBackToHome}
+                                onPress={onOrderProduct}
+                                title={'Chốt'.toUpperCase()}
+                            />
+                        </View>
+                    ) : (
+                        <View style={{
+                            position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                            width: Dimensions.get('window').width, backgroundColor: color.background, padding: 10
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: color.normalButton, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2, marginRight: 20
+                                }}
+                                onPress={onEditProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Sửa</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    backgroundColor: color.important, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, borderRadius: 5,
+                                    width: (Dimensions.get('window').width - 150) / 2
+                                }}
+                                onPress={onDeleteProduct}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>Xóa</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
-
+                <LoadingOverlay loading={updating} />
             </SafeAreaView>
         </SafeAreaProvider >
     );
@@ -309,11 +414,13 @@ const styles = StyleSheet.create({
     },
     userContainer: {
         flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+
 
 
     },
     userNameContainer: {
-        width: '90%',
         flexDirection: 'row',
         justifyContent: 'flex-start',
 

@@ -31,6 +31,8 @@ interface productProps {
     }
 }
 const ProductHistoryItem = ({ product }: productProps) => {
+
+
     const navigation = useNavigation();
     const data = {
         productId: product.id,
@@ -53,14 +55,10 @@ const ProductHistoryItem = ({ product }: productProps) => {
         <View>
             <View style={styles.root}>
                 <View style={styles.topContainer}>
-
                     <View style={styles.imageContainer}>
-
-                        <Image style={styles.productImage} source={product.image} />
+                        <Image style={styles.productImage} source={{ uri: product.images && product.images[0]?.url_full }} />
                     </View>
-
                     <View style={styles.middleContainer}>
-
                         <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }} numberOfLines={1} style={styles.title}>{product.name}
                         </Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
 
+import React, { Component, useState } from 'react';
+import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView, Alert } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 // import color
 import color from '../../theme/color';
 import layout from '../../theme/layout';
@@ -15,6 +15,13 @@ import UnderlinePasswordInput from '../../component/InputPassword';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { onlogin } from '../../modules/auth/slice';
+import LoadingOverlay from '../../component/LoadingOverlay';
+import { loadingLoginSelector } from '../../modules/auth/selectors';
+import { getUserInfo } from '../../modules/user/slice';
+import { getMasterData } from '../../modules/search/slice';
+import { sendOtpResetPasswordAPI } from '../../services';
 // SignIn Config
 const headerImg = require('../../image/LoginHeader.jpg')
 
@@ -24,52 +31,47 @@ const INPUT_BORDER_COLOR = color.borderColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
 
-const Login = ({ route }) => {
-  const [password, setPassword] = useState('');
-  const temp = route.params.phoneNumber;
-  const [phoneNumber, setPhoneNumber] = useState(temp);
 
-  const [statusChecked, setStatusChecked] = useState('');
-  const navigation = useNavigation();
-  const authAccount = (phoneNumber: string, password: string) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+const Login = ({ route }: any) => {
+  const [phone, setPhone] = useState<string>(route.params?.phoneNumber ?? '')
+  const [password, setPassword] = useState<string>()
+  const dispatch = useDispatch()
+  const navigation = useNavigation<any>();
+  const loading = useSelector(loadingLoginSelector)
+  const [updating, setUpdating] = useState(false)
 
-    var raw = JSON.stringify({
-      "phone": phoneNumber,
-      "password": password
-    });
+  const onClickLogin = () => {
+    if (phone && password) {
+      dispatch(
+        onlogin({
+          data: {
+            phone: phone,
+            password: password,
+          },
+          onSuccess: (response: any) => {
+            dispatch(getUserInfo())
+            dispatch(getMasterData())
+            navigation.replace('HomeNavigation')
+          },
+          onError: () => { },
+        }),
+      );
 
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
-
-    return fetch("http://misao.one/api/auth/login", requestOptions)
-      .then(response => response.json())
-      .then(json => {
-        if (json.success == true) {
-          const user = json.data;
-          const userObj = JSON.stringify(user.access_token);
-
-          navigation.navigate('HomeNavigation', {
-            screen: 'Home',
-            params: { user: userObj },
-
-            //setStatusChecked(userObj);
-
-          })
-        }
-        else {
-          setStatusChecked("Sai tài khoản hoặc mật khẩu. Vui lòng nhập lại");
-
-        }
-      }
-      )
-      .catch(error => console.log('error', error));
+    } else {
+      Alert.alert("", "Vui lòng nhập mật khẩu của bạn!")
+    }
   }
+
+  const onResetPassword = async () => {
+    setUpdating(true)
+    const response: any = await sendOtpResetPasswordAPI(phone)
+    if (response.__typename !== 'ErrorResponse') {
+      navigation.navigate('EnterOTP', { typeOTP: 'forgetPassword', phoneNumber: route.params.phoneNumber, OTP: response.data.otp });
+    }
+    setUpdating(false)
+  }
+
+
   return (
     <SafeAreaView style={styles.screenContainer}>
       <StatusBar translucent backgroundColor='transparent' />
@@ -114,8 +116,10 @@ const Login = ({ route }) => {
 
               <UnderlineTextInput
                 blurOnSubmit={false}
-                keyboardType="phone-pad"
-                placeholder={phoneNumber}
+
+                keyboardType="email-address"
+                value={route.params.phoneNumber}
+
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
                 borderColor={INPUT_BORDER_COLOR}
@@ -131,6 +135,8 @@ const Login = ({ route }) => {
                 placeholder="Nhập mật khẩu của bạn"
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
+                value={password}
+                onChangeText={(value: any) => setPassword(value)}
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                 onChangeText={(val: string) => setPassword(val)}
@@ -140,12 +146,13 @@ const Login = ({ route }) => {
             <View style={styles.buttonsGroup}>
               <ButtonNormal
                 buttonStyle={styles.customButton}
-                onPress={() => { authAccount(phoneNumber, password); }}
+                onPress={onClickLogin}
+
                 title={'Đăng nhập'.toUpperCase()}
               />
             </View>
             <LinkButton
-              onPress={() => { navigation.navigate('HomeNavigation'); }}
+              onPress={onResetPassword}
               title="Quên mật khẩu"
               titleStyle={styles.forgotPasswordText}
             />
@@ -154,7 +161,7 @@ const Login = ({ route }) => {
         </KeyboardAwareScrollView>
         <View style={styles.termBox}>
           <TouchableWithoutFeedback
-            onPress={() => { navigation.push('Login'); }}>
+            onPress={() => { navigation.push('Welcome'); }}>
             <View style={styles.termAndCondition}>
               <Text style={styles.footerText}>
                 Bằng việc đăng nhập/đăng ký, bạn đồng ý với
@@ -173,7 +180,7 @@ const Login = ({ route }) => {
           </TouchableWithoutFeedback>
         </View>
       </View>
-
+      <LoadingOverlay loading={updating} />
     </SafeAreaView >
   );
 };

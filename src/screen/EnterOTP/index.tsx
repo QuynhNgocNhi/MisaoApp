@@ -1,87 +1,139 @@
-import React, { useRef } from 'react';
-import { View, StyleSheet, TextInput, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Image, StatusBar, SafeAreaView, Text, View, StyleSheet, Alert } from 'react-native';
+import Button from '../../component/Button';
+import LinkButton from '../../component/Button/LinkButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import CategoryList from '../../component/CategoryItem';
-import PostItem from '../../component/PostItem';
-//import data
-import category from '../../assets/data/category';
-import post from '../../assets/data/post';
-// import components
-import Button from '../../component/Button';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { Header } from 'react-native-elements';
-import HeaderIconButton from '../../component/HeaderButton'
-import VirtualKeyboard from 'react-native-virtual-keyboard';
-
-import LinkButton from '../../component/Button/LinkButton';
-const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
-import OTPInputView from '@twotalltotems/react-native-otp-input'
-
-/* to ignore the warning message: 'VirtualizedLists should never be nested inside plain ScrollViews 
-with the same orientation because it can break windowing and other functionality - use another 
-VirtualizedList-backed container instead.' */
-import LogBox from 'react-native';
 // import color, layout, style
 import color from '../../theme/color';
-import layout from '../../theme/layout';
-//set something when screen is focused(status bar), because it is not rerendered when screen is load
-import { useIsFocused } from '@react-navigation/native';
-
+import {
+    CodeField,
+    Cursor,
+    useBlurOnFulfill,
+    useClearByFocusCell,
+} from 'react-native-confirmation-code-field';
 import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
+import { sendOtpRegisterAPI, sendOtpResetPasswordAPI } from '../../services';
+import LoadingOverlay from '../../component/LoadingOverlay';
+// enterOTP Config
+const headerImg = require('../../assets/image/receiveMessage.png')
+const CELL_COUNT = 6;
 
-const AddScreen = ({ route }) => {
+const EnterOTP = ({ route }: any) => {
+    const [phone, setPhone] = useState<string>(route.params.phoneNumber ?? '')
+
+    const [value, setValue] = useState('');
+    const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+    const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+        value,
+        setValue,
+    });
     const navigation = useNavigation();
     const isFocused = useIsFocused();
-    const state = {
-        text: '',
-    };
-    const data = route.params.user;
+
+    const [loading, setLoading] = useState(false)
+    const [otp, setOtp] = useState(route.params.OTP ?? '')
+
+    const onCheckOTP = async () => {
+
+        if (value && route.params.typeOTP == "Register" && value === otp) {
+            navigation.navigate('Register',
+                { phoneNumber: route.params.phoneNumber ?? '', OTP: value })
+        }
+        else if (value && route.params.typeOTP == "forgetPassword" && value === otp) {
+            navigation.navigate('NewPassword', {
+                phoneNumber: route.params.phoneNumber ?? '', OTP: value
+            })
+        }
+        else {
+            Alert.alert("", "Vui lòng nhập mã OTP được gửi đến bạn!")
+        }
+    }
+    const onSendOTPAgain = async () => {
+        setLoading(true)
+        if (route.params.typeOTP == "Register") {
+            const response: any = await sendOtpRegisterAPI(route.params.phoneNumber);
+            if (response.__typename !== 'ErrorResponse') {
+                setOtp(response.data.otp)
+                Alert.alert("", "Mã OTP đã được gửi đến bạn!")
+            }
+        } else {
+            const response: any = await sendOtpResetPasswordAPI(route.params.phoneNumber);
+            if (response.__typename !== 'ErrorResponse') {
+                setOtp(response.data.otp)
+                Alert.alert("", "Mã OTP đã được gửi đến bạn!")
+            }
+        }
+        setLoading(false)
 
 
+    }
 
     return (
         <SafeAreaProvider>
 
             <SafeAreaView style={styles.screenContainer}>
                 {isFocused ? (<StatusBar backgroundColor={color.background} barStyle={'dark-content'} />) : null}
-
                 <View style={styles.container}>
 
-
-                    <View style={styles.contentContainer}>
-                        <View style={styles.paragraphGroup}>
-                            <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>{data}Nhập mã OTP vừa được gửi đến số điện thoại +84 {route.params.phoneNumber} </Heading6>
-                        </View>
-
-
-
+                    <View style={styles.paragraphGroup}>
+                        <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>
+                            Nhập mã OTP vừa được gửi đến số điện thoại +{route.params.phoneNumber}
+                        </Heading6>
+                    </View>
+                    <View>
 
 
+                        <Image source={headerImg} style={styles.imageReceiveMessage}>
+
+
+                        </Image>
                     </View>
 
                     <View style={styles.enterOTP}>
-                        <OTPInputView
-                            style={{ width: '80%', height: 200 }}
-                            pinCount={4}
-                            editable
-                            // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-                            // onCodeChanged = {code => { this.setState({code})}}
-                            autoFocusOnLoad={false}
-                            codeInputFieldStyle={styles.underlineStyleBase}
-                            codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                            onCodeFilled={(code) => {
-                                console.log(`Code is ${code}, you are good to go!`)
-                            }}
-                            keyboardType="phone-pad"
-                            clearInputs={true}
+
+                        <CodeField
+                            ref={ref}
+                            {...props}
+                            value={value}
+                            onChangeText={setValue}
+                            cellCount={CELL_COUNT}
+                            rootStyle={styles.codeFieldRoot}
+                            keyboardType="number-pad"
+                            textContentType="oneTimeCode"
+                            renderCell={({ index, symbol, isFocused }) => (
+                                <View
+                                    // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
+                                    onLayout={getCellOnLayoutHandler(index)}
+                                    key={index}
+                                    style={[styles.cellRoot, isFocused && styles.focusCell]}>
+                                    <Text style={styles.cellText}>
+                                        {symbol || (isFocused ? <Cursor /> : null)}
+                                    </Text>
+                                </View>
+                            )}
                         />
+                        <Text style={styles.textResendOTP}>Bạn chưa nhận được OTP?
+                            <LinkButton
+                                titleStyle={styles.buttonResendOTP}
+                                onPress={onSendOTPAgain}
+                                title={' Gửi Lại OTP!'}
+                            >
+                            </LinkButton>
+                        </Text>
+                        <Button
+                            buttonStyle={styles.customButton}
+                            onPress={onCheckOTP}
+                            title={'Tiếp tục'.toUpperCase()}>
+                            Xác nhận OTP</Button>
+
                     </View>
 
-
                 </View>
-
+                <LoadingOverlay loading={loading} />
             </SafeAreaView>
         </SafeAreaProvider >
     );
@@ -90,20 +142,14 @@ const styles = StyleSheet.create({
     screenContainer: {
         flex: 1,
         backgroundColor: color.background,
-        justifyContent: 'space-between',
+
     },
     container: {
         flex: 1,
-
-
-    },
-    contentContainer: {
-        flex: 1,
-        flexDirection: 'column',
-
-
+        marginBottom: 200
 
     },
+
     paragraphGroup: {
         alignItems: 'center',
         alignSelf: 'center',
@@ -120,49 +166,56 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
     },
-
-
-    buttonsGroup: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-
-        marginBottom: 50,
-        justifyContent: 'space-evenly'
-
-    },
-    borderStyleBase: {
-        width: 30,
-        height: 45
-    },
-
-    borderStyleHighLighted: {
-        borderColor: color.linkButton,
-    },
-
-    underlineStyleBase: {
-        width: 40,
-        height: 45,
-        borderWidth: 0,
-        borderBottomWidth: 1,
-        color: color.normalText,
-        borderColor: color.borderColor,
-
-        fontSize: 20
-    },
-
-    underlineStyleHighLighted: {
-
-        borderColor: color.primaryLightColor,
-
-    },
     enterOTP: {
         flex: 1,
+        width: '95%',
+        alignSelf: 'center',
+    },
+    textResendOTP: {
+        paddingTop: 60,
+        alignSelf: 'center',
+        fontSize: 18,
+        color: color.normalText
+    },
+    buttonResendOTP: {
+        fontSize: 18
+    },
+    customButton: {
+        marginTop: 20,
+
+        width: '80%',
+        alignSelf: 'center',
+    },
+    imageReceiveMessage: {
+        width: 200,
+        height: 200,
+        alignSelf: 'center',
+    },
+
+    title: { textAlign: 'center', fontSize: 30 },
+    codeFieldRoot: {
+        marginTop: 50,
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    cellRoot: {
+        width: 50,
+        height: 60,
+        justifyContent: 'center',
         alignItems: 'center',
-
-    }
-
+        borderBottomColor: '#ccc',
+        borderBottomWidth: 1,
+    },
+    cellText: {
+        color: '#000',
+        fontSize: 36,
+        textAlign: 'center',
+    },
+    focusCell: {
+        borderBottomColor: '#FF5656',
+        borderBottomWidth: 2,
+    },
 
 });
-
-export default AddScreen
+export default EnterOTP;

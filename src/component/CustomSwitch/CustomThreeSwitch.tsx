@@ -25,13 +25,14 @@ export default function CustomSwitch({
                 width: '100%',
                 borderRadius: 10,
                 flexDirection: 'row',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
             }}>
             <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => updateSwitchData(1)}
                 style={{
                     padding: 10,
+                    marginRight:10,
                     height: 40,
                     width: '30%',
                     justifyContent: 'space-between',
@@ -75,7 +76,7 @@ export default function CustomSwitch({
                     {option2}
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => updateSwitchData(3)}
                 style={{
@@ -99,7 +100,7 @@ export default function CustomSwitch({
                     }}>
                     {option3}
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     );
 }

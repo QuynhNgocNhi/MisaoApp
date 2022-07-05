@@ -7,6 +7,9 @@ import {
     Pressable,
     Alert,
 } from "react-native";
+import FastImage from "react-native-fast-image";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../modules/user/selectors";
 // import color, layout, style
 import color from '../../theme/color';
 const myID = 'u1';
@@ -14,16 +17,21 @@ const myID = 'u1';
 const blue = "#3777f0";
 const grey = "lightgrey";
 
-const Message = ({ message }) => {
-
-    const isMe = message.user.id === myID;
+const Message = ({ message }: any) => {
+    const user = useSelector(userSelector)
+    const isMe = message?.buyer_id === user?.id || message?.seller_id === user?.id;
     return (
         <View style={[styles.container, isMe ? styles.rightContainer : styles.leftContainer]}>
-            <Text style={{ fontSize: 20, color: isMe ? color.black : color.white }}>
-                {message.content}
-            </Text>
-
-
+            {message?.type === 1 ? (
+                <FastImage
+                    source={{ uri: message?.content }}
+                    style={{ width: 120, height: 120 }}
+                />
+            ) : (
+                <Text style={{ fontSize: 20, color: isMe ? color.black : color.white }}>
+                    {message.content}
+                </Text>
+            )}
         </View >
     );
 };

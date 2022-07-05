@@ -1,51 +1,53 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { View, StyleSheet, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
+
+import ChatRoomScreen from '../ChatRoom'
+import { BuyList } from './BuyList'
+import { SellList } from './SellList'
+import color from '../../theme/color';
+import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitch';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-// import components
-
+const Tab = createMaterialTopTabNavigator()
+import { useIsFocused } from '@react-navigation/native';
 import { Header } from 'react-native-elements';
 import HeaderIconButton from '../../component/HeaderButton';
-import SearchBar from '../../component/SearchBar/SearchBarItem';
 const BACK_ICON = Platform.OS === 'ios' ? 'ios-chevron-back-outline' : 'md-chevron-back';
 const DELETE_ICON = Platform.OS === 'ios' ? 'ios-trash-outline' : 'md-trash-outline';
-
-// import color, layout, style
-import color from '../../theme/color';
-
-//set something when screen is focused(status bar), because it is not rerendered when screen is load
-import { useIsFocused } from '@react-navigation/native';
-
-import { useNavigation } from '@react-navigation/native';
-
-import ChatTypeScreen from './ChatTypeScreen'
-
-import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitch';
-
 const ChatScreen = () => {
-  const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const route = useRoute<any>()
+  const navigation = useNavigation()
+  const [tab, setTab] = useState<any>('purchase')
+  console.log(tab);
+  useLayoutEffect(() => {
+    if (route?.params?.tab) {
+      setTab(route?.params?.tab)
+      navigation.setOptions({
+        initialRouteName: route?.params?.tab
+      })
+    }
 
+  }, [route?.params?.tab, navigation])
   const [ChatTab, setChatTab] = useState(1);
   const onSelectSwitch = value => {
     setChatTab(value);
   };
-
-
   return (
     <SafeAreaProvider>
 
       <SafeAreaView style={styles.screenContainer}>
-        {isFocused ? (<StatusBar backgroundColor={color.background} barStyle={'dark-content'} />) : null}
+        {isFocused ? (<StatusBar backgroundColor={color.primaryColorLight} barStyle={'dark-content'} />) : null}
 
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <Header
 
-              containerStyle={{ borderBottomWidth: 0, marginVertical: 10 }}
-              backgroundColor={color.white}
+              containerStyle={{ borderBottomWidth: 0, borderBottomColor: color.border, }}
+              backgroundColor={color.primaryColorLight}
               centerComponent={
-                <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', paddingTop: 5 }}>Trò chuyện</Text>
+                <Text style={{ fontSize: 18, color: color.primaryText, fontWeight: '500', textTransform: 'uppercase', }}>Trò chuyện</Text>
               }
               leftComponent={
                 <HeaderIconButton
@@ -67,29 +69,33 @@ const ChatScreen = () => {
             />
           </View>
 
-          <View style={styles.middleContainer} >
 
-            <View style={styles.search} >
-              <SearchBar />
-            </View>
 
-          </View>
-          <View style={styles.switchTabContainer}>
-            <CustomSwitch
-              selectionMode={1}
-              option1="Bán hàng"
-              option2="Mua hàng"
-              option3="Tất cả"
-              onSelectSwitch={onSelectSwitch}
+
+
+          <Tab.Navigator
+            style={{}}
+            screenOptions={{
+              title: 'Từ bạn',
+              lazy: true,
+            }}
+            initialRouteName={'purchase'}
+          >
+            <Tab.Screen
+              name="purchase"
+              component={BuyList}
+              options={{
+                title: "Từ bạn",
+              }}
             />
+            <Tab.Screen
+              name="sale"
+              component={SellList}
+              options={{
+                title: "Đến bạn",
+              }} />
+          </Tab.Navigator>
 
-          </View>
-          {ChatTab == 1 &&
-            <ChatTypeScreen chatTypeId='1' />}
-          {ChatTab == 2 &&
-            <ChatTypeScreen chatTypeId='2' />}
-          {ChatTab == 3 &&
-            <ChatTypeScreen chatTypeId='3' />}
 
 
 
@@ -100,7 +106,8 @@ const ChatScreen = () => {
       </SafeAreaView>
     </SafeAreaProvider >
   );
-};
+
+}
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
@@ -112,7 +119,9 @@ const styles = StyleSheet.create({
 
 
   },
-
+  headerContainer: {
+    backgroundColor: color.primaryColorLight
+  },
   headingText: {
     fontSize: 20,
     textAlign: 'center',
@@ -136,13 +145,7 @@ const styles = StyleSheet.create({
 
 
   },
-  switchTabContainer: {
-    flexDirection: 'row',
-    width: '90%',
-    justifyContent: 'space-around',
-    alignSelf: 'center',
-    marginBottom: 30
-  },
+
   switchButton: {
     padding: 10,
     height: 40,

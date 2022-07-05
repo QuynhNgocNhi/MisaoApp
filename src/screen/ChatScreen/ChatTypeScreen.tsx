@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { BuyList } from './BuyList';
 
-import BuyList from './BuyList';
-import SellList from './SellList';
+
 import OtherList from './OtherList';
-const ChatTypeScreen = ({ chatTypeId }) => (
+import { SellList } from './SellList';
+const ChatTypeScreen = ({ chatTypeId, data }: any) => (
     <View style={styles.container}>
-        {chatTypeId === '1' ? (<SellList />) : (chatTypeId === '2' ? (<BuyList />) : (<OtherList />))}
-
-
+        {chatTypeId === '1' ? (<SellList data={data} />) : <BuyList data={data} />}
     </View>
 );
 
