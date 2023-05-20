@@ -1,0 +1,22 @@
+{
+    "rules": {
+        "no-use-before-define": false,
+        "react/jsx-filename-extension": false,
+        "react/prop-types": false,
+        "comma-dangle": false,
+        "indent": ["error", "tab"],
+        "import/no-unresolved": false,
+        "no-tabs": false,
+        "quote-props": ["error", "consistent-as-needed"],
+        "react/jsx-indent": false,
+        "react/jsx-indent-props": [2, "tab"],
+        "no-console": false,
+        "global-require": false,
+        "class-methods-use-this": false,
+        "no-plusplus": false,
+        "no-empty": ["error", { "allowEmptyCatch": true }],
+        "import/no-extraneous-dependencies": false,
+        "consistent-return": false,
+        "no-mixed-spaces-and-tabs": false
+    }
+}
