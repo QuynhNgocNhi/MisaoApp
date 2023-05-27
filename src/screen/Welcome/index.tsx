@@ -39,24 +39,28 @@ const Welcome: React.FC<WelcomeProps> = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const onCheckPhoneExists = async () => {
     if (phoneNumber) {
-      setLoading(true)
-      const response = await checkPhoneExistsAPI(phoneNumber)
+      setLoading(true);
+      const response = await checkPhoneExistsAPI(phoneNumber);
       if (response.__typename !== 'ErrorResponse') {
         navigation.navigate('Login', { phoneNumber: phoneNumber });
       } else {
-        Alert.alert("", "Bạn chưa đăng ký tài khoản với số điện thoại này!",
-          [
-            {
-              text: "Hủy",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
-            },
-            { text: "Đăng ký", onPress: () => navigation.navigate('Register') }
-          ])
+        Alert.alert('', 'Bạn chưa đăng ký tài khoản với số điện thoại này!', [
+          {
+            text: 'Hủy',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+          },
+          {
+            text: 'Đăng ký',
+            onPress: () =>
+              navigation.navigate('EnterPhoneNumber', {
+                phoneNumber: phoneNumber
+              })
+          }
+        ]);
       }
 
-      setLoading(false)
-
+      setLoading(false);
     } else {
       Alert.alert("", "Vui lòng nhập số điện thoại!")
     }

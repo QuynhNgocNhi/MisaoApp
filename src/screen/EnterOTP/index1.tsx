@@ -43,50 +43,45 @@ const OTPScreen = ({ route }) => {
 
 
     return (
-        <SafeAreaProvider>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.screenContainer}>
+          {isFocused ? (
+            <StatusBar
+              backgroundColor={color.background}
+              barStyle={'dark-content'}
+            />
+          ) : null}
 
-            <SafeAreaView style={styles.screenContainer}>
-                {isFocused ? (<StatusBar backgroundColor={color.background} barStyle={'dark-content'} />) : null}
+          <View style={styles.container}>
+            <View style={styles.contentContainer}>
+              <View style={styles.paragraphGroup}>
+                <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>
+                  Nhập mã OTP vừa được gửi đến số điện thoại +84 888 250 764
+                </Heading6>
+              </View>
+            </View>
 
-                <View style={styles.container}>
-
-
-                    <View style={styles.contentContainer}>
-                        <View style={styles.paragraphGroup}>
-                            <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>
-                                Nhập mã OTP vừa được gửi đến số điện thoại +84 888 250 764
-                            </Heading6>
-                        </View>
-
-
-
-
-
-                    </View>
-
-                    <View style={styles.enterOTP}>
-                        <OTPInputView
-                            style={{ width: '80%', height: 200 }}
-                            pinCount={6}
-                            editable
-                            // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-                            onCodeChanged={code => { () => this.setState({ code }) }}
-                            autoFocusOnLoad={false}
-                            codeInputFieldStyle={styles.underlineStyleBase}
-                            codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                            onCodeFilled={(code) => {
-                                console.log(`Code is ${code}, you are good to go!`)
-                            }}
-                            keyboardType="phone-pad"
-
-                        />
-                    </View>
-
-
-                </View>
-
-            </SafeAreaView>
-        </SafeAreaProvider >
+            <View style={styles.enterOTP}>
+              <OTPInputView
+                style={{ width: '80%', height: 200 }}
+                pinCount={6}
+                editable
+                code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+                onCodeChanged={(code) => {
+                  () => this.setState({ code });
+                }}
+                autoFocusOnLoad={false}
+                codeInputFieldStyle={styles.underlineStyleBase}
+                codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                onCodeFilled={(code) => {
+                  console.log(`Code is ${code}, you are good to go!`);
+                }}
+                keyboardType="phone-pad"
+              />
+            </View>
+          </View>
+        </SafeAreaView>
+      </SafeAreaProvider>
     );
 };
 const styles = StyleSheet.create({

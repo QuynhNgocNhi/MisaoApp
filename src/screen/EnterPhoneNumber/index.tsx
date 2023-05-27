@@ -28,89 +28,91 @@ const headerImg = require('../../assets/image/PhoneNumber.png')
 type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
 
 // Welcome
-const EnterPhoneNumber: React.FC<WelcomeProps> = () => {
-    const navigation = useNavigation<any>();
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [loading, setLoading] = useState<boolean>(false)
-    const onCheckPhoneExists = async () => {
-        if (phoneNumber) {
-            setLoading(true)
-            const response = await checkPhoneExistsAPI(phoneNumber)
-            if (response.__typename === 'ErrorResponse') {
-                const otpResponse: any = await sendOtpRegisterAPI(phoneNumber)
-                if (otpResponse.__typename !== 'ErrorResponse') {
-                    navigation.navigate('EnterOTP', { typeOTP: 'Register', phoneNumber: phoneNumber, OTP: otpResponse.data.otp });
-                }
-            } else {
-                Alert.alert("", "Bạn đã đăng ký tài khoản với số điện thoại này!",
-                    [
-                        {
-                            text: "Ok",
-                            onPress: () => console.log("Cancel Pressed"),
-                            style: "cancel"
-                        },
-                        { text: "Đăng nhập", onPress: () => navigation.navigate('Login') }
-                    ])
-            }
-
-            setLoading(false)
-
-        } else {
-            Alert.alert("", "Vui lòng nhập số điện thoại!")
+const EnterPhoneNumber: React.FC<WelcomeProps> = ({ route }: any) => {
+  const navigation = useNavigation<any>();
+  const [phoneNumber, setPhoneNumber] = useState(
+    route.params?.phoneNumber ?? ''
+  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const onCheckPhoneExists = async () => {
+    if (phoneNumber) {
+      setLoading(true);
+      const response = await checkPhoneExistsAPI(phoneNumber);
+      if (response.__typename === 'ErrorResponse') {
+        const otpResponse: any = await sendOtpRegisterAPI(phoneNumber);
+        if (otpResponse.__typename !== 'ErrorResponse') {
+          navigation.navigate('EnterOTP', {
+            typeOTP: 'Register',
+            phoneNumber: phoneNumber,
+            OTP: otpResponse.data.otp
+          });
         }
+      } else {
+        Alert.alert('', 'Bạn đã đăng ký tài khoản với số điện thoại này!', [
+          {
+            text: 'Ok',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+          },
+          { text: 'Đăng nhập', onPress: () => navigation.navigate('Login') }
+        ]);
+      }
+
+      setLoading(false);
+    } else {
+      Alert.alert('', 'Vui lòng nhập số điện thoại!');
     }
-    return (
-        <SafeAreaView style={styles.screenContainer}>
-            <StatusBar translucent backgroundColor='transparent' />
-            <KeyboardAwareScrollView
-                contentContainerStyle={styles.contentContainerStyle}>
-                <View style={styles.content}>
-                    <View style={styles.footer}>
+  };
+  return (
+    <SafeAreaView style={styles.screenContainer}>
+      <StatusBar translucent backgroundColor="transparent" />
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.contentContainerStyle}
+      >
+        <View style={styles.content}>
+          <View style={styles.footer}>
+            <View style={styles.paragraphGroup}>
+              <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>
+                Vui lòng nhập số điện thoại của bạn để tạo tài khoản
+              </Heading6>
+            </View>
 
-                        <View style={styles.paragraphGroup}>
-                            <Heading6 style={[styles.headingText, { paddingTop: 50 }]}>
-                                Vui lòng nhập số điện thoại của bạn để tạo tài khoản
-                            </Heading6>
-                        </View>
+            <Image source={headerImg} style={styles.headerImg}></Image>
 
-                        <Image source={headerImg} style={styles.headerImg}>
+            <View style={styles.center}>
+              <View style={styles.buttonsGroup}>
+                <UnderlineTextInput
+                  inputContainerStyle={styles.inputContainer}
+                  value={phoneNumber}
+                  blurOnSubmit={false}
+                  keyboardType="phone-pad"
+                  placeholder="Số điện thoại"
+                  onChangeText={(val: any) => setPhoneNumber(val)}
+                />
+              </View>
 
-                        </Image>
+              <View style={styles.buttonsGroup}>
+                <Button
+                  buttonStyle={styles.customButton}
+                  onPress={onCheckPhoneExists}
+                  title={'Tiếp tục'.toUpperCase()}
+                />
+              </View>
 
-                        <View style={styles.center}>
-
-                            <View style={styles.buttonsGroup}>
-                                <UnderlineTextInput
-                                    inputContainerStyle={styles.inputContainer}
-
-                                    blurOnSubmit={false}
-                                    keyboardType="phone-pad"
-                                    placeholder="Số điện thoại"
-                                    onChangeText={(val: any) => setPhoneNumber(val)}
-                                />
-                            </View>
-
-                            <View style={styles.buttonsGroup}>
-                                <Button
-                                    buttonStyle={styles.customButton}
-                                    onPress={onCheckPhoneExists}
-                                    title={'Tiếp tục'.toUpperCase()}
-                                />
-                            </View>
-
-                            <LinkButton
-                                onPress={() => { navigation.navigate('Welcome'); }}
-                                title="Đã có tài khoản"
-                                titleStyle={styles.linkButtonText}
-                            />
-                        </View>
-                    </View>
-                </View>
-            </KeyboardAwareScrollView>
-            <LoadingOverlay loading={loading} />
-        </SafeAreaView>
-    );
-
+              <LinkButton
+                onPress={() => {
+                  navigation.navigate('Welcome');
+                }}
+                title="Đã có tài khoản"
+                titleStyle={styles.linkButtonText}
+              />
+            </View>
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+      <LoadingOverlay loading={loading} />
+    </SafeAreaView>
+  );
 };
 // Welcome Styles
 const styles = StyleSheet.create({

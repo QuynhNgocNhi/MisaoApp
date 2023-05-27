@@ -8,28 +8,33 @@ import HistoryTimeStampItem from './HistoryTimeStampItem';
 import { G } from 'react-native-svg';
 import moment from 'moment';
 const MyProductList = ({ products, buyRequest }: any) => {
-    // console.log({ products });
-    console.log({ buyRequest });
-    const data = products.concat(buyRequest);
-    const groupBy = (_k: any, a: any) => a.reduce((r: any, { [_k]: k, ...p }) => ({
-        ...r, ...{
-            [k]: (
-                r[k] ? [...r[k], { ...p }] : [{ ...p }]
-            )
+  // console.log({ products });
+  // console.log({ buyRequest });
+  //   const data = products.concat(buyRequest);
+  const groupBy = (_k: any, a: any) =>
+    a?.reduce(
+      (r: any, { [_k]: k, ...p }) => ({
+        ...r,
+        ...{
+          [k]: r[k] ? [...r[k], { ...p }] : [{ ...p }]
         }
-    }), {});
-
-    let grouped = groupBy('updated_at', buyRequest);
-    let keys = Object.keys(grouped);
-    return (
-        <ScrollView style={styles.container}>
-            {keys.map((key, index) => (
-                <HistoryTimeStampItem data={grouped[key]} key={index} date={moment(key).format('DD-MM-YYYY')} />
-            ))}
-        </ScrollView>
-
-
+      }),
+      {}
     );
+
+  let grouped = groupBy('updated_at', buyRequest);
+  let keys = grouped ? Object.keys(grouped) : [];
+  return (
+    <ScrollView style={styles.container}>
+      {keys.map((key, index) => (
+        <HistoryTimeStampItem
+          data={grouped[key]}
+          key={index}
+          date={moment(key).format('DD-MM-YYYY')}
+        />
+      ))}
+    </ScrollView>
+  );
 }
 
 

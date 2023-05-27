@@ -70,47 +70,45 @@ const HomeScreen = () => {
   }
   return (
     <SafeAreaProvider>
-
       <SafeAreaView style={styles.screenContainer}>
-        {isFocused ? (<StatusBar backgroundColor={color.themeBackground} />) : null}
+        {isFocused ? (
+          <StatusBar backgroundColor={color.themeBackground} />
+        ) : null}
 
         <View style={styles.container}>
           <HomeHeader />
 
           {/* Add the following AnimatedHeader */}
-          <ScrollView
-            nestedScrollEnabled={false}
-          >
-
-
+          <ScrollView nestedScrollEnabled={false}>
             {/* Render Product Component */}
             {/* <ProductItem item = {products[0]}/> */}
             <View style={styles.middleContainer}>
               <View style={styles.topContent}>
                 <View style={styles.banner}>
                   <View style={styles.imageContainer}>
-
-                    <Image style={styles.image} source={require('../../image/Banner.png')} />
+                    <Image
+                      style={styles.image}
+                      source={require('../../image/Banner.png')}
+                    />
                   </View>
                 </View>
-
               </View>
 
               <View style={styles.centerContent}>
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText]}>{data} Giá sốc hôm nay <FontAwesome name={'bolt'} color={'#FF0000'} size={22} /></Heading6>
+                    <Heading6 style={[styles.titleText]}>
+                      {/* {data} */} Giá sốc hôm nay{' '}
+                      <FontAwesome name={'bolt'} color={'#FF0000'} size={22} />
+                    </Heading6>
 
                     <LinkButton
                       title="Xem thêm"
                       titleStyle={styles.viewAllText}
-
                     />
-
                   </View>
                 </View>
                 <View style={styles.hotDeal}>
-
                   <FlatList
                     horizontal
                     data={hotProductList}
@@ -122,48 +120,61 @@ const HomeScreen = () => {
                         <View>
                           {/* {
                             item.discountPercentage && ( */}
-                          <HotDealItem product={item}
+                          <HotDealItem
+                            product={item}
                             contentContainerStyle={styles.hotDealList}
                             scrollEnabled={false}
                           />
                           {/* )
                           } */}
                         </View>
-                      )
+                      );
                     }}
                   />
                 </View>
                 <View style={styles.hotDealContentainer}>
                   <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Tìm theo danh mục </Heading6>
+                    <Heading6
+                      style={[styles.titleText, { color: color.lightBlack }]}
+                    >
+                      Tìm theo danh mục{' '}
+                    </Heading6>
 
-
-                    <FontAwesome name={'arrow-right'} color={color.backgroundColor} size={18} />
-
+                    <FontAwesome
+                      name={'arrow-right'}
+                      color={color.backgroundColor}
+                      size={18}
+                    />
                   </View>
                 </View>
                 <View style={styles.CategoryListContainer}>
-
                   <FlatList
                     horizontal
                     data={categoriesList}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => <CategoryList category={item} tabId={1} />}
+                    renderItem={({ item }) => (
+                      <CategoryList category={item} tabId={1} />
+                    )}
                   />
                 </View>
-
               </View>
             </View>
             <View style={styles.bottomContainer}>
               <View style={styles.productListContentainer}>
                 <View style={styles.titleContainer}>
-                  <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>
+                  <Heading6
+                    style={[styles.titleText, { color: color.lightBlack }]}
+                  >
+                    Mới nhất{' '}
+                  </Heading6>
 
-
-                  <FontAwesome name={'filter'} color={color.lightBlack} size={16} />
-
+                  <FontAwesome
+                    name={'filter'}
+                    color={color.lightBlack}
+                    size={16}
+                  />
                 </View>
               </View>
 
@@ -175,9 +186,7 @@ const HomeScreen = () => {
               />
             </View>
           </ScrollView>
-
         </View>
-
       </SafeAreaView>
     </SafeAreaProvider>
   );

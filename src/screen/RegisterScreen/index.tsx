@@ -26,175 +26,169 @@ import { register, registerAPI } from '../../services';
 import LoadingOverlay from '../../component/LoadingOverlay';
 
 const Register = ({ route }: any) => {
+  const [phoneNumber, setPhoneNumber] = useState(route.params.phoneNumber);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const navigation = useNavigation();
+  const onClickRegister = async () => {
+    if (phoneNumber && password && name) {
+      if (password === confirmPassword) {
+        setLoading(true);
+        const data = {
+          phone: phoneNumber,
+          password: password,
+          name: name,
+          otp: route?.params?.otp,
+          confirm: true
+        };
 
-    const [phoneNumber, setPhoneNumber] = useState(route.params.phoneNumber);
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [name, setName] = useState('');
-    const [loading, setLoading] = useState<boolean>(false)
-    const navigation = useNavigation();
-    const onClickRegister = async () => {
-
-        if (phoneNumber && password && name) {
-            if (password === confirmPassword) {
-                setLoading(true)
-                const data = {
-                    "phone": phoneNumber,
-                    "password": password,
-                    "name": name,
-                    "otp": route?.params?.otp,
-                    "confirm": true
-                }
-
-                const response = await registerAPI(data)
-                if (response.__typename !== 'ErrorResponse') {
-                    Alert.alert("", "Đăng ký tài khoản thành công!",
-                        [
-
-                            { text: "Tiếp tục", onPress: () => navigation.navigate('Login', { phoneNumber: phoneNumber }) }
-                        ])
-                }
-                setLoading(false)
-            } else {
-                Alert.alert("", "Mật khẩu không khớp!")
+        const response = await registerAPI(data);
+        if (response.__typename !== 'ErrorResponse') {
+          Alert.alert('', 'Đăng ký tài khoản thành công!', [
+            {
+              text: 'Tiếp tục',
+              onPress: () =>
+                navigation.navigate('Login', { phoneNumber: phoneNumber })
             }
-
-
-        } else {
-            Alert.alert("", "Vui lòng nhập đầy đủ thông tin bên dưới!")
+          ]);
         }
+        setLoading(false);
+      } else {
+        Alert.alert('', 'Mật khẩu không khớp!');
+      }
+    } else {
+      Alert.alert('', 'Vui lòng nhập đầy đủ thông tin bên dưới!');
     }
+  };
 
+  return (
+    <SafeAreaView style={styles.screenContainer}>
+      <StatusBar
+        barStyle="dark-content"
+        translucent
+        backgroundColor={color.background}
+      />
 
-    return (
-        <SafeAreaView style={styles.screenContainer}>
-            <StatusBar barStyle="dark-content" translucent backgroundColor={color.background} />
-
-
-            <View style={styles.top}>
-                <View style={styles.box}>
-                    <Paragraph style={styles.topText}>
-                        Đã đăng ký trước đây
-                    </Paragraph>
-                    <View style={styles.signIn}>
-                        <LinkButton
-                            onPress={() => { navigation.navigate('Login'); }}
-
-                            title="Đăng nhập"
-                            titleStyle={styles.signInText}
-                        />
-                    </View>
-                </View>
+      <View style={styles.top}>
+        <View style={styles.box}>
+          <Paragraph style={styles.topText}>Đã đăng ký trước đây</Paragraph>
+          <View style={styles.signIn}>
+            <LinkButton
+              onPress={() => {
+                navigation.navigate('Login');
+              }}
+              title="Đăng nhập"
+              titleStyle={styles.signInText}
+            />
+          </View>
+        </View>
+      </View>
+      <View style={styles.footer}>
+        <KeyboardAwareScrollView style={styles.scroll}>
+          <View style={styles.form}>
+            <View style={styles.inputGroup}>
+              <UnderlineTextInput
+                blurOnSubmit={false}
+                keyboardType="email-address"
+                placeholder="Tên của bạn"
+                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+                inputTextColor={INPUT_TEXT_COLOR}
+                borderColor={INPUT_BORDER_COLOR}
+                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                inputContainerStyle={styles.inputContainer}
+                value={name}
+                onChangeText={(val: any) => setName(val)}
+              />
             </View>
-            <View style={styles.footer}>
-                <KeyboardAwareScrollView style={styles.scroll}>
-
-                    <View style={styles.form}>
-                        <View style={styles.inputGroup}>
-
-                            <UnderlineTextInput
-                                blurOnSubmit={false}
-                                keyboardType="email-address"
-                                placeholder="Tên của bạn"
-                                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
-                                inputTextColor={INPUT_TEXT_COLOR}
-                                borderColor={INPUT_BORDER_COLOR}
-                                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
-                                inputContainerStyle={styles.inputContainer}
-                                value={name}
-                                onChangeText={(val: any) => setName(val)}
-
-                            />
-                        </View>
-                        <View style={styles.inputGroup}>
-
-                            <UnderlineTextInput
-                                editable={false}
-                                blurOnSubmit={false}
-                                keyboardType="email-address"
-                                placeholder="Số điện thoại của bạn"
-                                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
-                                inputTextColor={INPUT_TEXT_COLOR}
-                                borderColor={INPUT_BORDER_COLOR}
-                                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
-                                inputContainerStyle={styles.inputContainer}
-                                onChangeText={(val: any) => setPhoneNumber(val)}
-                                value={phoneNumber}
-
-                            />
-                        </View>
-                        <View style={styles.inputGroup}>
-
-                            <UnderlineTextInput
-                                blurOnSubmit={false}
-                                keyboardType="email-address"
-                                placeholder="Nhập mật khẩu của bạn"
-                                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
-                                inputTextColor={INPUT_TEXT_COLOR}
-                                borderColor={INPUT_BORDER_COLOR}
-                                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
-                                inputContainerStyle={styles.inputContainer}
-                                value={password}
-                                onChangeText={(val: any) => setPassword(val)}
-
-                            />
-                        </View>
-                        <View style={styles.inputGroup}>
-
-                            <UnderlinePasswordInput
-                                returnKeyType="done"
-                                placeholder="Nhập lại mật khẩu của bạn"
-                                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
-                                inputTextColor={INPUT_TEXT_COLOR}
-                                borderColor={INPUT_BORDER_COLOR}
-                                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
-                                value={confirmPassword}
-                                onChangeText={(val: any) => setConfirmPassword(val)}
-                            />
-                        </View>
-                        <View style={styles.buttonsGroup}>
-                            <Button
-                                buttonStyle={styles.customButton}
-                                onPress={onClickRegister}
-                                /*                                 onPress={() => { navigation.navigate('EnterOTP', { phoneNumber: phoneNumber }); }}
-                                 */
-                                title={'Đăng ký'.toUpperCase()}
-                            />
-                        </View>
-                        <LinkButton
-                            onPress={() => { navigation.navigate('Welcome'); }}
-
-                            title="Quay trở lại"
-                            titleStyle={styles.goBackButton}
-                        />
-                    </View>
-                    {/* <View style={styles.vSpacer} /> */}
-                </KeyboardAwareScrollView>
-                <View style={styles.termBox}>
-                    <TouchableWithoutFeedback
-                        onPress={() => { navigation.navigate('TermsConditions'); }}>
-                        <View style={styles.termAndCondition}>
-                            <Text style={styles.footerText}>
-                                Bằng việc đăng nhập/đăng ký, bạn đồng ý với
-                            </Text>
-                            <View style={styles.termsContainer}>
-                                <Text style={[styles.footerText, styles.footerLink]}>
-                                    Điều khoản & Điều kiện
-                                </Text>
-                                <Text style={styles.footerText}> and </Text>
-                                <Text style={[styles.footerText, styles.footerLink]}>
-                                    Chính sách bảo mật
-                                </Text>
-                                <Text style={styles.footerText}>.</Text>
-                            </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
+            <View style={styles.inputGroup}>
+              <UnderlineTextInput
+                editable={false}
+                blurOnSubmit={false}
+                keyboardType="email-address"
+                placeholder="Số điện thoại của bạn"
+                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+                inputTextColor={INPUT_TEXT_COLOR}
+                borderColor={INPUT_BORDER_COLOR}
+                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                inputContainerStyle={styles.inputContainer}
+                onChangeText={(val: any) => setPhoneNumber(val)}
+                value={phoneNumber}
+              />
             </View>
-        <LoadingOverlay loading={loading} />
-        </SafeAreaView >
-    );
-
+            <View style={styles.inputGroup}>
+              <UnderlineTextInput
+                blurOnSubmit={false}
+                keyboardType="email-address"
+                placeholder="Nhập mật khẩu của bạn"
+                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+                inputTextColor={INPUT_TEXT_COLOR}
+                borderColor={INPUT_BORDER_COLOR}
+                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                inputContainerStyle={styles.inputContainer}
+                value={password}
+                onChangeText={(val: any) => setPassword(val)}
+              />
+            </View>
+            <View style={styles.inputGroup}>
+              <UnderlinePasswordInput
+                returnKeyType="done"
+                placeholder="Nhập lại mật khẩu của bạn"
+                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+                inputTextColor={INPUT_TEXT_COLOR}
+                borderColor={INPUT_BORDER_COLOR}
+                focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
+                value={confirmPassword}
+                onChangeText={(val: any) => setConfirmPassword(val)}
+              />
+            </View>
+            <View style={styles.buttonsGroup}>
+              <Button
+                buttonStyle={styles.customButton}
+                onPress={onClickRegister}
+                /*                                 onPress={() => { navigation.navigate('EnterOTP', { phoneNumber: phoneNumber }); }}
+                 */
+                title={'Đăng ký'.toUpperCase()}
+              />
+            </View>
+            <LinkButton
+              onPress={() => {
+                navigation.navigate('Welcome');
+              }}
+              title="Quay trở lại"
+              titleStyle={styles.goBackButton}
+            />
+          </View>
+          {/* <View style={styles.vSpacer} /> */}
+        </KeyboardAwareScrollView>
+        <View style={styles.termBox}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.navigate('TermsConditions');
+            }}
+          >
+            <View style={styles.termAndCondition}>
+              <Text style={styles.footerText}>
+                Bằng việc đăng nhập/đăng ký, bạn đồng ý với
+              </Text>
+              <View style={styles.termsContainer}>
+                <Text style={[styles.footerText, styles.footerLink]}>
+                  Điều khoản & Điều kiện
+                </Text>
+                <Text style={styles.footerText}> and </Text>
+                <Text style={[styles.footerText, styles.footerLink]}>
+                  Chính sách bảo mật
+                </Text>
+                <Text style={styles.footerText}>.</Text>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+      <LoadingOverlay loading={loading} />
+    </SafeAreaView>
+  );
 }
 //Login styles
 const styles = StyleSheet.create({

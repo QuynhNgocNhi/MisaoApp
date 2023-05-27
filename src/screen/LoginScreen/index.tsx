@@ -46,80 +46,87 @@ const Login = ({ route }: any) => {
         onlogin({
           data: {
             phone: phone,
-            password: password,
+            password: password
           },
           onSuccess: (response: any) => {
-            dispatch(getUserInfo())
-            dispatch(getMasterData())
-            navigation.replace('HomeNavigation')
+            dispatch(getUserInfo());
+            dispatch(getMasterData());
+            navigation.replace('HomeNavigation');
           },
-          onError: () => { },
-        }),
+          onError: () => {
+          }
+        })
       );
-
     } else {
-      Alert.alert("", "Vui lòng nhập mật khẩu của bạn!")
+      Alert.alert('', 'Vui lòng nhập mật khẩu của bạn!');
     }
-  }
+  };
 
   const onResetPassword = async () => {
-    setUpdating(true)
-    const response: any = await sendOtpResetPasswordAPI(phone)
+    setUpdating(true);
+    const response: any = await sendOtpResetPasswordAPI(phone);
     if (response.__typename !== 'ErrorResponse') {
-      navigation.navigate('EnterOTP', { typeOTP: 'forgetPassword', phoneNumber: route.params.phoneNumber, OTP: response.data.otp });
+      navigation.navigate('EnterOTP', {
+        typeOTP: 'forgetPassword',
+        phoneNumber: route.params.phoneNumber,
+        OTP: response.data.otp
+      });
     }
-    setUpdating(false)
-  }
-
+    setUpdating(false);
+  };
 
   return (
     <SafeAreaView style={styles.screenContainer}>
-      <StatusBar translucent backgroundColor='transparent' />
-
-
+      <StatusBar translucent backgroundColor="transparent" />
 
       <View style={styles.top}>
         <View style={styles.box}>
-
-
-          <ImageBackground source={headerImg} resizeMode="cover" style={styles.image}>
-            <StatusBar translucent backgroundColor='transparent' />
+          <ImageBackground
+            source={headerImg}
+            resizeMode="cover"
+            style={styles.image}
+          >
+            <StatusBar translucent backgroundColor="transparent" />
             <Svg
               height={750}
               width={Dimensions.get('screen').width}
               viewBox="0 0 1440 320"
-
             >
               <Path
                 fill="#ffffff"
-                d='M0,64L48,74.7C96,85,192,107,288,101.3C384,96,480,64,576,90.7C672,117,768,203,864,234.7C960,267,1056,245,1152,208C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'
+                d="M0,64L48,74.7C96,85,192,107,288,101.3C384,96,480,64,576,90.7C672,117,768,203,864,234.7C960,267,1056,245,1152,208C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
               />
             </Svg>
-
           </ImageBackground>
 
-          <View style={styles.iconContainer} >
-            <Button type="clear" onPress={() => navigation.goBack()} icon={<Icon name={'md-chevron-back-circle-sharp'} size={42} color={color.white} />} />
+          <View style={styles.iconContainer}>
+            <Button
+              type="clear"
+              onPress={() => navigation.goBack()}
+              icon={
+                <Icon
+                  name={'md-chevron-back-circle-sharp'}
+                  size={42}
+                  color={color.white}
+                />
+              }
+            />
           </View>
         </View>
-
       </View>
 
       <View style={styles.footer}>
-
         <KeyboardAwareScrollView
-          contentContainerStyle={styles.contentContainerStyle}>
+          contentContainerStyle={styles.contentContainerStyle}
+        >
           <View style={styles.form}>
-            <Text style={styles.statusChecked}>{statusChecked}</Text>
+            {/* <Text style={styles.statusChecked}>{statusChecked}</Text> */}
 
             <View style={styles.inputGroup}>
-
               <UnderlineTextInput
                 blurOnSubmit={false}
-
                 keyboardType="email-address"
                 value={route.params.phoneNumber}
-
                 placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
                 inputTextColor={INPUT_TEXT_COLOR}
                 borderColor={INPUT_BORDER_COLOR}
@@ -129,7 +136,6 @@ const Login = ({ route }: any) => {
               />
             </View>
             <View style={styles.inputGroup}>
-
               <UnderlinePasswordInput
                 returnKeyType="done"
                 placeholder="Nhập mật khẩu của bạn"
@@ -140,14 +146,12 @@ const Login = ({ route }: any) => {
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                 onChangeText={(val: string) => setPassword(val)}
-
               />
             </View>
             <View style={styles.buttonsGroup}>
               <ButtonNormal
                 buttonStyle={styles.customButton}
                 onPress={onClickLogin}
-
                 title={'Đăng nhập'.toUpperCase()}
               />
             </View>
@@ -161,7 +165,10 @@ const Login = ({ route }: any) => {
         </KeyboardAwareScrollView>
         <View style={styles.termBox}>
           <TouchableWithoutFeedback
-            onPress={() => { navigation.push('Welcome'); }}>
+            onPress={() => {
+              navigation.push('Welcome');
+            }}
+          >
             <View style={styles.termAndCondition}>
               <Text style={styles.footerText}>
                 Bằng việc đăng nhập/đăng ký, bạn đồng ý với
@@ -181,7 +188,7 @@ const Login = ({ route }: any) => {
         </View>
       </View>
       <LoadingOverlay loading={updating} />
-    </SafeAreaView >
+    </SafeAreaView>
   );
 };
 
