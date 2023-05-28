@@ -16,7 +16,6 @@ import {
 
 // import components
 import { useNavigation } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RootStackParameterList } from '../../MainNavigator';
 import Button from '../../component/Button';
 import LinkButton from '../../component/Button/LinkButton';
@@ -27,7 +26,6 @@ import { Heading6, Logo } from '../../component/Text';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import { checkPhoneExistsAPI } from '../../services';
 import color from '../../theme/color';
-import layout from '../../theme/layout';
 
 // Welcome Config
 const headerImg = require('../../image/HappyFarmerGirl.jpg');
@@ -75,59 +73,56 @@ const Welcome: React.FC<WelcomeProps> = () => {
   return (
     <SafeAreaView style={styles.screenContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.contentContainerStyle}
-      >
-        <View style={styles.content}>
-          <ImageBackground source={headerImg} style={styles.headerImg}>
-            <View style={styles.top}></View>
-          </ImageBackground>
-          <View style={styles.footer}>
-            <View style={styles.center}>
-              <Logo style={styles.Logo}>Misao</Logo>
-            </View>
 
-            <View style={styles.paragraphGroup}>
-              <Heading6 style={styles.headingText}>
-                Mua bán và trãi nghiệm sản phẩm cây trồng
-              </Heading6>
-              <Heading6 style={styles.headingText}>
-                trên khắp mọi vùng miền tại Việt Nam
-              </Heading6>
-            </View>
+      <View style={styles.content}>
+        <ImageBackground source={headerImg} style={styles.headerImg}>
+          <View style={styles.top}></View>
+        </ImageBackground>
+        <View style={styles.footer}>
+          <View style={styles.center}>
+            <Logo style={styles.Logo}>Misao</Logo>
+          </View>
 
-            <View style={styles.center}>
-              <View style={[styles.buttonsGroup, { marginBottom: 5 }]}>
-                <UnderlineTextInput
-                  inputContainerStyle={styles.inputContainer}
-                  returnKeyType="done"
-                  blurOnSubmit={true}
-                  keyboardType="phone-pad"
-                  placeholder="Số điện thoại"
-                  onChangeText={(val: any) => setPhoneNumber(val)}
-                />
-              </View>
-              <Text style={styles.statusChecked}>{statusChecked}</Text>
+          <View style={styles.paragraphGroup}>
+            <Heading6 style={styles.headingText}>
+              Mua bán và trãi nghiệm sản phẩm cây trồng
+            </Heading6>
+            <Heading6 style={styles.headingText}>
+              trên khắp mọi vùng miền tại Việt Nam
+            </Heading6>
+          </View>
 
-              <View style={styles.buttonsGroup}>
-                <Button
-                  buttonStyle={styles.customButton}
-                  onPress={onCheckPhoneExists}
-                  title={'Tiếp tục'.toUpperCase()}
-                />
-              </View>
-
-              <LinkButton
-                onPress={() => {
-                  navigation.navigate('EnterPhoneNumber');
-                }}
-                title="Chưa có tài khoản"
-                titleStyle={styles.linkButtonText}
+          <View style={styles.center}>
+            <View style={[styles.buttonsGroup, { marginBottom: 5 }]}>
+              <UnderlineTextInput
+                inputContainerStyle={styles.inputContainer}
+                returnKeyType="done"
+                blurOnSubmit={true}
+                keyboardType="phone-pad"
+                placeholder="Số điện thoại"
+                onChangeText={(val: any) => setPhoneNumber(val)}
               />
             </View>
+            <Text style={styles.statusChecked}>{statusChecked}</Text>
+
+            <View style={styles.buttonsGroup}>
+              <Button
+                buttonStyle={styles.customButton}
+                onPress={onCheckPhoneExists}
+                title={'Tiếp tục'.toUpperCase()}
+              />
+            </View>
+
+            <LinkButton
+              onPress={() => {
+                navigation.navigate('EnterPhoneNumber');
+              }}
+              title="Chưa có tài khoản"
+              titleStyle={styles.linkButtonText}
+            />
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </View>
       <LoadingOverlay loading={loading} />
     </SafeAreaView>
   );
@@ -135,50 +130,45 @@ const Welcome: React.FC<WelcomeProps> = () => {
 // Welcome Styles
 const styles = StyleSheet.create({
   screenContainer: {
-    height: '100%',
-    flexDirection: "column",
+    flexDirection: 'column',
     backgroundColor: color.black,
+    flex: 1
   },
   contentContainerStyle: {
-    flexGrow: 1,
+    // flexGrow: 1
   },
   content: {
-    flex: 1,
+    flex: 1
   },
   headerImg: {
-    height: layout.SCREEN_HEIGHT * 0.6,
-
+    // height: layout.SCREEN_HEIGHT * 0.6
+    flex: 1
   },
   top: {
-    flex: 1,
-
+    // flex: 1
   },
   Logo: {
     paddingTop: 35
-
   },
 
   footer: {
-    backgroundColor: color.background,
-    flex: 1
+    backgroundColor: color.background
+    // flex: 1
   },
   paragraphGroup: {
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headingText: {
-    paddingTop: 10,
-
+    paddingTop: 10
   },
   center: {
-    alignItems: 'center',
-
+    alignItems: 'center'
   },
   buttonsGroup: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginBottom: 20,
-    paddingTop: 5,
-
+    paddingTop: 5
   },
   customButton: {
     width: '80%',
@@ -187,10 +177,10 @@ const styles = StyleSheet.create({
 
   linkButtonText: {
     color: color.black,
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
   inputContainer: {
-    width: '80%',
+    width: '80%'
   },
   statusChecked: {
     color: color.important,
