@@ -107,7 +107,7 @@ const HomeScreen = () => {
                   <View style={styles.hotDealContentainer}>
                     <View style={styles.titleContainer}>
                       <Heading6 style={[styles.titleText]}>
-                        {/* {data} */} Giá sốc hôm nay{' '}
+                        Giá sốc hôm nay{' '}
                         <FontAwesome
                           name={'bolt'}
                           color={'#FF0000'}

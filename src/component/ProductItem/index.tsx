@@ -241,6 +241,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignSelf: 'flex-end',
     paddingBottom: 5
+  },
+  tittleContainer: {
+    minHeight: 60
+    // backgroundColor: 'pink'
   }
 });
 export default ProductItem;

@@ -130,7 +130,13 @@ const ProductDetailScreen = ({ Props, route }: any) => {
 
     if (response.__typename !== 'ErrorResponse') {
       navigation.navigate('ChatRoomScreen', {
-        id: response?.data?.chat_room?.id
+        id: response?.data?.chat_room?.id,
+        chatRoom: {
+          product: {
+            name: data?.name,
+            images: data?.images
+          }
+        }
       });
     }
     setUpdating(false);
@@ -336,7 +342,7 @@ const ProductDetailScreen = ({ Props, route }: any) => {
                   <ButtonNormal
                     buttonStyle={styles.statusButton}
                     outlined
-                    title={data?.is_availabel === 0 ? 'Còn hàng' : 'Hết hàng'}
+                    title={data?.is_availabel === 0 ? 'Đang có' : 'Sắp có'}
                   ></ButtonNormal>
                 </View>
                 <View

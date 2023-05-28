@@ -45,16 +45,17 @@ const AddProductScreen = () => {
   const userInfo = useSelector(userSelector);
 
   const [date, setDate] = useState(new Date());
+
   const [product, setProduct] = useState<any>({
     ...params?.data,
     seller_name: userInfo?.name,
     seller_phone: userInfo?.phone,
     seller_address: userInfo?.address,
-    is_availabel: new Date() < date
+    is_availabel: 0
   });
   const [price, setPrice] = useState(product?.price);
-  const [curentPrice, setCurrentPrice] = useState();
-  const [unit, setUnit] = useState(product?.unit);
+  const [curentPrice, setCurrentPrice] = useState('');
+  const [unit, setUnit] = useState('');
   const [salePercentage, setSalePercentage] = useState(product?.discount);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -68,8 +69,8 @@ const AddProductScreen = () => {
   };
 
   const handleConfirm = (date: Date) => {
-    setDate(date);
     hideDatePicker();
+    setDate(date);
   };
   const getDate = () => {
     return date !== ''
@@ -97,15 +98,22 @@ const AddProductScreen = () => {
   const handleUpdatePrice = (value: string) => {
     setProduct({ ...product, price: value });
     setPrice(value);
+    // setCurrentPrice(value);
   };
 
   useEffect(() => {
+    console.log('🚀 -----------------🚀');
+    console.log('🚀 ~ price:', price);
+    console.log('🚀 -----------------🚀');
     const discountedPrice = new Intl.NumberFormat().format(
       price - price * (salePercentage / 100)
     );
 
-    setCurrentPrice(discountedPrice);
-  }, [salePercentage]);
+    console.log('🚀 -------------------------------------🚀');
+    console.log('🚀 ~ discountedPrice:', discountedPrice);
+    console.log('🚀 -------------------------------------🚀');
+    if (discountedPrice.toString() !== 'NaN') setCurrentPrice(discountedPrice);
+  }, [salePercentage, price]);
 
   return (
     <SafeAreaProvider>
@@ -154,10 +162,11 @@ const AddProductScreen = () => {
                       Giá bán
                     </Heading6>
                   </View>
-
-                  <Text style={[styles.headingText, {}]}>
-                    {curentPrice ? curentPrice : price}/{unit}
-                  </Text>
+                  <>
+                    <Text style={[styles.headingText, {}]}>
+                      {curentPrice && curentPrice + '/' + unit}
+                    </Text>
+                  </>
                 </View>
                 <View style={styles.productRequire}>
                   <Text style={styles.requireName}>Giá bán</Text>

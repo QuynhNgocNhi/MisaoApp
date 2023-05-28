@@ -16,7 +16,7 @@ Reactotron.setAsyncStorageHandler &&
 
 // Config name and network
 Reactotron.configure({
-  host: '192.168.1.101'
+  host: '192.168.1.113'
   // port: 9090
 });
 
