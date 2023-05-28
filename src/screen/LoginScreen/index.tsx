@@ -1,44 +1,52 @@
 
-import React, { Component, useState } from 'react';
-import { Dimensions, StatusBar, StyleSheet, View, Text, ImageBackground, TouchableWithoutFeedback, SafeAreaView, Alert } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Dimensions,
+  ImageBackground,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 // import color
+import Icon from '../../component/Icon';
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-import Icon from '../../component/Icon';
 // import components
-import ButtonNormal from '../../component/Button';
 import { Button } from 'react-native-elements';
-import LinkButton from '../../component/Button/LinkButton';
-import UnderlineTextInput from '../../component/InputText';
-import UnderlinePasswordInput from '../../component/InputPassword';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import ButtonNormal from '../../component/Button';
+import LinkButton from '../../component/Button/LinkButton';
+import UnderlinePasswordInput from '../../component/InputPassword';
+import UnderlineTextInput from '../../component/InputText';
 
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { onlogin } from '../../modules/auth/slice';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import { loadingLoginSelector } from '../../modules/auth/selectors';
-import { getUserInfo } from '../../modules/user/slice';
+import { onlogin } from '../../modules/auth/slice';
 import { getMasterData } from '../../modules/search/slice';
+import { getUserInfo } from '../../modules/user/slice';
 import { sendOtpResetPasswordAPI } from '../../services';
 // SignIn Config
-const headerImg = require('../../image/LoginHeader.jpg')
+const headerImg = require('../../image/LoginHeader.jpg');
 
 const PLACEHOLDER_TEXT_COLOR = color.Text;
 const INPUT_TEXT_COLOR = color.Text;
 const INPUT_BORDER_COLOR = color.borderColor;
 const INPUT_FOCUSED_BORDER_COLOR = color.onPrimaryColor;
 
-
-
 const Login = ({ route }: any) => {
-  const [phone, setPhone] = useState<string>(route.params?.phoneNumber ?? '')
-  const [password, setPassword] = useState<string>()
-  const dispatch = useDispatch()
+  const [phone, setPhone] = useState<string>(route.params?.phoneNumber ?? '');
+  const [password, setPassword] = useState<string>();
+  const dispatch = useDispatch();
   const navigation = useNavigation<any>();
-  const loading = useSelector(loadingLoginSelector)
-  const [updating, setUpdating] = useState(false)
+  const loading = useSelector(loadingLoginSelector);
+  const [updating, setUpdating] = useState(false);
 
   const onClickLogin = () => {
     if (phone && password) {
@@ -53,8 +61,7 @@ const Login = ({ route }: any) => {
             dispatch(getMasterData());
             navigation.replace('HomeNavigation');
           },
-          onError: () => {
-          }
+          onError: () => {}
         })
       );
     } else {
@@ -145,7 +152,7 @@ const Login = ({ route }: any) => {
                 onChangeText={(value: any) => setPassword(value)}
                 borderColor={INPUT_BORDER_COLOR}
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
-                onChangeText={(val: string) => setPassword(val)}
+                // onChangeText={(val: string) => setPassword(val)}
               />
             </View>
             <View style={styles.buttonsGroup}>

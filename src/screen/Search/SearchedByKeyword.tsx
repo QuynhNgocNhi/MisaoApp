@@ -1,72 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Heading6 } from '../../component/Text';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import CategoryItem from '../../component/CategoryItem';
 import ProductItem from '../../component/ProductItem';
 //import data
-import category from '../../assets/data/category';
-import product from '../../assets/data/product';
 import { Icon } from 'react-native-elements';
-import Button from '../../component/Button';
-import LinkButton from '../../component/Button/LinkButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import product from '../../assets/data/product';
 
 /* to ignore the warning message: 'VirtualizedLists should never be nested inside plain ScrollViews 
 with the same orientation because it can break windowing and other functionality - use another 
 VirtualizedList-backed container instead.' */
-import LogBox from 'react-native';
 // import color, layout, style
-import color from '../../theme/color';
-import layout from '../../theme/layout';
 import CustomSwitch from '../../component/CustomSwitch';
-import { Compare } from '@material-ui/icons';
-import AppStatusBar from '../../component/AppStatusBar';
 import PostItem from '../../component/PostItem';
+import color from '../../theme/color';
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
-import { useIsFocused } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
-import { getProductListAPI, getPostListAPI } from '../../services';
-
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { getPostListAPI, getProductListAPI } from '../../services';
 
 const ProductSearchedByCategory = ({ route }) => {
-    const { data } = route.params;
-    console.log(data)
-    const navigation = useNavigation();
-    const ProductByCategoryId = [...product].filter(p => p.categoryId === data.categoryId)
+  const { data } = route.params;
+  console.log(data);
+  const navigation = useNavigation();
+  const ProductByCategoryId = [...product].filter(
+    (p) => p.categoryId === data.categoryId
+  );
 
-    const isFocused = useIsFocused();
-    const [productList, setProductList] = useState<any>([])
+  const isFocused = useIsFocused();
+  const [productList, setProductList] = useState<any>([]);
 
-    const [postList, setPostList] = useState<any>([])
+  const [postList, setPostList] = useState<any>([]);
 
-    const [loading, setLoading] = useState<boolean>(false)
-    const [updating, setUpadting] = useState<boolean>(false)
-    const [keyword, setKeyword] = useState(data.keyword)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [updating, setUpadting] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState(data.keyword);
 
-    const onSearch = async () => {
-        setUpadting(true)
-        const response = await getProductListAPI({
-            keyword
-        })
-        if (response.__typename !== 'ErrorResponse') {
-            setProductList(response.data)
-        }
-        setUpadting(false)
+  const onSearch = async () => {
+    setUpadting(true);
+    const response = await getProductListAPI({
+      keyword
+    });
+    if (response.__typename !== 'ErrorResponse') {
+      setProductList(response.data);
     }
+    setUpadting(false);
+  };
 
+  useEffect(() => {
+    setLoading(true);
+    /* fetchProduct() */
+    onSearch();
+    setLoading(false);
+  }, []);
 
-    useEffect(() => {
-        setLoading(true)
-        /* fetchProduct() */
-        onSearch()
-        setLoading(false)
-
-    }, [])
-
-    /* const fetchProduct = async () => {
+  /* const fetchProduct = async () => {
         setLoading(true)
         const response = await getProductListAPI({
             category_id: data?.categoryId
@@ -77,132 +73,119 @@ const ProductSearchedByCategory = ({ route }) => {
         }
         setLoading(false)
     } */
-    const fetchData = async () => {
-        setLoading(true)
-        const responses = await getPostListAPI({
-            keyword
-        })
-        if (responses.__typename !== 'ErrorResponse') {
-            setPostList(responses.data)
-        }
-        setLoading(false)
+  const fetchData = async () => {
+    setLoading(true);
+    const responses = await getPostListAPI({
+      keyword
+    });
+    if (responses.__typename !== 'ErrorResponse') {
+      setPostList(responses.data);
     }
-    const [Tab, setTab] = useState(1);
-    const onSelectSwitch = value => {
-        setTab(value);
-    };
-    useEffect(() => {
-        /* fetchProduct() */
-        fetchData()
-        onSelectSwitch(Tab);
-    }, [])
+    setLoading(false);
+  };
+  const [Tab, setTab] = useState(1);
+  const onSelectSwitch = (value) => {
+    setTab(value);
+  };
+  useEffect(() => {
+    /* fetchProduct() */
+    fetchData();
+    onSelectSwitch(Tab);
+  }, []);
 
-    if (loading) {
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <ActivityIndicator animating />
-            </View>
-        )
-    }
-
-
+  if (loading) {
     return (
-        <SafeAreaProvider>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator animating />
+      </View>
+    );
+  }
 
-            <SafeAreaView style={styles.screenContainer}>
-                {isFocused ? (<StatusBar backgroundColor={color.themeBackground} />) : null}
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.screenContainer}>
+        {isFocused ? (
+          <StatusBar backgroundColor={color.themeBackground} />
+        ) : null}
 
+        <View style={styles.container}>
+          <HomeHeader />
 
-
-                <View style={styles.container}>
-                    <HomeHeader />
-
-                    <ScrollView
-                        nestedScrollEnabled={false}
-                    >
-
-                        <View style={styles.middleContainer}>
-
-
-                            <View style={styles.centerContent}>
-
-
-                                <View style={styles.searchContentainer}>
-                                    <View style={styles.titleContainer}>
-                                        <View style={styles.keywordContainer}>
-
-                                            <Text style={styles.keyword}>
-                                                {data.keyword}
-                                            </Text>
-                                            <Icon
-                                                onPress={() => navigation.goBack()}
-                                                name='cross'
-                                                type='entypo'
-                                                size={30}
-                                                color={color.normalText}
-                                            />
-                                        </View>
-                                    </View>
-
-                                </View>
-
-
-                            </View>
-                        </View>
-                        <View style={styles.bottomContainer}>
-
-
-                            <View style={styles.productListContainer}>
-
-                                <View style={styles.switchTabContainer}>
-                                    <CustomSwitch
-                                        selectionMode={1}
-                                        option1="Sản phẩm"
-                                        option2="Tin mua"
-
-                                        onSelectSwitch={onSelectSwitch}
-                                    />
-
-                                </View>
-                                <View style={styles.productListContainer}>
-                                    {Tab == 1 &&
-                                        (<FlatList
-                                            ListEmptyComponent={() => {
+          <ScrollView nestedScrollEnabled={false}>
+            <View style={styles.middleContainer}>
+              <View style={styles.centerContent}>
+                <View style={styles.searchContentainer}>
+                  <View style={styles.titleContainer}>
+                    <View style={styles.keywordContainer}>
+                      <Text style={styles.keyword}>{data.keyword}</Text>
+                      <Icon
+                        onPress={() => navigation.goBack()}
+                        name="cross"
+                        type="entypo"
+                        size={30}
+                        color={color.normalText}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.bottomContainer}>
+              <View style={styles.productListContainer}>
+                <View style={styles.switchTabContainer}>
+                  <CustomSwitch
+                    selectionMode={1}
+                    option1="Sản phẩm"
+                    option2="Tin mua"
+                    onSelectSwitch={onSelectSwitch}
+                  />
+                </View>
+                <View style={styles.productListContainer}>
+                  {Tab == 1 && (
+                    <FlatList
+                      /*  ListEmptyComponent={() => {
                                                 return (
                                                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                                         <Text>Không tìm thấy sản phẩm liên quan để hiển thị.</Text>
                                                     </View>
                                                 )
-                                            }}
-                                            data={productList}
-                                            numColumns={2}
-                                            renderItem={({ item }) => <ProductItem product={item} />}
-                                        />)}
-                                    {Tab == 2 &&
-                                        (<FlatList
-                                            ListEmptyComponent={() => {
-                                                return (
-                                                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                                        <Text style={{ fontSize: 18 }}> Không tìm thấy tin mua liên quan để hiển thị.</Text>
-                                                    </View>
-                                                )
-                                            }}
-                                            contentContainerStyle={styles.ProductItemList}
-                                            data={postList}
-
-                                            renderItem={({ item }) => <PostItem post={item} />}
-                                        />)}
-
-                                </View>
-                            </View>
-                        </View>
-                    </ScrollView>
-
+                                            }} */
+                      data={productList}
+                      numColumns={2}
+                      renderItem={({ item }) => <ProductItem product={item} />}
+                    />
+                  )}
+                  {Tab == 2 && (
+                    <FlatList
+                      ListEmptyComponent={() => {
+                        return (
+                          <View
+                            style={{
+                              flex: 1,
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                            <Text style={{ fontSize: 18 }}>
+                              {' '}
+                              Không tìm thấy tin mua liên quan để hiển thị.
+                            </Text>
+                          </View>
+                        );
+                      }}
+                      contentContainerStyle={styles.ProductItemList}
+                      data={postList}
+                      renderItem={({ item }) => <PostItem post={item} />}
+                    />
+                  )}
                 </View>
-
-            </SafeAreaView >
-        </SafeAreaProvider >
-    );
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 };
 const styles = StyleSheet.create({
     screenContainer: {

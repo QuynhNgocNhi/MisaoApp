@@ -1,16 +1,11 @@
-import React from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Platform, Image, TextInput } from 'react-native';
-import { Heading6 } from '../../component/Text';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ProductItem from '../../component/ProductItem';
-import products from '../../assets/data/product';
-import HistoryTimeStampItem from './HistoryTimeStampItem';
-import { G } from 'react-native-svg';
 import moment from 'moment';
+import React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import HistoryTimeStampItem from './HistoryTimeStampItem';
 const MyProductList = ({ products, buyRequest }: any) => {
-  // console.log({ products });
+  console.log({ products });
   // console.log({ buyRequest });
-  //   const data = products.concat(buyRequest);
+  // const data = products.concat(buyRequest);
   const groupBy = (_k: any, a: any) =>
     a?.reduce(
       (r: any, { [_k]: k, ...p }) => ({
@@ -22,7 +17,7 @@ const MyProductList = ({ products, buyRequest }: any) => {
       {}
     );
 
-  let grouped = groupBy('updated_at', buyRequest);
+  let grouped = groupBy('updated_at', products);
   let keys = grouped ? Object.keys(grouped) : [];
   return (
     <ScrollView style={styles.container}>
@@ -35,16 +30,13 @@ const MyProductList = ({ products, buyRequest }: any) => {
       ))}
     </ScrollView>
   );
-}
-
-
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        backgroundColor: '#ffffff',
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#ffffff'
+  }
+});
 
-    }
-})
-
-export default MyProductList
+export default MyProductList;
