@@ -8,11 +8,44 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "android": "npx react-native run-android",
+
+    "android-dev": "yarn android --variant=developmentDebug --appIdSuffix \"development\"",
+    "android-staging": "yarn android --variant=stagingDebug --appIdSuffix \"staging\"",
+    "android-prod": "yarn android --variant=prodDebug --appId \"nom.com.ph\"",
+
+    "android-release-dev": "yarn android --variant=developmentRelease --appIdSuffix \"development\"",
+    "android-release-staging": "yarn android --variant=stagingRelease --appIdSuffix \"staging\"",
+    "android-release-prod": "yarn android --variant=prodRelease --appId \"nom.com.ph\"",
+
+    "android-build-apk-dev": "yarn generate-android-jsbundle && cd android && ./gradlew assembleDevelopmentRelease && open app/build/outputs/apk/development/release",
+    "android-build-apk-staging": "yarn generate-android-jsbundle && cd android && ./gradlew assembleStagingRelease && open app/build/outputs/apk/staging/release",
+    "android-build-apk-prod": "yarn generate-android-jsbundle && cd android && ./gradlew assembleProdRelease && open app/build/outputs/apk/prod/release",
+
+    "android-build-aab-dev": "yarn generate-android-jsbundle && cd android && ./gradlew bundleDevelopmentRelease && open app/build/outputs/bundle/developmentRelease",
+    "android-build-aab-staging": "yarn generate-android-jsbundle && cd android && ./gradlew bundleStagingRelease && open app/build/outputs/bundle/stagingRelease",
+    "android-build-aab-prod": "yarn generate-android-jsbundle && cd android && ./gradlew bundleProdRelease && open app/build/outputs/bundle/prodRelease",
+
+    "ios": "npx react-native run-ios --simulator=\\'iPhone 13 Pro Max\\'",
+    "android:clean": "cd android && ./gradlew clean && cd ..",
+    "start": "watchman watch-del '../mobile-nutri' ; watchman watch-project '../mobile-nutri' && npm run start-metro",
+    "start-metro": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
+    "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
+    "pod": "cd ios && pod install && cd ..",
+    "gen:components": "node src/scripts/generate_components.ts",
+    "podm1": "cd ios && arch -x86_64 pod install && cd ..",
+    "images": "node src/scripts/generate_images.ts",
+    "blue-icon-images": "node src/scripts/generate_blue_icon_nom.ts",
+    "generate-jsbundle": "npx react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
+    "generate-android-jsbundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
+    "svg": "node src/scripts/generate_svgs.ts",
+    "xc": "cd ios && open NOM.xcworkspace && cd ..",
+    "all": "watchman watch-del-all && rm -rf yarn-lock.json && rm -rf node_modules/ && rm -fr $TMPDIR/metro* && yarn install && cd ios && rm -rf Pods && rm -rf Podfile.lock && pod install && cd ..",
+    "cp:release-update-dev": "read -p 'Enter target version: ' value && appcenter codepush release-react -a phong.na-kyanon.digital/NOM-Development-iOS -d Staging -k code_push_config/nom_dev_cp.pem --plist-file ios/NOM/NOMDevelopmentInfo.plist --xcode-project-file ios/NOM.xcodeproj -t $value && appcenter codepush release-react -a thang.vo/Nutri-Beta-Android -d Staging -k code_push_config/nom_dev_cp.pem -t $value",
+    "cp:release-update-staging": "read -p 'Enter target version: ' value && appcenter codepush release-react -a phong.na-kyanon.digital/NOM-Staging-iOS -d Staging -k code_push_config/nom_dev_cp.pem --plist-file ios/NOM/NOMStagingInfo.plist --xcode-project-file ios/NOM.xcodeproj -t $value && appcenter codepush release-react -a thang.vo/Nutri-Android-Staging -d Staging -k code_push_config/nom_dev_cp.pem -t $value",
+    "cp:release-update-production": "read -p 'Enter target version: ' value && appcenter codepush release-react -a phong.na-kyanon.digital/NOM-iOS -d Production -k code_push_config/nom_cp.pem --plist-file ios/NOM/NOMStagingInfo.plist --xcode-project-file ios/NOM.xcodeproj -t $value && appcenter codepush release-react -a KD_Hermes/Nutri-android-Production -d Production -k code_push_config/nom_cp.pem -t $value"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",
