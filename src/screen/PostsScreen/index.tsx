@@ -1,61 +1,63 @@
 //toDo: chỉnh lại post item nhìn chuyên nghiệp hơn
 
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Heading6 } from '../../component/Text';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View
+} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeHeader from '../../component/AnimatedHeader';
-import CategoryItem from '../../component/CategoryItem/PostCategoryItem';
 import PostItem from '../../component/PostItem';
-import post from '../../assets/data/post';
+import { Heading6 } from '../../component/Text';
 
-import color from '../../theme/color';
-import CustomSwitch from '../../component/CustomSwitch';
-import AppStatusBar from '../../component/AppStatusBar';
 import { useNavigation } from '@react-navigation/native';
+import color from '../../theme/color';
 
 //set something when screen is focused(status bar), because it is not rerendered when screen is load
 import { useIsFocused } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { masterDataSelector } from '../../modules/search/selectors';
 import CategoryList from '../../component/CategoryItem';
+import { masterDataSelector } from '../../modules/search/selectors';
 
-import { getPostListAPI } from '../../services';
 import { tokenSelector } from '../../modules/auth/selectors';
+import { getPostListAPI } from '../../services';
 
 const PostScreen = () => {
   const navigation = useNavigation<any>();
 
   const isFocused = useIsFocused();
 
+  const [postList, setPostList] = useState<any>([]);
 
-  const [postList, setPostList] = useState<any>([])
-
-  const categoriesList = useSelector(masterDataSelector)
-  const [loading, setLoading] = useState<boolean>(false)
-  const token = useSelector(tokenSelector)
+  const categoriesList = useSelector(masterDataSelector);
+  const [loading, setLoading] = useState<boolean>(false);
+  const token = useSelector(tokenSelector);
   const fetchData = async () => {
-    setLoading(true)
-    const postResponse = await getPostListAPI()
+    setLoading(true);
+    const postResponse = await getPostListAPI();
 
     if (postResponse.__typename !== 'ErrorResponse') {
-
-      setPostList(postResponse.data)
+      setPostList(postResponse.data);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   if (loading) {
-    return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <ActivityIndicator animating />
-    </View>)
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator animating />
+      </View>
+    );
   }
-
 
   /*  const [PostTab, setPostTab] = useState(1);
    const onSelectSwitch = value => {
@@ -67,11 +69,10 @@ const PostScreen = () => {
 
   return (
     <SafeAreaProvider>
-
       <SafeAreaView style={styles.screenContainer}>
-        {isFocused ? (<StatusBar backgroundColor={color.themeBackground} />) : null}
-
-
+        {isFocused ? (
+          <StatusBar backgroundColor={color.themeBackground} />
+        ) : null}
 
         <View style={styles.container}>
           <HomeHeader />
@@ -80,42 +81,39 @@ const PostScreen = () => {
             nestedScrollEnabled={false}
             contentContainerStyle={{ flexGrow: 1 }}
           >
-
             <View style={styles.middleContainer}>
-
-
               <View style={styles.centerContent}>
-
-
-                <View style={styles.hotDealContentainer}>
-                  <View style={styles.titleContainer}>
-                    <Heading6 style={[styles.titleText, { color: color.primaryText }]}>
-                      Danh mục
-                    </Heading6>
+                {categoriesList.length > 0 && (
+                  <View style={styles.hotDealContentainer}>
+                    <View style={styles.titleContainer}>
+                      <Heading6
+                        style={[styles.titleText, { color: color.primaryText }]}
+                      >
+                        Danh mục
+                      </Heading6>
+                    </View>
                   </View>
-                </View>
+                )}
 
                 <View style={styles.CategoryListContainer}>
-
                   <FlatList
                     horizontal
                     data={categoriesList}
                     showsHorizontalScrollIndicator={false}
                     alwaysBounceHorizontal={false}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => <CategoryList category={item} tabId={2} />}
+                    renderItem={({ item }) => (
+                      <CategoryList category={item} tabId={2} />
+                    )}
                   />
                 </View>
-
               </View>
             </View>
             <View style={styles.bottomContainer}>
-
               <View style={styles.productListContainer}>
                 <FlatList
                   contentContainerStyle={styles.ProductItemList}
                   data={postList}
-
                   renderItem={({ item }) => <PostItem post={item} />}
                 />
                 {/* <View style={styles.switchTabContainer}>
@@ -144,16 +142,10 @@ const PostScreen = () => {
                   />)} */}
 
                 {/*                   <Heading6 style={[styles.titleText, { color: color.lightBlack }]}>Mới nhất </Heading6>*/}
-
-
-
-
               </View>
             </View>
           </ScrollView>
-
         </View>
-
       </SafeAreaView>
     </SafeAreaProvider>
   );

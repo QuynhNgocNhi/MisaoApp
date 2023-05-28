@@ -1,31 +1,35 @@
 
 
 // import dependencies
-import React, { useState } from 'react';
-import { Image, StatusBar, StyleSheet, View, SafeAreaView, Text, Alert } from 'react-native';
-import { useNavigationContainerRef } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Image,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View
+} from 'react-native';
 
 // import components
+import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RootStackParameterList } from '../../MainNavigator';
 import Button from '../../component/Button';
-import { Logo, Heading6 } from '../../component/Text';
 import LinkButton from '../../component/Button/LinkButton';
 import UnderlineTextInput from '../../component/InputText';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParameterList } from '../../MainNavigator';
+import { Heading6 } from '../../component/Text';
 
 // import color, layout, style
-import color from '../../theme/color';
-import layout from '../../theme/layout';
-import { checkPhoneExistsAPI, sendOtpRegisterAPI } from '../../services';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import { checkPhoneExistsAPI, sendOtpRegisterAPI } from '../../services';
+import color from '../../theme/color';
 
 // Welcome Config
-const headerImg = require('../../assets/image/PhoneNumber.png')
+const headerImg = require('../../assets/image/PhoneNumber.png');
 
-
-type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
+type WelcomeProps = NativeStackScreenProps<RootStackParameterList, 'Welcome'>;
 
 // Welcome
 const EnterPhoneNumber: React.FC<WelcomeProps> = ({ route }: any) => {
@@ -84,7 +88,7 @@ const EnterPhoneNumber: React.FC<WelcomeProps> = ({ route }: any) => {
                 <UnderlineTextInput
                   inputContainerStyle={styles.inputContainer}
                   value={phoneNumber}
-                  blurOnSubmit={false}
+                  // blurOnSubmit={false}
                   keyboardType="phone-pad"
                   placeholder="Số điện thoại"
                   onChangeText={(val: any) => setPhoneNumber(val)}

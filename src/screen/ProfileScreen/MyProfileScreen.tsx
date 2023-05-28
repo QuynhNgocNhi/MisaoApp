@@ -2,46 +2,45 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-  View,
-  StyleSheet,
-  FlatList,
-  Text,
-  StatusBar,
+  ActivityIndicator,
   SafeAreaView,
-  ScrollView,
-  Platform,
-  Image,
-  TextInput,
-  ActivityIndicator
+  StatusBar,
+  StyleSheet,
+  Text,
+  View
 } from 'react-native';
 
-import { Heading6 } from '../../component/Text';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Heading6 } from '../../component/Text';
 
 import { Avatar } from 'react-native-elements';
-import ProductTab from './ProductTab';
-import PostTab from './PostTab';
 import HistoryTab from './HistoryTab';
+import PostTab from './PostTab';
+import ProductTab from './ProductTab';
 
 import { Icon } from 'react-native-elements';
 
 // import components
-import ButtonNormal from '../../component/Button';
 import { Header } from 'react-native-elements';
+import ButtonNormal from '../../component/Button';
 
 // import color, layout, style
 import color from '../../theme/color';
 
 import { useNavigation } from '@react-navigation/native';
 
-import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
 import { useSelector } from 'react-redux';
+import CustomSwitch from '../../component/CustomSwitch/CustomThreeSwitchUnderLine';
 import { userSelector } from '../../modules/user/selectors';
 import { getListOrderAPI } from '../../services';
 const ProductDetailScreen = ({ Props, route }) => {
   const navigation = useNavigation();
 
   const userInfo = useSelector(userSelector);
+
+  console.log('🚀 -----------------------🚀');
+  console.log('🚀 ~ userInfo:', userInfo);
+  console.log('🚀 -----------------------🚀');
 
   const [ProfileTab, setProfileTab] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -93,7 +92,7 @@ const ProductDetailScreen = ({ Props, route }) => {
 
           <View style={styles.container}>
             <View style={[styles.box]}>
-              <View style={[styles.userContainer]}>
+              <View style={[styles.r]}>
                 <View style={styles.userNameContainer}>
                   <Avatar
                     size="large"
@@ -121,7 +120,13 @@ const ProductDetailScreen = ({ Props, route }) => {
                     </View>
                   </View>
                 </View>
-                <View style={styles.userContainer}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between'
+                  }}
+                >
                   <View style={[styles.userInfomationContainer]}>
                     <Text style={styles.userName} numberOfLines={1}>
                       {userInfo?.name}
@@ -161,12 +166,24 @@ const ProductDetailScreen = ({ Props, route }) => {
                       borderColor={color.linkButton}
                       titleColor={color.linkButton}
                       onPress={() => {
-                        navigation.navigate('Login');
+                        navigation.navigate('EditProfile');
                       }}
                       buttonStyle={styles.editProfileButton}
                       title={'Chỉnh sửa thông tin'}
                     />
-                    <Text
+                  </View>
+                  {/*   <View style={styles.editProfileButtonContainer}>
+                     <ButtonNormal
+                      outlined
+                      borderColor={color.linkButton}
+                      titleColor={color.linkButton}
+                      onPress={() => {
+                        navigation.navigate('Login');
+                      }}
+                      buttonStyle={styles.editProfileButton}
+                      title={'Chỉnh sửa thông tin'}
+                    /> 
+                     <Text
                       style={{
                         fontSize: 18,
                         color: color.primaryText,
@@ -182,21 +199,8 @@ const ProductDetailScreen = ({ Props, route }) => {
                         size={30}
                       />{' '}
                       Đà Lạt
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.editProfileButtonContainer}>
-                  <ButtonNormal
-                    outlined
-                    borderColor={color.linkButton}
-                    titleColor={color.linkButton}
-                    onPress={() => {
-                      navigation.navigate('EditProfile');
-                    }}
-                    buttonStyle={styles.editProfileButton}
-                    title={'Chỉnh sửa thông tin'}
-                  />
+                    </Text> 
+                  </View>*/}
                 </View>
               </View>
             </View>
@@ -210,19 +214,18 @@ const ProductDetailScreen = ({ Props, route }) => {
                 onSelectSwitch={onSelectSwitch}
               />
             </View>
-            {ProfileTab == 1 && <ProductTab />}
+            {/* {ProfileTab == 1 && <ProductTab />}
             {ProfileTab == 2 && <PostTab />}
-            {ProfileTab == 3 && <HistoryTab />}
+            {ProfileTab == 3 && <HistoryTab />} */}
+            {ProfileTab == 1 && <ProductTab products={userInfo?.product} />}
+            {ProfileTab == 2 && <PostTab buyRequest={userInfo?.buy_request} />}
+            {ProfileTab == 3 && (
+              <HistoryTab
+                products={userInfo?.product}
+                buyRequest={userInfo?.buy_request}
+              />
+            )}
           </View>
-
-          {ProfileTab == 1 && <ProductTab products={userInfo?.product} />}
-          {ProfileTab == 2 && <PostTab buyRequest={userInfo?.buy_request} />}
-          {ProfileTab == 3 && (
-            <HistoryTab
-              products={userInfo?.product}
-              buyRequest={userInfo?.buy_request}
-            />
-          )}
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -242,9 +245,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center'
   },
-  userContainer: {
+  r: {
     width: '100%',
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'space-between'
   },
   userNameContainer: {
@@ -292,7 +295,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     borderBottomWidth: 1,
-    borderBottomColor: color.borderColor
+    borderBottomColor: color.borderColor,
+    marginBottom: 20
   },
 
   userAttributes: {

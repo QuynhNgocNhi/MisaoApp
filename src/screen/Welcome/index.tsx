@@ -1,31 +1,38 @@
 
 
 // import dependencies
-import React, { useState } from 'react';
-import { ImageBackground, StatusBar, StyleSheet, View, SafeAreaView, Text, Alert } from 'react-native';
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import { useNavigationContainerRef } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useState } from 'react';
+import {
+  Alert,
+  ImageBackground,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 
 // import components
+import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RootStackParameterList } from '../../MainNavigator';
 import Button from '../../component/Button';
-import { Logo, Heading6 } from '../../component/Text';
 import LinkButton from '../../component/Button/LinkButton';
 import UnderlineTextInput from '../../component/InputText';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParameterList } from '../../MainNavigator';
+import { Heading6, Logo } from '../../component/Text';
 
 // import color, layout, style
+import LoadingOverlay from '../../component/LoadingOverlay';
+import { checkPhoneExistsAPI } from '../../services';
 import color from '../../theme/color';
 import layout from '../../theme/layout';
-import { checkPhoneExistsAPI } from '../../services';
-import LoadingOverlay from '../../component/LoadingOverlay';
 
 // Welcome Config
-const headerImg = require('../../image/HappyFarmerGirl.jpg')
+const headerImg = require('../../image/HappyFarmerGirl.jpg');
 
-
-type WelcomeProps = NativeStackScreenProps<RootStackParameterList, "Welcome">
+type WelcomeProps = NativeStackScreenProps<RootStackParameterList, 'Welcome'>;
 
 // Welcome
 const Welcome: React.FC<WelcomeProps> = () => {
@@ -36,7 +43,7 @@ const Welcome: React.FC<WelcomeProps> = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [statusChecked, setStatusChecked] = useState('');
   const data = { phoneNumber: phoneNumber };
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   const onCheckPhoneExists = async () => {
     if (phoneNumber) {
       setLoading(true);
@@ -62,18 +69,18 @@ const Welcome: React.FC<WelcomeProps> = () => {
 
       setLoading(false);
     } else {
-      Alert.alert("", "Vui lòng nhập số điện thoại!")
+      Alert.alert('', 'Vui lòng nhập số điện thoại!');
     }
-  }
+  };
   return (
     <SafeAreaView style={styles.screenContainer}>
-      <StatusBar translucent backgroundColor='transparent' />
+      <StatusBar translucent backgroundColor="transparent" />
       <KeyboardAwareScrollView
-        contentContainerStyle={styles.contentContainerStyle}>
+        contentContainerStyle={styles.contentContainerStyle}
+      >
         <View style={styles.content}>
           <ImageBackground source={headerImg} style={styles.headerImg}>
-            <View style={styles.top}>
-            </View>
+            <View style={styles.top}></View>
           </ImageBackground>
           <View style={styles.footer}>
             <View style={styles.center}>
@@ -81,21 +88,23 @@ const Welcome: React.FC<WelcomeProps> = () => {
             </View>
 
             <View style={styles.paragraphGroup}>
-              <Heading6 style={styles.headingText}>Mua bán và trãi nghiệm sản phẩm cây trồng</Heading6>
-              <Heading6 style={styles.headingText}>trên khắp mọi vùng miền tại Việt Nam</Heading6>
+              <Heading6 style={styles.headingText}>
+                Mua bán và trãi nghiệm sản phẩm cây trồng
+              </Heading6>
+              <Heading6 style={styles.headingText}>
+                trên khắp mọi vùng miền tại Việt Nam
+              </Heading6>
             </View>
 
             <View style={styles.center}>
-
               <View style={[styles.buttonsGroup, { marginBottom: 5 }]}>
                 <UnderlineTextInput
                   inputContainerStyle={styles.inputContainer}
-
-                  blurOnSubmit={false}
+                  returnKeyType="done"
+                  blurOnSubmit={true}
                   keyboardType="phone-pad"
                   placeholder="Số điện thoại"
                   onChangeText={(val: any) => setPhoneNumber(val)}
-
                 />
               </View>
               <Text style={styles.statusChecked}>{statusChecked}</Text>
@@ -109,7 +118,9 @@ const Welcome: React.FC<WelcomeProps> = () => {
               </View>
 
               <LinkButton
-                onPress={() => { navigation.navigate('EnterPhoneNumber'); }}
+                onPress={() => {
+                  navigation.navigate('EnterPhoneNumber');
+                }}
                 title="Chưa có tài khoản"
                 titleStyle={styles.linkButtonText}
               />
@@ -120,7 +131,6 @@ const Welcome: React.FC<WelcomeProps> = () => {
       <LoadingOverlay loading={loading} />
     </SafeAreaView>
   );
-
 };
 // Welcome Styles
 const styles = StyleSheet.create({

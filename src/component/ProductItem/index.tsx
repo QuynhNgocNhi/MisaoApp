@@ -1,44 +1,40 @@
-import { Image, View, Text, ImagePropTypes, StyleSheet, LogBox, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { LogBox, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Heading6 } from '../../component/Text';
 // import color, layout, style
-import color from '../../theme/color';
-import layout from '../../theme/layout';
-import NumberFormat from 'react-number-format';
 import { useNavigation } from '@react-navigation/native';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import FastImage from 'react-native-fast-image';
 import { likeProductAPI } from '../../services';
-LogBox.ignoreLogs(["VirtualizedLists should never be nested"])
+import color from '../../theme/color';
+import layout from '../../theme/layout';
+LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 //import image from '../../data/image'
 interface ProductItemProps {
   product: {
-    id: string,
-    name: string,
-    description: string,
-    image: string,
-    price: number,
-    oldPrice?: number,
-    discountPercentage?: number,
-    unitPrice: string,
-    askedTimes: number,
-    userId: string,
-    userName: string,
-    userAvatar: string,
-    time: number,
-    timeUnit: string,
-    dateCreated: string,
-    availability: number,
-    discount: number,
-    images: any
+    id: string;
+    name: string;
+    description: string;
+    image: string;
+    price: number;
+    oldPrice?: number;
+    discountPercentage?: number;
+    unitPrice: string;
+    askedTimes: number;
+    userId: string;
+    userName: string;
+    userAvatar: string;
+    time: number;
+    timeUnit: string;
+    dateCreated: string;
+    availability: number;
+    discount: number;
+    images: any;
 
-    //for optional props: oldPrice? 
-
-  }
+    //for optional props: oldPrice?
+  };
 }
-
 
 const ProductItem = ({ product }: any) => {
   const navigation = useNavigation();
@@ -58,59 +54,91 @@ const ProductItem = ({ product }: any) => {
     userName: product.userName,
     userAvatar: product.userAvatar,
     time: product.time,
-    timeUnit: product.timeUnit,
-  }
-  const [tempHasFavorite, setTempHasFavorite] = useState(product?.has_favorite)
+    timeUnit: product.timeUnit
+  };
+  const [tempHasFavorite, setTempHasFavorite] = useState(product?.has_favorite);
   const onLikeProduct = async () => {
-    const response = await likeProductAPI(product?.id)
-    setTempHasFavorite(tempHasFavorite === 0 ? 1 : 0)
-  }
+    const response = await likeProductAPI(product?.id);
+    setTempHasFavorite(tempHasFavorite === 0 ? 1 : 0);
+  };
 
   return (
-    <View style={styles.container} >
+    <View style={styles.container}>
       <View style={styles.bottomContainer}>
-        {product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full ? (
-          <FastImage style={styles.image}
-            source={{ uri: product.images && product.images?.length > 0 && product.images[0].url && product.images[0].url_full }} />
+        {product.images &&
+        product.images?.length > 0 &&
+        product.images[0].url &&
+        product.images[0].url_full ? (
+          <FastImage
+            style={styles.image}
+            source={{
+              uri:
+                product.images &&
+                product.images?.length > 0 &&
+                product.images[0].url &&
+                product.images[0].url_full
+            }}
+          />
         ) : (
           <></>
         )}
         <View style={styles.tittleContainer}>
-          <Text onPress={() => { navigation.navigate('ProductDetail', { data }); }}
-            style={styles.title} numberOfLines={2}>{product?.name}</Text>
+          <Text
+            onPress={() => {
+              navigation.navigate('ProductDetail', { data });
+            }}
+            style={styles.title}
+            numberOfLines={2}
+          >
+            {product?.name}
+          </Text>
         </View>
 
-
         <View style={styles.unitPriceRow}>
-
-          <Text style={styles.price}>đ{new Intl.NumberFormat().format(product?.price)}
-            {/* {product.oldPrice && (<Text style={styles.oldPrice}> ${product.oldPrice}</Text>)} */}
-
+          <Text style={styles.price}>
+            đ
+            {new Intl.NumberFormat().format(
+              product?.price - product?.price * (product?.discount / 100)
+            )}
+            {/* {product?.discount && (
+              <Text style={styles.oldPrice}> ${product?.price}</Text>
+            )} */}
           </Text>
           <Text style={styles.unitPrice}> {product?.unit} </Text>
         </View>
-        <Text style={styles.askedTimes}> {product?.order?.length ? (product?.order?.length) : '0'} người đang hỏi</Text>
+        <Text style={styles.askedTimes}>
+          {' '}
+          {product?.order?.length ? product?.order?.length : '0'} người đang hỏi
+        </Text>
 
-        {product.discount ? (<View style={styles.discountLabelContainer}>
-          <Text style={styles.label}>{`- ${product?.discount}%`}</Text>
-
-        </View>) : <></>}
+        {product.discount ? (
+          <View style={styles.discountLabelContainer}>
+            <Text style={styles.label}>{`- ${product?.discount}%`}</Text>
+          </View>
+        ) : (
+          <></>
+        )}
         <TouchableOpacity
           onPress={onLikeProduct}
-          style={styles.wishlistContainer}>
-          <FontAwesome style={styles.wishlist} name={tempHasFavorite === 0 ? "heart-o" : 'heart'} color={'#FF0000'} size={24} />
+          style={styles.wishlistContainer}
+        >
+          <FontAwesome
+            style={styles.wishlist}
+            name={tempHasFavorite === 0 ? 'heart-o' : 'heart'}
+            color={'#FF0000'}
+            size={24}
+          />
         </TouchableOpacity>
       </View>
     </View>
-
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     backgroundColor: color.white,
-    width: (layout.SCREEN_WIDTH) / 2,
+    width: layout.SCREEN_WIDTH / 2,
     borderWidth: 0.5,
-    borderColor: color.borderColor,
+    borderColor: color.borderColor
   },
   borderContainer: {
     borderWidth: 1,
@@ -119,12 +147,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
     backgroundColor: color.surface,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   titleContainer: {
     paddingTop: 12,
     paddingHorizontal: 12,
-    height: 52,
+    height: 52
   },
   /*  root: {
        flexDirection: 'column',
@@ -143,7 +171,7 @@ const styles = StyleSheet.create({
     height: 150,
     resizeMode: 'cover',
     borderWidth: 1,
-    borderColor: color.borderColor,
+    borderColor: color.borderColor
   },
   /* bottomContainer: {
       padding: 5,
@@ -163,7 +191,7 @@ const styles = StyleSheet.create({
     color: '#FF0000',
     fontSize: 16,
     fontWeight: 'bold',
-
+    justifyContent: 'space-between'
   },
 
   discountLabelContainer: {
@@ -175,34 +203,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     backgroundColor: '#FF9A9A',
     borderWidth: 1,
-    borderColor: '#FF0000',
+    borderColor: '#FF0000'
   },
   label: {
     fontSize: 12,
-    color: color.onPrimaryColor,
+    color: color.onPrimaryColor
   },
   wishlistContainer: {
     position: 'absolute',
     top: 0,
-    right: 0,
-
+    right: 0
   },
   wishlist: {
-    opacity: 0.5,
+    opacity: 0.5
   },
   oldPrice: {
-
-    color: '#000',
-    fontSize: 12,
+    color: '#A9A9A9',
+    fontSize: 15,
     textDecorationLine: 'line-through',
+    fontWeight: '300'
   },
   text: {
     marginLeft: 10,
-    color: '#000',
-
+    color: '#000'
   },
   unitPriceRow: {
-
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
@@ -210,14 +235,12 @@ const styles = StyleSheet.create({
   unitPrice: {
     marginRight: 10,
 
-    fontSize: 16,
-
+    fontSize: 16
   },
   askedTimes: {
     marginRight: 10,
     alignSelf: 'flex-end',
-    paddingBottom: 5,
-  },
-
+    paddingBottom: 5
+  }
 });
 export default ProductItem;

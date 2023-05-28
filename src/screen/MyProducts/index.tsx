@@ -1,157 +1,137 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, FlatList, Text, StatusBar, SafeAreaView, ScrollView, Image, ActivityIndicator } from 'react-native';
-import { Heading6 } from '../../component/Text';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View
+} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import MyProductItem from '../../component/MyProductItem';
 //import data
-import products from '../../assets/data/product';
-
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // import color, layout, style
+import { getListMyProductAPI } from '../../services';
 import color from '../../theme/color';
-import layout from '../../theme/layout';
-import { getListMyBuyRequestAPI, getListMyProductAPI } from '../../services';
-
 
 const MyProducts = () => {
+  console.log('haha');
 
-    const [loading, setLoading] = useState<boolean>(false)
-    const [productList, setProductList] = useState<any>([])
-    const fetchData = async () => {
-        setLoading(true)
-        const response = await getListMyProductAPI()
-        if (response.__typename !== 'ErrorResponse') {
-            setProductList(response.data)
-        }
-        setLoading(false)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [productList, setProductList] = useState<any>([]);
+  const fetchData = async () => {
+    setLoading(true);
+    const response = await getListMyProductAPI();
+    if (response.__typename !== 'ErrorResponse') {
+      setProductList(response.data);
     }
+    setLoading(false);
+  };
 
-    useEffect(() => {
-        fetchData()
-    }, [])
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-
-
-    if (loading) {
-        return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator animating />
-        </View>)
-    }
+  if (loading) {
     return (
-        <SafeAreaProvider>
-
-            <SafeAreaView style={styles.screenContainer}>
-                <StatusBar translucent backgroundColor='transparent' />
-                <View>
-                    <ScrollView
-                        nestedScrollEnabled={false}
-                    >
-                        <FlatList
-                            contentContainerStyle={styles.ProductItemList}
-                            data={productList}
-                            numColumns={2}
-                            renderItem={({ item }) => <MyProductItem product={item} />}
-                        />
-                    </ScrollView>
-                </View>
-
-            </SafeAreaView>
-        </SafeAreaProvider>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator animating />
+      </View>
     );
+  }
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.screenContainer}>
+        <StatusBar translucent backgroundColor="transparent" />
+        <View>
+          <ScrollView nestedScrollEnabled={false}>
+            <FlatList
+              contentContainerStyle={styles.ProductItemList}
+              data={productList}
+              numColumns={2}
+              renderItem={({ item }) => <MyProductItem product={item} />}
+            />
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 };
 const styles = StyleSheet.create({
-    screenContainer: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: color.background,
+  screenContainer: {
+    flex: 1,
+    // alignItems: 'center',
+    backgroundColor: color.background
+  },
+  container: {
+    flex: 1,
+    width: '90%',
+    paddingTop: 20
+  },
+
+  middleContainer: {},
+  topContent: {
+    height: 160
+  },
+  banner: {
+    backgroundColor: color.themeBackground,
+    height: '50%',
+    alignItems: 'center'
+  },
+  imageContainer: {
+    width: '90%',
+    height: 150,
+    borderRadius: 20,
+    //set box shadow fo image
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 10,
+      height: 16
     },
-    container: {
-        flex: 1,
-        width: '90%',
-        paddingTop: 20
-    },
-
-    middleContainer: {
-
-
-    },
-    topContent: {
-
-        height: 160,
-
-    },
-    banner: {
-
-        backgroundColor: color.themeBackground,
-        height: '50%',
-        alignItems: 'center',
-
-
-
-
-    },
-    imageContainer: {
-        width: '90%',
-        height: 150,
-        borderRadius: 20,
-        //set box shadow fo image
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 10,
-            height: 16,
-        },
-        shadowOpacity: 0.35,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    image: {
-        flex: 1,
-        width: '100%',
-        borderRadius: 20,
-
-    },
-    bottomContainer: {
-
-        width: '100%',
-
-    },
-    centerContent: {
-
-        backgroundColor: color.white,
-
-
-    },
-    hotDealContentainer: {
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: 10,
-        paddingHorizontal: 16,
-        paddingBottom: 12,
-        backgroundColor: color.white,
-    },
-    titleText: {
-        fontWeight: '600',
-        color: '#FF0000',
-
-    },
-    viewAllText: {
-        color: color.primaryColor,
-    },
-    hotDeal: {
-        width: '80%',
-        alignSelf: 'center',
-
-    },
-    CategoryListContainer: {
-        padding: 10,
-    },
-    ProductItemList: {
-
-    }
+    shadowOpacity: 0.35,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  image: {
+    flex: 1,
+    width: '100%',
+    borderRadius: 20
+  },
+  bottomContainer: {
+    width: '100%'
+  },
+  centerContent: {
+    backgroundColor: color.white
+  },
+  hotDealContentainer: {},
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    backgroundColor: color.white
+  },
+  titleText: {
+    fontWeight: '600',
+    color: '#FF0000'
+  },
+  viewAllText: {
+    color: color.primaryColor
+  },
+  hotDeal: {
+    width: '80%',
+    alignSelf: 'center'
+  },
+  CategoryListContainer: {
+    padding: 10
+  },
+  ProductItemList: {
+    // justifyContent: 'flex-start'
+  }
 });
 
-export default MyProducts
+export default MyProducts;
