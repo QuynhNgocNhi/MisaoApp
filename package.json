@@ -64,7 +64,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
     "react": "17.0.2",
-    "react-native": "0.67.3",
+    "react-native": "0.70.0",
     "react-native-actionsheet": "^2.4.2",
     "react-native-confirmation-code-field": "^7.3.0",
     "react-native-elements": "^3.4.2",
