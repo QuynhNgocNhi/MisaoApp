@@ -11,15 +11,18 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.67.3)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - libwebp (1.2.1):
-    - libwebp/demux (= 1.2.1)
-    - libwebp/mux (= 1.2.1)
-    - libwebp/webp (= 1.2.1)
-  - libwebp/demux (1.2.1):
+  - libwebp (1.3.2):
+    - libwebp/demux (= 1.3.2)
+    - libwebp/mux (= 1.3.2)
+    - libwebp/sharpyuv (= 1.3.2)
+    - libwebp/webp (= 1.3.2)
+  - libwebp/demux (1.3.2):
     - libwebp/webp
-  - libwebp/mux (1.2.1):
+  - libwebp/mux (1.3.2):
     - libwebp/demux
-  - libwebp/webp (1.2.1)
+  - libwebp/sharpyuv (1.3.2)
+  - libwebp/webp (1.3.2):
+    - libwebp/sharpyuv
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -220,6 +223,8 @@ PODS:
     - glog
   - react-native-get-random-values (1.8.0):
     - React-Core
+  - react-native-pager-view (6.2.0):
+    - React-Core
   - react-native-safe-area-context (4.2.4):
     - RCT-Folly
     - RCTRequired
@@ -293,8 +298,6 @@ PODS:
     - React-perflogger (= 0.67.3)
   - RNCAsyncStorage (1.17.3):
     - React-Core
-  - RNCClipboard (1.5.1):
-    - React-Core
   - RNDateTimePicker (6.1.2):
     - React-Core
   - RNFastImage (8.5.11):
@@ -320,7 +323,7 @@ PODS:
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
-  - SDWebImageWebPCoder (0.8.4):
+  - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - TOCropViewController (2.6.1)
@@ -347,6 +350,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -361,7 +365,6 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
-  - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
@@ -415,6 +418,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-perflogger:
@@ -443,8 +448,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
-  RNCClipboard:
-    :path: "../node_modules/@react-native-community/clipboard"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNFastImage:
@@ -467,7 +470,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 94473205b8741b61402e8c51716dea34aa3f5b2f
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
-  libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
+  libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
   RCTRequired: 3c77b683474faf23920fbefc71c4e13af21470c0
   RCTTypeSafety: 720b1841260dac692444c2822b27403178da8b28
@@ -481,6 +484,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 1e1e03345cf6d47779e2061d679d0a87d9ae73d8
   React-logger: 1e10789cb84f99288479ba5f20822ce43ced6ffe
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
+  react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df
   react-native-safe-area-context: f98b0b16d1546d208fc293b4661e3f81a895afd9
   React-perflogger: 93d3f142d6d9a46e635f09ba0518027215a41098
   React-RCTActionSheet: 87327c3722203cc79cf79d02fb83e7332aeedd18
@@ -495,7 +499,6 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: af1946623656f9c5fd64ca6f36f3863516193446
   ReactCommon: 650e33cde4fb7d36781cd3143f5276da0abb2f96
   RNCAsyncStorage: 005c0e2f09575360f142d0d1f1f15e4ec575b1af
-  RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNDateTimePicker: 6f1f0b4cf7c71b6e2aea7a3aa62969111084bbd1
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
@@ -503,10 +506,10 @@ SPEC CHECKSUMS:
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
-  SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
+  SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: 90dcd029e45d8a7c1ff059e8b3c6612ff409061a
 
 PODFILE CHECKSUM: 77462f2a2197f6ce6bf2d2b90ea561111279f53f
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

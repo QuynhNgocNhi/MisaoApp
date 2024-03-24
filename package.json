@@ -41,11 +41,13 @@
     "generate-jsbundle": "npx react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
     "generate-android-jsbundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
     "svg": "node src/scripts/generate_svgs.ts",
-    "xc": "cd ios && open NOM.xcworkspace && cd ..",
+    "xc": "cd ios && open misao.xcworkspace && cd ..",
     "all": "watchman watch-del-all && rm -rf yarn-lock.json && rm -rf node_modules/ && rm -fr $TMPDIR/metro* && yarn install && cd ios && rm -rf Pods && rm -rf Podfile.lock && pod install && cd ..",
     "cp:release-update-dev": "read -p 'Enter target version: ' value && appcenter codepush release-react -a phong.na-kyanon.digital/NOM-Development-iOS -d Staging -k code_push_config/nom_dev_cp.pem --plist-file ios/NOM/NOMDevelopmentInfo.plist --xcode-project-file ios/NOM.xcodeproj -t $value && appcenter codepush release-react -a thang.vo/Nutri-Beta-Android -d Staging -k code_push_config/nom_dev_cp.pem -t $value",
     "cp:release-update-staging": "read -p 'Enter target version: ' value && appcenter codepush release-react -a phong.na-kyanon.digital/NOM-Staging-iOS -d Staging -k code_push_config/nom_dev_cp.pem --plist-file ios/NOM/NOMStagingInfo.plist --xcode-project-file ios/NOM.xcodeproj -t $value && appcenter codepush release-react -a thang.vo/Nutri-Android-Staging -d Staging -k code_push_config/nom_dev_cp.pem -t $value",
-    "cp:release-update-production": "read -p 'Enter target version: ' value && appcenter codepush release-react -a phong.na-kyanon.digital/NOM-iOS -d Production -k code_push_config/nom_cp.pem --plist-file ios/NOM/NOMStagingInfo.plist --xcode-project-file ios/NOM.xcodeproj -t $value && appcenter codepush release-react -a KD_Hermes/Nutri-android-Production -d Production -k code_push_config/nom_cp.pem -t $value"
+    "cp:release-update-production": "read -p 'Enter target version: ' value && appcenter codepush release-react -a phong.na-kyanon.digital/NOM-iOS -d Production -k code_push_config/nom_cp.pem --plist-file ios/NOM/NOMStagingInfo.plist --xcode-project-file ios/NOM.xcodeproj -t $value && appcenter codepush release-react -a KD_Hermes/Nutri-android-Production -d Production -k code_push_config/nom_cp.pem -t $value",
+    "fresh-install": "watchman watch-del-all && rm -rf ios/build/ && rm -rf node_modules/ && yarn cache clean && yarn install"
+
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",

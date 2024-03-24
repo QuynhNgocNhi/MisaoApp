@@ -1,9 +1,8 @@
 
 
 // import dependencies
-import type ReactElement from 'react';
 import React from 'react';
-import {Platform, StyleSheet, Text as RNText} from 'react-native';
+import { Platform, Text as RNText, StyleSheet } from 'react-native';
 
 // import color
 import color from '../../theme/color';
@@ -14,51 +13,51 @@ const fontConfig = {
   ios: {
     thin: {
       fontFamily: 'System',
-      fontWeight: '100',
+      fontWeight: '100'
     },
     light: {
       fontFamily: 'System',
-      fontWeight: '300',
+      fontWeight: '300'
     },
     regular: {
       fontFamily: 'System',
-      fontWeight: '400',
+      fontWeight: '400'
     },
     medium: {
       fontFamily: 'System',
-      fontWeight: '500',
+      fontWeight: '500'
     },
     bold: {
-      fontWeight: '700',
+      fontWeight: '700'
     },
     Logo: {
-      fontFamily: 'PressStart2P-Regular',
+      fontFamily: 'PressStart2P-Regular'
     }
   },
   android: {
     thin: {
       fontFamily: 'sans-serif-thin',
-      fontWeight: 'normal',
+      fontWeight: 'normal'
     },
     light: {
       fontFamily: 'sans-serif-light',
-      fontWeight: 'normal',
+      fontWeight: 'normal'
     },
     regular: {
       fontFamily: 'sans-serif',
-      fontWeight: 'normal',
+      fontWeight: 'normal'
     },
     medium: {
       fontFamily: 'sans-serif-medium',
-      fontWeight: 'normal',
+      fontWeight: 'normal'
     },
     bold: {
-      fontWeight: 'bold',
+      fontWeight: 'bold'
     },
     Logo: {
-      fontFamily: 'PressStart2P',
+      fontFamily: 'PressStart2P'
     }
-  },
+  }
 };
 const fonts = fontConfig[platform];
 
